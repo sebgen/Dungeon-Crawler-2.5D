@@ -1,6 +1,7 @@
 # Dungeon Crawler
 
 2.5D retro dungeon crawler game.
+
 By Sebastian Genlund and Matias Lavik
 
 ![screenshot](https://pbs.twimg.com/media/DAh1QhPXkAAH2Ea.jpg:large)
