@@ -1,0 +1,18 @@
+# file types
+*.sln
+*.suo
+*.vcxproj
+*.cbp
+*.layout
+*.sdf
+
+# folders
+build
+CMakeFiles
+.vs
+CMake
+webbuild
+-p
+
+#files
+emcc_build.bat
