@@ -9,12 +9,105 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build")
 
 set(SourceDir ${PROJECT_SOURCE_DIR}/src)
 
-file(GLOB SOURCES "src/*")
+#file(GLOB SourceDir "src/*")
 
+
+# Gather c++ files
+file(GLOB_RECURSE SOURCEFILES 
+	src/*.cpp
+	src/*.h
+)
+
+
+file(GLOB_RECURSE SRC_ACTOR
+    "${SourceDir}/Actor/*.cpp"
+    "${SourceDir}/Actor/*.h"
+)
+file(GLOB_RECURSE SRC_API_SDL
+    "${SourceDir}/API/SDL/*.cpp"
+    "${SourceDir}/API/SDL/*.h"
+)
+file(GLOB_RECURSE SRC_COMPONENT
+    "${SourceDir}/Component/*.cpp"
+    "${SourceDir}/Component/*.h"
+)
+file(GLOB_RECURSE SRC_ENGINE
+    "${SourceDir}/Engine/*.cpp"
+    "${SourceDir}/Engine/*.h"
+)
+file(GLOB_RECURSE SRC_GRAPHICS
+    "${SourceDir}/Graphics/*.cpp"
+    "${SourceDir}/Graphics/*.h"
+)
+file(GLOB_RECURSE SRC_MATH
+    "${SourceDir}/Math/*.cpp"
+    "${SourceDir}/Math/*.h"
+)
+file(GLOB_RECURSE SRC_MISC
+    "${SourceDir}/Misc/*.cpp"
+    "${SourceDir}/Misc/*.h"
+)
+file(GLOB_RECURSE SRC_OBJECT
+    "${SourceDir}/Object/*.cpp"
+    "${SourceDir}/Object/*.h"
+)
+file(GLOB_RECURSE SRC_TEXT
+    "${SourceDir}/Text/*.cpp"
+    "${SourceDir}/Text/*.h"
+)
+file(GLOB_RECURSE SRC_UI_CORE
+    "${SourceDir}/UI/Core/*.cpp"
+    "${SourceDir}/UI/Core/*.h"
+)
+file(GLOB_RECURSE SRC_UI_INTERFACES
+    "${SourceDir}/UI/Interfaces/*.cpp"
+    "${SourceDir}/UI/Interfaces/*.h"
+)
+file(GLOB_RECURSE SRC_UI_MANAGERS
+    "${SourceDir}/UI/Managers/*.cpp"
+    "${SourceDir}/UI/Managers/*.h"
+)
+file(GLOB_RECURSE SRC_UI_VISUAL
+    "${SourceDir}/UI/Visual/*.cpp"
+    "${SourceDir}/UI/Visual/*.h"
+)
+file(GLOB_RECURSE SRC_UI_WIDGETS
+    "${SourceDir}/UI/Widgets/*.cpp"
+    "${SourceDir}/UI/Widgets/*.h"
+)
+file(GLOB_RECURSE SRC_WINDOW
+    "${SourceDir}/Window/*.cpp"
+    "${SourceDir}/Window/*.h"
+)
+file(GLOB_RECURSE SRC_WORLD
+    "${SourceDir}/World/*.cpp"
+    "${SourceDir}/World/*.h"
+)
+source_group("Actor" FILES ${SRC_ACTOR})
+source_group("API" FILES ${SRC_API})
+source_group("API\\SDL" FILES ${SRC_API_SDL})
+source_group("Component" FILES ${SRC_COMPONENT})
+source_group("Engine" FILES ${SRC_ENGINE})
+source_group("Graphics" FILES ${SRC_GRAPHICS})
+source_group("Math" FILES ${SRC_MATH})
+source_group("Misc" FILES ${SRC_MISC})
+source_group("Object" FILES ${SRC_OBJECT})
+source_group("Text" FILES ${SRC_TEXT})
+source_group("UI" FILES ${SRC_UI})
+source_group("UI\\Core" FILES ${SRC_UI_CORE})
+source_group("UI\\Interfaces" FILES ${SRC_UI_INTERFACES})
+source_group("UI\\Managers" FILES ${SRC_UI_MANAGERS})
+source_group("UI\\Visual" FILES ${SRC_UI_VISUAL})
+source_group("UI\\Widgets" FILES ${SRC_UI_WIDGETS})
+source_group("Window" FILES ${SRC_WINDOW})
+source_group("World" FILES ${SRC_WORLD})
+
+
+include_directories(${SourceDir})
 include_directories(include)
 include_directories ("../include")
 
-add_executable(DungeonCrawler ${SOURCES})
+add_executable(DungeonCrawler ${SOURCEFILES})
 
 SET(LIB_DIR "${CMAKE_SOURCE_DIR}/libraries/Windows/x86")
 
@@ -27,6 +120,7 @@ endif()
 TARGET_LINK_LIBRARIES(DungeonCrawler ${LIB_DIR}/SDL2_image.lib)
 TARGET_LINK_LIBRARIES(DungeonCrawler ${LIB_DIR}/SDL2main.lib)
 TARGET_LINK_LIBRARIES(DungeonCrawler ${LIB_DIR}/SDL2.lib)
+TARGET_LINK_LIBRARIES(DungeonCrawler ${LIB_DIR}/SDL2_ttf.lib)
 
 set (OUT_DIR ${IN_DIR})
 
