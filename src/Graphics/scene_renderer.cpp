@@ -409,7 +409,7 @@ namespace Retro3D
 		SDL_UpdateTexture(mRenderTexture, NULL, &mPixels[0], texWidth * 4);
 
 		SDL_RenderCopy(GGameEngine->GetWindow()->GetSDLRenderer(), mRenderTexture, NULL, NULL);
-		SDL_RenderPresent(GGameEngine->GetWindow()->GetSDLRenderer());
+		//SDL_RenderPresent(GGameEngine->GetWindow()->GetSDLRenderer());
 
 		mPixels = mClearPixels; // TODO
 		mDepthBuffer = mClearDepthBuffer; // TODO

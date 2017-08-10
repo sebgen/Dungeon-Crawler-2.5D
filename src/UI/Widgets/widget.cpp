@@ -121,7 +121,7 @@ namespace Retro3D
 		return mAbsoluteTransform; // return the re-calculated absolute transform of the widget
 	}
 
-	const size_t& Widget::GetNumChildWidgets() const
+	const size_t Widget::GetNumChildWidgets() const
 	{
 		return mChildWidgets.size();
 	}

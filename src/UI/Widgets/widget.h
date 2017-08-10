@@ -104,7 +104,7 @@ namespace Retro3D
 		const WidgetTransform& GetCachedAbsoluteTransform() const { return mAbsoluteTransform; };
 		const WidgetTransform& GetAbsoluteTransform();
 
-		const size_t& GetNumChildWidgets() const;
+		const size_t GetNumChildWidgets() const;
 		ObjectPtr<Widget> GetChildWidgetAt(const size_t& arg_index) const;
 
 	};
