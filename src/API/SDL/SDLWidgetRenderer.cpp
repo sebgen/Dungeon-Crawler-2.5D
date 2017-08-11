@@ -5,10 +5,10 @@
 #include "UI/Core/text_style.h"
 #include "Misc/debug.h"
 
-#include <sdl2/SDL.h>
-#include <sdl2/SDL_video.h>
-#include <sdl2/SDL_ttf.h>
-#include <sdl2/SDL_image.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_video.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 
 #include <math.h>
 
@@ -72,6 +72,7 @@ namespace Retro3D
 		SDL_DestroyTexture(img); // TODO: use resource manager
 	}
 
+
 	void SDLWidgetRenderer::RenderText(TextVisual* arg_text, const WidgetRenderParams& arg_renderparams)
 	{
 		const TextStyle& style = arg_text->GetTextStyle();
@@ -89,7 +90,7 @@ namespace Retro3D
 		rect.y = arg_renderparams.mVisibleRect.mPosition.y * window_height;
 		rect.w = arg_renderparams.mVisibleRect.mSize.x * window_width;
 		rect.h = arg_renderparams.mVisibleRect.mSize.y * window_height;
-		SDL_RenderFillRect(renderer, &rect);
+		//SDL_RenderFillRect(renderer, &rect);
 
 		// TODO: make resource, and open only once!!!
 		TTF_Font* font = TTF_OpenFont("resources//fonts//comic.ttf", style.GetFontSize());
@@ -103,9 +104,9 @@ namespace Retro3D
 		SDL_Color White = { 255, 255, 255 };
 
 		SDL_Surface* surface;
-		if(wrapText)
-			surface = TTF_RenderText_Blended_Wrapped(font, text.c_str(), White, (Uint32)rect.w);
-		else
+		//if(wrapText)
+		//	surface = TTF_RenderText_Blended_Wrapped(font, text.c_str(), White, (Uint32)rect.w);
+		//else
 			surface = TTF_RenderText_Solid(font, text.c_str(), White);
 
 		SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);

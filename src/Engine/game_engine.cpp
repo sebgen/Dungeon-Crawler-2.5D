@@ -5,7 +5,7 @@
 #include "World/level.h"
 #include "Window/window.h"
 #include "World/world.h"
-#include <sdl2/SDL.h>
+#include <SDL2/SDL.h>
 #include "Actor/actor.h"
 #include "Actor/player_controller.h"
 #include "World/world_messagebus.h"
@@ -13,7 +13,7 @@
 #include "Misc/debug.h"
 #include "API/SDL/SDLWidgetRenderer.h"
 #include "UI/Managers/WidgetManager.h"
-#include <sdl2/SDL_ttf.h>
+#include <SDL2/SDL_ttf.h>
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>

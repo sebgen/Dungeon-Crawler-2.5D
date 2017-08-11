@@ -1,6 +1,6 @@
 #include "scene_renderer.h"
-#include <sdl2/SDL_image.h>
-#include <sdl2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL.h>
 #include <glm/gtx/transform.hpp>
 #include <vector>
 #include "Engine/game_engine.h"

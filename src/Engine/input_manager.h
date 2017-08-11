@@ -1,7 +1,7 @@
 #ifndef RETRO3D_INPUTMANAGER_H
 #define RETRO3D_INPUTMANAGER_H
 
-#include "sdl2/SDL.h"
+#include "SDL2/SDL.h"
 #include "glm/glm.hpp"
 #include <unordered_map>
 #include <string>

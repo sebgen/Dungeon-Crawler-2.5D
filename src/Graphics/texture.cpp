@@ -1,7 +1,7 @@
 #include "texture.h"
 
 #include "Misc/debug.h"
-#include <sdl2/SDL_image.h>
+#include <SDL2/SDL_image.h>
 
 namespace Retro3D
 {
