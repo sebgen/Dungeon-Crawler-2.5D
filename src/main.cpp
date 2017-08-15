@@ -72,7 +72,9 @@ int main(int argc, char** argv)
 	txtWidget->SetPivot(0.5f, 0.0f);
 	txtWidget->SetSize(0.6f, 0.9f);
 	txtWidget->SetText("Dungeon Crawler");
-	txtWidget->GetTextStyle().SetColour(Colour(1.0f, 1.0f, 1.0f));
+	TextStyle textStyle = txtWidget->GetTextStyle();
+	textStyle.SetColour(Colour(1.0f, 1.0f, 1.0f));
+	txtWidget->SetTextStyle(textStyle);
 	colWidget->AddChildWidget(txtWidget);
 
 	engine->StartEngine();

@@ -45,7 +45,7 @@ namespace Retro3D
 	}
 
 	template<typename T>
-	T* ObjectPtr<T>::Get()
+	T* ObjectPtr<T>::Get() const
 	{
 		return static_cast<T*>(mRefHandle->GetObject());
 	}

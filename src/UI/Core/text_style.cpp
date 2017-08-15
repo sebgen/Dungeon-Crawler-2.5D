@@ -4,7 +4,7 @@ namespace Retro3D
 {
 	TextStyle::TextStyle()
 	{
-		mFontName = "comic";
+		mFontName = "resources//fonts//FreeSans.ttf"; // TODO: store default paths somewhere
 		mFontSize = 12;
 		mColour = Colour(1.0f, 1.0f, 1.0f);
 		mWrapText = true;

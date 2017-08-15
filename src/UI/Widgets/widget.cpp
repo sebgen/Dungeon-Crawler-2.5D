@@ -60,7 +60,7 @@ namespace Retro3D
 
 	}
 
-	void Widget::OnFrame(float arg_deltatime)
+	void Widget::OnTick(float arg_deltatime)
 	{
 
 	}

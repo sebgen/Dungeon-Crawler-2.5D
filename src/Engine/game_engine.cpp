@@ -1,5 +1,6 @@
 #include "game_engine.h"
 
+#include "Resource/resource_manager.h"
 #include "Engine/input_manager.h"
 #include "Graphics/scene_renderer.h"
 #include "World/level.h"
@@ -36,6 +37,7 @@ namespace Retro3D
 		}
 
 		GGameEngine = this;
+		mResourceManager = new ResourceManager();
 		mInputManager = new InputManager();
 		mScriptManager = new ScriptManager();
 		mWindow = new Window();
@@ -67,6 +69,9 @@ namespace Retro3D
 	void GameEngine::StartEngine()
 	{
 		LOG_INFO() << "Starting game engine";
+
+		mResourceManager->OnStart();
+
 		mPlayerController->OnStart();
 
 		for (const ObjectPtr<Actor> actor : mWorld->GetActors())
@@ -104,6 +109,9 @@ namespace Retro3D
 			actor->OnTick(mDeltaTime);
 		}
 
+		// Update all widgets
+		mWidgetManager->TickWidgets(mDeltaTime);
+
 		// Clear screen
 		mWindow->PrepareRender();
 
@@ -115,6 +123,8 @@ namespace Retro3D
 
 		// Update the screen
 		mWindow->Render();
+
+		mResourceManager->ProcessCompletedAsyncLoads();
 
 		const Uint64 end = SDL_GetPerformanceCounter();
 		const static Uint64 freq = SDL_GetPerformanceFrequency();

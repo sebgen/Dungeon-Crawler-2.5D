@@ -5,6 +5,15 @@
 #include "class.h"
 #include "function.h"
 
+typedef unsigned int ObjectFlagRegister;
+
+enum class ObjectFlag
+{
+	Destroyed = 1,
+	PendingDestroy = 2,
+	AsyncLoading = 4
+};
+
 typedef uint32_t NetGUID;
 
 // Used in the constructor defined in DEFINE_CLASS_INTERNAL.

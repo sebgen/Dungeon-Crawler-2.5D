@@ -3,6 +3,8 @@
 
 #include "UI/Visual/visual.h"
 #include <string>
+#include "Resource/texture_res.h"
+#include "Resource/res_ptr.h"
 
 namespace Retro3D
 {
@@ -10,12 +12,21 @@ namespace Retro3D
 	{
 	private:
 		std::string mImagePath;
+		ResPtr<TextureRes> mImageRes;
+		SDL_Texture* mSDLTexture = nullptr;
+
 	public:
+		
+		ImageVisual();
+		~ImageVisual();
+
 		void RenderVisual(IWidgetRenderer *arg_renderer, const WidgetRenderParams& arg_renderparams);
 
 		void SetImagePath(std::string arg_img);
 
 		std::string GetImagePath() { return mImagePath; }
+
+		inline SDL_Texture* GetSDLTexture() { return mSDLTexture; }
 	};
 }
 

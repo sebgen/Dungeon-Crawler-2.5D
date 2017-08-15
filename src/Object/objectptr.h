@@ -15,7 +15,7 @@ namespace Retro3D
 	template <class T>
 	class ObjectPtr
 	{
-	private:
+	protected:
 		ObjectRefHandle* mRefHandle;
 
 		inline Object* getObjectSafe() const { return (mRefHandle != nullptr ? mRefHandle->GetObject() : nullptr); }
@@ -27,14 +27,14 @@ namespace Retro3D
 
 		ObjectPtr<T>& operator=(const ObjectPtr<T>& arg_other);
 
-		T* Get();
+		T* Get() const;
 		T* operator->() const;
 		bool operator==(const ObjectPtr<T>& arg_other) const;
 		bool operator!=(const ObjectPtr<T>& arg_other) const;
 		bool operator==(const T* arg_other) const;
 		bool operator!=(const T* arg_other) const;
 
-		bool IsValid() const;
+		virtual bool IsValid() const;
 
 	};
 }

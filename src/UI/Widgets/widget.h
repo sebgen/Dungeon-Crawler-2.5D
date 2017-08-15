@@ -49,7 +49,7 @@ namespace Retro3D
 		/**
 		* Called every frame.
 		*/
-		virtual void OnFrame(float arg_deltatime);
+		virtual void OnTick(float arg_deltatime);
 
 
 		//virtual void OnInput(InputEvent arg_event);

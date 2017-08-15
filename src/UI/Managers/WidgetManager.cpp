@@ -16,6 +16,14 @@ namespace Retro3D
 		mRootWidget->AddChildWidget(arg_widget);
 	}
 
+	void WidgetManager::TickWidgets(float arg_deltatime)
+	{
+		if (mRootWidget != nullptr)
+		{
+			tickWidgetRecursive(mRootWidget.Get(), arg_deltatime);
+		}
+	}
+
 	void WidgetManager::RenderWidgets(Window* arg_window)
 	{
 		IWidgetRenderer* widgetRenderer = GGameEngine->GetWidgetRenderer();
@@ -59,6 +67,16 @@ namespace Retro3D
 		{
 			ObjectPtr<Widget> currentWidget = arg_widget->GetChildWidgetAt(i);
 			renderWidgetRecursive(currentWidget.Get(), arg_window);
+		}
+	}
+
+	void WidgetManager::tickWidgetRecursive(Widget* arg_widget, float arg_deltatime)
+	{
+		arg_widget->OnTick(arg_deltatime);
+
+		for (ObjectPtr<Widget> child : arg_widget->mChildWidgets)
+		{
+			tickWidgetRecursive(child.Get(), arg_deltatime);
 		}
 	}
 }

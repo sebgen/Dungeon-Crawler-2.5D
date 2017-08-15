@@ -22,6 +22,7 @@ namespace Retro3D
 
 	private:
 		ObjectRefHandle* mObjectRefHandle;
+		ObjectFlagRegister mObjectFlags;
 
 	protected:
 		std::string mObjectName;
@@ -35,6 +36,11 @@ namespace Retro3D
 		void CallFunction(Function* arg_function, FunctionArgContainer args);
 
 		inline ObjectRefHandle*  GetRefHandle() { return mObjectRefHandle; }
+
+		inline bool HasObjectFlag(ObjectFlag arg_flag) { return mObjectFlags & (ObjectFlagRegister)arg_flag; }
+		inline void SetObjectFlag(ObjectFlag arg_flag) { mObjectFlags |= (ObjectFlagRegister)arg_flag; }
+		inline void ClearObjectFlag(ObjectFlag arg_flag) { mObjectFlags &= ~(ObjectFlagRegister)arg_flag; }
+
 	};
 }
 

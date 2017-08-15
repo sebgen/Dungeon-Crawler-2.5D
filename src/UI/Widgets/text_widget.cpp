@@ -13,9 +13,14 @@ namespace Retro3D
 		mTextVisual.SetText(arg_string);
 	}
 
-	TextStyle& TextWidget::GetTextStyle()
+	TextStyle TextWidget::GetTextStyle()
 	{
 		return mTextVisual.GetTextStyle();
+	}
+
+	void TextWidget::SetTextStyle(TextStyle arg_style)
+	{
+		mTextVisual.SetTextStyle(arg_style);
 	}
 
 	void TextWidget::CreateContent()

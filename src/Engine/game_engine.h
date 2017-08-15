@@ -23,6 +23,7 @@ namespace Retro3D
 	class ScriptManager;
 	class WidgetManager;
 	class SceneRenderer;
+	class ResourceManager;
 	class World;
 	class PlayerController;
 	class WorldMessageBus;
@@ -37,6 +38,7 @@ namespace Retro3D
 		ScriptManager* mScriptManager;
 		WidgetManager* mWidgetManager;
 		SceneRenderer* mSceneRenderer;
+		ResourceManager* mResourceManager;
 		World* mWorld;
 		PlayerController* mPlayerController;
 		float mDeltaTime = 0.1f;
@@ -65,6 +67,7 @@ namespace Retro3D
 		inline ScriptManager* GetScriptManager() { return mScriptManager; }
 		inline WidgetManager* GetWidgetManager() { return mWidgetManager; }
 		inline SceneRenderer* GetSceneRenderer() { return mSceneRenderer; }
+		inline ResourceManager* GetResourceManager() { return mResourceManager; }
 		inline World* GetWorld() { return mWorld; }
 		inline PlayerController* GetPlayerController() { return mPlayerController; }
 		inline ConfigReader& GetGameConfig() { return mGameConfig; }

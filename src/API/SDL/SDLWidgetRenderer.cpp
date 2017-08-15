@@ -40,11 +40,10 @@ namespace Retro3D
 		int window_height;
 		SDL_GetWindowSize(mWindow->GetSDLWindow(), &window_width, &window_height);
 
-		// TEMP HACK - TODO: Get pre-loaded resource!
-		SDL_Texture* img = IMG_LoadTexture(renderer, arg_image->GetImagePath().c_str());
+		SDL_Texture* img = arg_image->GetSDLTexture();
 		if (img == nullptr)
 		{
-			LOG_ERROR() << "Failed to load image: " << arg_image->GetImagePath();
+			LOG_ERROR() << "Image visual has no loaded texture: " << arg_image->GetImagePath();
 			return;
 		}
 		int w, h;
@@ -68,8 +67,6 @@ namespace Retro3D
 		dstRect.h = arg_renderparams.mVisibleRect.mSize.y * window_height;
 
 		SDL_RenderCopy(renderer, img, &srcRect, &dstRect);
-
-		SDL_DestroyTexture(img); // TODO: use resource manager
 	}
 
 
@@ -90,23 +87,21 @@ namespace Retro3D
 		rect.y = arg_renderparams.mVisibleRect.mPosition.y * window_height;
 		rect.w = arg_renderparams.mVisibleRect.mSize.x * window_width;
 		rect.h = arg_renderparams.mVisibleRect.mSize.y * window_height;
-		//SDL_RenderFillRect(renderer, &rect);
 
-		// TODO: make resource, and open only once!!!
-		TTF_Font* font = TTF_OpenFont("resources//fonts//comic.ttf", style.GetFontSize());
+		TTF_Font* font = arg_text->GetFontRes()->GetFont();
 
 		if (font == nullptr)
 		{
-			LOG_ERROR() << "Failed to open font: " << "resources//fonts//comic.ttf";
+			LOG_ERROR() << "Failed to open font for text: " << arg_text->GetText().c_str();
 			return;
 		}
 
 		SDL_Color White = { 255, 255, 255 };
 
 		SDL_Surface* surface;
-		//if(wrapText)
-		//	surface = TTF_RenderText_Blended_Wrapped(font, text.c_str(), White, (Uint32)rect.w);
-		//else
+		if(wrapText)
+			surface = TTF_RenderText_Blended_Wrapped(font, text.c_str(), White, (Uint32)rect.w);
+		else
 			surface = TTF_RenderText_Solid(font, text.c_str(), White);
 
 		SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
@@ -146,7 +141,6 @@ namespace Retro3D
 
 		SDL_RenderCopy(renderer, txtTexture, &srcRect, &rect);
 
-		TTF_CloseFont(font); // TODO: use resource manager
 		SDL_FreeSurface(surface); // TODO: use resource manager
 		SDL_DestroyTexture(txtTexture); // TODO: use resource manager
 	}

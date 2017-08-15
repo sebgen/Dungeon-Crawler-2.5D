@@ -51,9 +51,17 @@ file(GLOB_RECURSE SRC_OBJECT
     "${SourceDir}/Object/*.cpp"
     "${SourceDir}/Object/*.h"
 )
+file(GLOB_RECURSE SRC_RESOURCE
+    "${SourceDir}/Resource/*.cpp"
+    "${SourceDir}/Resource/*.h"
+)
 file(GLOB_RECURSE SRC_TEXT
     "${SourceDir}/Text/*.cpp"
     "${SourceDir}/Text/*.h"
+)
+file(GLOB_RECURSE SRC_THREADING
+    "${SourceDir}/Threading/*.cpp"
+    "${SourceDir}/Threading/*.h"
 )
 file(GLOB_RECURSE SRC_UI_CORE
     "${SourceDir}/UI/Core/*.cpp"
@@ -92,7 +100,9 @@ source_group("Graphics" FILES ${SRC_GRAPHICS})
 source_group("Math" FILES ${SRC_MATH})
 source_group("Misc" FILES ${SRC_MISC})
 source_group("Object" FILES ${SRC_OBJECT})
+source_group("Resource" FILES ${SRC_RESOURCE})
 source_group("Text" FILES ${SRC_TEXT})
+source_group("Threading" FILES ${SRC_THREADING})
 source_group("UI" FILES ${SRC_UI})
 source_group("UI\\Core" FILES ${SRC_UI_CORE})
 source_group("UI\\Interfaces" FILES ${SRC_UI_INTERFACES})

@@ -4,7 +4,6 @@
 #include "Window/window.h"
 #include "UI/Interfaces/widget_renderer.h"
 #include "Math/rectangle.h"
-//#include "SFML/Graphics.hpp"
 
 namespace Retro3D
 {

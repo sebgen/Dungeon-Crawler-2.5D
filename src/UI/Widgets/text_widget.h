@@ -16,7 +16,8 @@ namespace Retro3D
 
 		void SetText(const std::string &arg_string);
 
-		TextStyle& GetTextStyle();
+		TextStyle GetTextStyle();
+		void SetTextStyle(TextStyle arg_style);
 
 		virtual void CreateContent() override;
 

@@ -17,9 +17,13 @@ namespace Retro3D
 
 		void renderWidgetRecursive(Widget* arg_widget, Window* arg_window);
 
+		void tickWidgetRecursive(Widget* arg_widget, float arg_deltatime);
+
 	public:
 		WidgetManager();
 		void AddWidget(Widget* arg_widget);
+
+		void TickWidgets(float arg_deltatime);
 
 		void RenderWidgets(Window* arg_window);
 
