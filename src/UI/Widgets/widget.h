@@ -7,12 +7,13 @@
 #include "Object/object.h"
 #include "Object/objectptr.h"
 #include "UI/Visual/visual.h"
+#include "Engine/input_listener.h"
 
 namespace Retro3D
 {
 	class IWidgetRenderer;
 
-	class Widget : public Object
+	class Widget : public Object, public IInputListener
 	{
 		friend class WidgetManager;
 

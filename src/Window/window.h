@@ -28,6 +28,8 @@ namespace Retro3D
 		{
 			return mSDLRenderer;
 		}
+
+		void GetWindowSize(int& out_width, int& out_height);
 	};
 }
 

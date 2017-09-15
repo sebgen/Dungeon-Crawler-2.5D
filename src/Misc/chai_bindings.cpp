@@ -13,6 +13,10 @@
 #include "Engine/script_manager.h"
 #include "Text/config_reader.h"
 #include "World/world.h"
+#include "UI/Widgets/image_widget.h"
+#include "UI/Widgets/text_widget.h"
+#include "UI/Managers/WidgetManager.h"
+#include "Actor/player_controller.h"
 
 namespace Retro3D
 {
@@ -32,6 +36,7 @@ namespace Retro3D
 		arg_chaiscript->add(chaiscript::fun(&GameEngine::GetCurrentLevel), "GetCurrentLevel");
 		arg_chaiscript->add(chaiscript::fun(&GameEngine::GetInputManager), "GetInputManager");
 		arg_chaiscript->add(chaiscript::fun(&GameEngine::GetScriptManager), "GetScriptManager");
+		arg_chaiscript->add(chaiscript::fun(&GameEngine::GetWidgetManager), "GetWidgetManager");
 		arg_chaiscript->add(chaiscript::fun(&GameEngine::GetGameConfig), "GetGameConfig");
 
 		arg_chaiscript->add(chaiscript::user_type<Level>(), "Level");
@@ -61,8 +66,14 @@ namespace Retro3D
 			return (ScriptComponent*)nullptr;
 		}), "GetScriptComponentByClass");
 
-
+		// Player
 		arg_chaiscript->add(chaiscript::user_type<Player>(), "Player");
+		arg_chaiscript->add(chaiscript::base_class<Actor, Player>());
+
+		// PlayerController
+		arg_chaiscript->add(chaiscript::user_type<PlayerController>(), "PlayerController");
+		arg_chaiscript->add(chaiscript::fun(&PlayerController::GetPlayer), "GetPlayer");
+		arg_chaiscript->add(chaiscript::fun(&PlayerController::SetPlayer), "SetPlayer");
 
 
 		// ChaiScriptObject
@@ -109,6 +120,39 @@ namespace Retro3D
 
 		arg_chaiscript->add(chaiscript::user_type<ScriptManager>(), "ScriptManager");
 
+		arg_chaiscript->add(chaiscript::user_type<WidgetManager>(), "WidgetManager");
+		arg_chaiscript->add(chaiscript::fun(&WidgetManager::AddWidget), "AddWidget");
+
+
+		// Widgets
+		arg_chaiscript->add(chaiscript::user_type<Widget>(), "Widget");
+		arg_chaiscript->add(chaiscript::fun(&Widget::AddVisual), "AddVisual");
+		arg_chaiscript->add(chaiscript::fun(&Widget::AddChildWidget), "AddChildWidget");
+		arg_chaiscript->add(chaiscript::fun([](Widget& widget, const float x, const float y) { widget.SetSize(x, y); }), "SetSize");
+		arg_chaiscript->add(chaiscript::fun([](Widget& widget, const float x, const float y) { widget.SetPosition(x, y); }), "SetPosition");
+		arg_chaiscript->add(chaiscript::fun([](Widget& widget, const float x, const float y) { widget.SetPivot(x, y); }), "SetPivot");
+
+		arg_chaiscript->add(chaiscript::user_type<ImageWidget>(), "ImageWidget");
+		arg_chaiscript->add(chaiscript::fun(&ImageWidget::SetColour), "SetColour");
+		arg_chaiscript->add(chaiscript::fun(&ImageWidget::SetImagePath), "SetImagePath");
+		arg_chaiscript->add(chaiscript::base_class<Widget, ImageWidget>());
+
+		arg_chaiscript->add(chaiscript::user_type<TextWidget>(), "TextWidget");
+		arg_chaiscript->add(chaiscript::base_class<Widget, TextWidget>());
+		arg_chaiscript->add(chaiscript::fun(&TextWidget::SetText), "SetText");
+		arg_chaiscript->add(chaiscript::fun(&TextWidget::GetTextStyle), "GetTextStyle");
+		arg_chaiscript->add(chaiscript::fun(&TextWidget::SetTextStyle), "SetTextStyle");
+
+		arg_chaiscript->add(chaiscript::user_type<TextStyle>(), "TextStyle");
+		arg_chaiscript->add(chaiscript::fun(&TextStyle::SetColour), "SetColour");
+		arg_chaiscript->add(chaiscript::fun(&TextStyle::SetFontName), "SetFontName");
+		arg_chaiscript->add(chaiscript::fun(&TextStyle::SetFontSize), "SetFontSize");
+		arg_chaiscript->add(chaiscript::fun(&TextStyle::SetWrapText), "SetWrapText");
+
+		arg_chaiscript->add(chaiscript::user_type<Colour>(), "Colour");
+		arg_chaiscript->add(chaiscript::constructor<Colour(float, float, float)>(), "Colour");
+		arg_chaiscript->add(chaiscript::constructor<Colour(float, float, float, float)>(), "Colour");
+
 
 		// Transform
 		arg_chaiscript->add(chaiscript::user_type<Transform>(), "Transform");
@@ -135,6 +179,19 @@ namespace Retro3D
 		arg_chaiscript->add(chaiscript::fun(&scripthelper_CreateSpriteComponent), "CreateSpriteComponent");
 		arg_chaiscript->add(chaiscript::fun(&scripthelper_CreateCameraComponent), "CreateCameraComponent");
 
+		// TEMP - TODO: Create a CreateWidget(typename) function
+		arg_chaiscript->add(chaiscript::fun([]()
+		{
+			ImageWidget* widget = new ImageWidget();
+			return widget;
+		}), "CreateImageWidget");
+		// TEMP - TODO: Create a CreateWidget(typename) function
+		arg_chaiscript->add(chaiscript::fun([]()
+		{
+			TextWidget* widget = new TextWidget();
+			return widget;
+		}), "CreateTextWidget");
+
 		arg_chaiscript->add(chaiscript::fun([](const std::string& name)
 		{
 			for (ObjectPtr<Actor> actor : GGameEngine->GetWorld()->GetActors())
@@ -146,4 +203,6 @@ namespace Retro3D
 		}), "GetActorByName");
 
 	}
+
+
 }

@@ -24,6 +24,11 @@ namespace Retro3D
 		mKeycodeMap["e"] = SDLK_e;
 		mKeycodeMap["1"] = SDLK_1;
 		mKeycodeMap["2"] = SDLK_2;
+
+		for (auto keyCodePair : mKeycodeMap)
+		{
+			mKeycodeMapInverted[keyCodePair.second] = keyCodePair.first;
+		}
 	}
 
 	void InputManager::CaptureInput()
@@ -41,11 +46,25 @@ namespace Retro3D
 			{
 				mKeyDownMap[mEvent.key.keysym.sym] = true;
 				mKeyPressedMap[mEvent.key.keysym.sym] = true;
+
+				auto iter = mKeycodeMapInverted.find(mEvent.key.keysym.sym);
+				if (iter != mKeycodeMapInverted.end())
+				{
+					for (IInputListener* listener : mInputListeners)
+						listener->OnKeyDown(iter->second.c_str());
+				}
 			}
 			else if (mEvent.type == SDL_KEYUP)
 			{
 				mKeyUpMap[mEvent.key.keysym.sym] = true;
 				mKeyPressedMap[mEvent.key.keysym.sym] = false;
+
+				auto iter = mKeycodeMapInverted.find(mEvent.key.keysym.sym);
+				if (iter != mKeycodeMapInverted.end())
+				{
+					for (IInputListener* listener : mInputListeners)
+						listener->OnKeyUp(iter->second.c_str());
+				}
 			}
 			else if (mEvent.type == SDL_MOUSEMOTION)
 			{
@@ -58,10 +77,16 @@ namespace Retro3D
 			else if (mEvent.type == SDL_MOUSEBUTTONDOWN)
 			{
 				mMousePressStates |= (SDL_PRESSED << (mEvent.button.button - 1));
+
+				for (IInputListener* listener : mInputListeners)
+					listener->OnMouseButtonDown((MouseButtonID)(mEvent.button.button - 1));
 			}
 			else if (mEvent.type == SDL_MOUSEBUTTONUP)
 			{
 				mMouseReleaseStates |= (SDL_PRESSED << (mEvent.button.button - 1));
+
+				for (IInputListener* listener : mInputListeners)
+					listener->OnMouseButtonUp((MouseButtonID)(mEvent.button.button - 1));
 			}
 
 
@@ -127,6 +152,16 @@ namespace Retro3D
 	const glm::vec2& InputManager::GetMousePosition() const
 	{
 		return mMousePosition;
+	}
+
+	void InputManager::RegisterInputListener(IInputListener* arg_listener)
+	{
+		mInputListeners.emplace(arg_listener);
+	}
+
+	void InputManager::UnregisterInputListener(IInputListener* arg_listener)
+	{
+		mInputListeners.erase(arg_listener);
 	}
 
 }

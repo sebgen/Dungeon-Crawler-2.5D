@@ -2,6 +2,7 @@
 
 #include "Engine/game_engine.h"
 #include "UI/Interfaces/widget_renderer.h"
+#include "Engine/input_manager.h"
 
 namespace Retro3D
 {
@@ -77,6 +78,60 @@ namespace Retro3D
 		for (ObjectPtr<Widget> child : arg_widget->mChildWidgets)
 		{
 			tickWidgetRecursive(child.Get(), arg_deltatime);
+		}
+	}
+
+	void WidgetManager::OnKeyDown(const char* arg_key)
+	{
+		// TODO: forward to selected/highlighted widget
+	}
+
+	void WidgetManager::OnKeyUp(const char* arg_key)
+	{
+		// TODO: forward to selected/highlighted widget
+	}
+
+	void WidgetManager::OnMouseButtonDown(MouseButtonID arg_button)
+	{
+		int win_w;
+		int win_h;
+		GGameEngine->GetWindow()->GetWindowSize(win_w, win_h);
+		if (mRootWidget != nullptr)
+			mouseEventRecursive(mRootWidget.Get(), GGameEngine->GetInputManager()->GetMousePosition() / glm::vec2(win_w, win_h), 1, arg_button);
+	}
+
+	void WidgetManager::OnMouseButtonUp(MouseButtonID arg_button)
+	{
+		int win_w;
+		int win_h;
+		GGameEngine->GetWindow()->GetWindowSize(win_w, win_h);
+		if (mRootWidget != nullptr)
+			mouseEventRecursive(mRootWidget.Get(), GGameEngine->GetInputManager()->GetMousePosition() / glm::vec2(win_w, win_h), 2, arg_button);
+	}
+
+	void WidgetManager::mouseEventRecursive(Widget* arg_widget, const glm::vec2& arg_mousepos, int arg_mouseevent, MouseButtonID arg_button)
+	{
+		const glm::vec2 widgetPos = arg_widget->mAbsoluteTransform.mPosition;
+		const glm::vec2 widgetRBPos = arg_widget->mAbsoluteTransform.mSize + widgetPos;
+
+		if (arg_mousepos.x > widgetPos.x && arg_mousepos.x < widgetRBPos.x && arg_mousepos.y > widgetPos.y && arg_mousepos.y < widgetRBPos.y)
+		{
+			switch (arg_mouseevent)
+			{
+			case 1:
+				arg_widget->OnMouseButtonDown(arg_button);
+				break;
+			case 2:
+				arg_widget->OnMouseButtonUp(arg_button);
+				break;
+			default:
+				break;
+			}
+		}
+
+		for (ObjectPtr<Widget> childWidget : arg_widget->mChildWidgets)
+		{
+			mouseEventRecursive(childWidget.Get(), arg_mousepos, arg_mouseevent, arg_button);
 		}
 	}
 }

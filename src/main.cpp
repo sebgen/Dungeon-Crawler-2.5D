@@ -20,14 +20,6 @@
 #include "Component/sprite_component.h"
 #include "Component/script_component.h"
 
-
-// UI test
-#include "UI/Widgets/visual_widget.h"
-#include "UI/Managers/WidgetManager.h"
-#include "UI/Widgets/text_widget.h"
-#include "UI/Widgets/image_widget.h"
-
-
 #include <typeinfo>
 
 #include "Engine/script_manager.h"
@@ -59,23 +51,6 @@ int main(int argc, char** argv)
 	GGameEngine->GetPlayerController()->SetPlayer(player);
 
 	GGameEngine->GetSceneRenderer()->SetCameraComponent(camComp); // TODO: make this automatic
-	
-	// UI Widget rendering test
-	ImageWidget* colWidget = new ImageWidget();
-	colWidget->SetPosition(0.0f, 0.0f);
-	colWidget->SetSize(1.0f, 0.12f);
-	colWidget->SetColour(Colour(0.0f, 0.0f, 1.0f, 0.3f));
-	GGameEngine->GetWidgetManager()->AddWidget(colWidget);
-	
-	TextWidget* txtWidget = new TextWidget();
-	txtWidget->SetPosition(0.5f, 0.0f);
-	txtWidget->SetPivot(0.5f, 0.0f);
-	txtWidget->SetSize(0.6f, 0.9f);
-	txtWidget->SetText("Dungeon Crawler");
-	TextStyle textStyle = txtWidget->GetTextStyle();
-	textStyle.SetColour(Colour(1.0f, 1.0f, 1.0f));
-	txtWidget->SetTextStyle(textStyle);
-	colWidget->AddChildWidget(txtWidget);
 
 	engine->StartEngine();
 

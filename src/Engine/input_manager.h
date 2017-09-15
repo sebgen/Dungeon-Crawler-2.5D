@@ -4,7 +4,9 @@
 #include "SDL2/SDL.h"
 #include "glm/glm.hpp"
 #include <unordered_map>
+#include <set>
 #include <string>
+#include "Engine/input_listener.h"
 
 namespace Retro3D
 {
@@ -34,8 +36,12 @@ namespace Retro3D
 		const glm::vec2& GetMouseMove() const;
 		const glm::vec2& GetMousePosition() const;
 
+		void RegisterInputListener(IInputListener* arg_listener);
+		void UnregisterInputListener(IInputListener* arg_listener);
+
 	private:
 		std::unordered_map<std::string, InputMapKeyCode> mKeycodeMap;
+		std::unordered_map<InputMapKeyCode, std::string> mKeycodeMapInverted;
 
 		std::unordered_map<InputMapKeyCode, bool> mKeyDownMap;
 		std::unordered_map<InputMapKeyCode, bool> mKeyUpMap;
@@ -49,6 +55,8 @@ namespace Retro3D
 		glm::vec2 mMouseWheel;
 
 		SDL_Event mEvent;
+
+		std::set<IInputListener*> mInputListeners;
 	};
 }
 

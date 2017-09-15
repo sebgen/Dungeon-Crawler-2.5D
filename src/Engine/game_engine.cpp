@@ -70,6 +70,8 @@ namespace Retro3D
 	{
 		LOG_INFO() << "Starting game engine";
 
+		mInputManager->RegisterInputListener(mWidgetManager); // TODO: do this in WidgetManager instead?
+
 		mResourceManager->OnStart();
 
 		mPlayerController->OnStart();
