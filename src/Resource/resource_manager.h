@@ -62,6 +62,12 @@ namespace Retro3D
 		template <typename T>
 		ResPtr<T> LoadResourceAsync(const std::string& arg_path, std::function<void()> arg_callback = {})
 		{
+#ifdef  __EMSCRIPTEN__ // TODO: does emcc support threads yet?
+			ResPtr<T> res = LoadResource<T>(arg_path);
+			arg_callback();
+			return res;
+#endif
+
 			const std::type_index& typeIndex = typeid(T);
 			T* resObj = getCahcedResource(typeIndex, arg_path);
 

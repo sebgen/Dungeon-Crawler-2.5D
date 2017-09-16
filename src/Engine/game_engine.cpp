@@ -86,7 +86,7 @@ namespace Retro3D
 		mIsRunning = true;
 
 #ifdef __EMSCRIPTEN__
-		emscripten_set_main_loop(emscriptenMainLoop, 60, 1);
+		emscripten_set_main_loop(emscriptenMainLoop, 0, 1);
 #else
 		while (mIsRunning) // TODO
 		{

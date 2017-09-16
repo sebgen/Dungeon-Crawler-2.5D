@@ -26,9 +26,7 @@ namespace Retro3D
 
 	void ResourceManager::OnStart()
 	{
-#ifdef __EMSCRIPTEN__ // TODO: FIND OUT WHY THIS CRASHES
-		// mAsyncLoadThread.Execute();
-#else
+#ifndef __EMSCRIPTEN__ // TODO: does emcc support threads yet?
 		mAsyncLoadThread.Execute();
 #endif
 	}
