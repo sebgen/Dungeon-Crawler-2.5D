@@ -29,7 +29,7 @@ namespace Retro3D
 
 	void Actor::OnTick(float arg_deltatime)
 	{
-		for (Component* comp : mComponents)
+		for (ObjectPtr<Component> comp : mComponents)
 		{
 			comp->OnTick(arg_deltatime);
 		}

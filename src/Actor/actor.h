@@ -8,16 +8,17 @@
 #include <unordered_map>
 #include <vector>
 #include <string>
+#include "Component/component.h"
+#include "Object/objectptr.h"
 
 namespace Retro3D
 {
-	class Component;
 
 	class Actor : public Object
 	{
 	protected:
 		Transform mTransform;
-		std::vector<Component*> mComponents; // TODO: RTTI
+		std::vector<ObjectPtr<Component>> mComponents; // TODO: RTTI
 
 	private:
 		bool mHasStarted = false;
@@ -36,9 +37,9 @@ namespace Retro3D
 		template<typename T>
 		T* GetComponent()
 		{
-			for (Component* comp : mComponents)
+			for (ObjectPtr<Component> comp : mComponents)
 			{
-				T* t = dynamic_cast<T*>(comp);
+				T* t = dynamic_cast<T*>(comp.Get());
 				if (t)
 					return t;
 			}
@@ -48,9 +49,9 @@ namespace Retro3D
 		const std::vector<T*> GetComponents()
 		{
 			std::vector<T*> outVector;
-			for (Component* comp : mComponents)
+			for (ObjectPtr<Component> comp : mComponents)
 			{
-				T* t = dynamic_cast<T*>(comp);
+				T* t = dynamic_cast<T*>(comp.Get());
 				if (t)
 					outVector.push_back(t);
 			}
