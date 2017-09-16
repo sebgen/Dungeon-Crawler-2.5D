@@ -1,6 +1,10 @@
 #include "widget.h"
 #include "UI/Interfaces/widget_renderer.h"
 #include "Misc/st_assert.h"
+#include "chaiscript/chaiscript.hpp"
+#include "Engine/script_manager.h"
+#include "Engine/game_engine.h"
+#include "UI/Managers/WidgetManager.h"
 
 namespace Retro3D
 {
@@ -29,6 +33,11 @@ namespace Retro3D
 		}
 		arg_widget->mParentWidget = this;
 		mChildWidgets.push_back(widget);
+
+		if (!arg_widget->mHasCreatedContent)
+		{
+			arg_widget->CreateContent();
+		}
 	}
 
 	bool Widget::RemoveChildWidget(Widget* arg_widget)
@@ -52,7 +61,11 @@ namespace Retro3D
 
 	void Widget::CreateContent()
 	{
-
+		if (mWidgetScriptClass != "")
+		{
+			SetupContentFromScript();
+		}
+		mHasCreatedContent = true;
 	}
 
 	void Widget::OnInitialise()
@@ -62,7 +75,20 @@ namespace Retro3D
 
 	void Widget::OnTick(float arg_deltatime)
 	{
-
+		if (funcOnTick != nullptr)
+		{
+			GGameEngine->GetWidgetManager()->CurrentWidget = this; // TODO
+			chaiscript::ChaiScript* chaiScriptCore = GGameEngine->GetScriptManager()->GetChaiScriptCore();
+			try
+			{
+				funcOnTick(mScriptObject, arg_deltatime); // TODO: only call if function exists
+			}
+			catch (std::exception ex)
+			{
+				LOG_ERROR() << "Exception caught in Widget::OnTick: " << ex.what();
+			}
+			GGameEngine->GetWidgetManager()->CurrentWidget = nullptr;
+		}
 	}
 
 	void Widget::SetPosition(glm::vec2 arg_pos)
@@ -106,6 +132,50 @@ namespace Retro3D
 		mTransform.mHorizontalScaling = arg_mode;
 		SetTransformDirty();
 	}
+
+
+	void Widget::SetWidgetScriptClass(const char* arg_script)
+	{
+		mWidgetScriptClass = arg_script;
+	}
+
+	bool Widget::SetupContentFromScript()
+	{
+		bool canCreate = mWidgetScriptClass != "";
+		if (!canCreate)
+			return false;
+
+		chaiscript::ChaiScript* chaiScriptCore = GGameEngine->GetScriptManager()->GetChaiScriptCore();
+		std::string createInstanceCall = mWidgetScriptClass + std::string("();");
+		try
+		{
+			mScriptObject = chaiScriptCore->eval(createInstanceCall); // will exist as long as mScriptObject
+			funcCreateContent = chaiScriptCore->eval<std::function<void(chaiscript::Boxed_Value&)>>("CreateContent");
+			funcOnTick = chaiScriptCore->eval<std::function<void(chaiscript::Boxed_Value&, float)>>("OnTick");
+
+		}
+		catch (std::exception ex)
+		{
+			LOG_ERROR() << "Failed to create script object for " << mWidgetScriptClass << ". Exception: " << ex.what();
+			return false;
+		}
+
+		// Call SetupContent
+		GGameEngine->GetWidgetManager()->CurrentWidget = this; // TODO
+		try
+		{
+			funcCreateContent(mScriptObject); // TODO: only call if function exists
+		}
+		catch (std::exception ex)
+		{
+			LOG_ERROR() << "Exception caught in Widget::SetupContentFromScript: " << ex.what();
+		}
+		GGameEngine->GetWidgetManager()->CurrentWidget = nullptr;
+		
+		return true;
+	}
+
+
 
 	const WidgetTransform& Widget::GetAbsoluteTransform()
 	{

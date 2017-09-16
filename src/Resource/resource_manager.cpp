@@ -26,7 +26,11 @@ namespace Retro3D
 
 	void ResourceManager::OnStart()
 	{
+#ifdef __EMSCRIPTEN__ // TODO: FIND OUT WHY THIS CRASHES
+		// mAsyncLoadThread.Execute();
+#else
 		mAsyncLoadThread.Execute();
+#endif
 	}
 
 	void ResourceManager::ProcessCompletedAsyncLoads()

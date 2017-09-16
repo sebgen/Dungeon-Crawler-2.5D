@@ -33,20 +33,8 @@ class TestLevel
 			print(fov);
 		}
 		
-		var colWidget = CreateImageWidget();
-		colWidget.SetPosition(0.0f, 0.0f);
-		colWidget.SetSize(1.0f, 0.12f);
-		colWidget.SetColour(Colour(0.0f, 0.0f, 1.0f, 0.3f));
-		GetGameEngine().GetWidgetManager().AddWidget(colWidget);
-		
-		var txtWidget = CreateTextWidget();
-		txtWidget.SetPosition(0.5f, 0.0f);
-		txtWidget.SetPivot(0.5f, 0.0f);
-		txtWidget.SetSize(0.6f, 0.9f);
-		txtWidget.SetText("Dungeon Crawler");
-		var textStyle = txtWidget.GetTextStyle();
-		textStyle.SetColour(Colour(1.0f, 1.0f, 1.0f));
-		txtWidget.SetTextStyle(textStyle);
-		colWidget.AddChildWidget(txtWidget);
+		// Test widget, loaded from the script "TestWidget.chai"
+		var scriptWidget = CreateScriptWidget("TestWidget");
+		GetGameEngine().GetWidgetManager().AddWidget(scriptWidget);
 	}
 };

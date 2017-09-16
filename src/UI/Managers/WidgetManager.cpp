@@ -15,6 +15,10 @@ namespace Retro3D
 	void WidgetManager::AddWidget(Widget* arg_widget)
 	{
 		mRootWidget->AddChildWidget(arg_widget);
+		if (!arg_widget->mHasCreatedContent)
+		{
+			arg_widget->CreateContent();
+		}
 	}
 
 	void WidgetManager::TickWidgets(float arg_deltatime)
@@ -73,7 +77,12 @@ namespace Retro3D
 
 	void WidgetManager::tickWidgetRecursive(Widget* arg_widget, float arg_deltatime)
 	{
+		CurrentWidget = arg_widget;
 		arg_widget->OnTick(arg_deltatime);
+
+		// TODO: forward mouse and input
+
+		CurrentWidget = nullptr;
 
 		for (ObjectPtr<Widget> child : arg_widget->mChildWidgets)
 		{

@@ -23,7 +23,8 @@ class TestClass
 			var getActorTest = GetActorByName("ScriptTestActor");
 			if(!getActorTest.is_var_null())
 			{
-				var scriptComp = getActorTest.GetScriptComponentByClass("TestClass");
+				//var scriptComp = getActorTest.GetScriptComponentByClass("TestClass");
+				var scriptComp = ThisScriptComponent(); // gets the ScriptComponent of this script
 				if(!scriptComp.is_var_null())
 				{
 					var scriptObj = scriptComp.GetScriptObject();

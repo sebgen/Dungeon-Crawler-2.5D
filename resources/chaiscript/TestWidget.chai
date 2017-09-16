@@ -1,0 +1,39 @@
+class TestWidget
+{
+	var colWidget;
+	var txtWidget
+	
+	def TestWidget()
+	{
+		print("Creating TestWidget");
+	}
+	
+	def CreateContent()
+	{
+		print("Creating content for TestWidget");
+		this.colWidget = CreateImageWidget();
+		this.colWidget.SetPosition(0.0f, 0.0f);
+		this.colWidget.SetSize(1.0f, 0.12f);
+		this.colWidget.SetColour(Colour(0.0f, 0.0f, 1.0f, 0.3f));
+		ThisWidget().AddChildWidget(this.colWidget); // ThisWidget() returns the Widget instance owned by this script
+		
+		this.txtWidget = CreateTextWidget();
+		this.txtWidget.SetPosition(0.5f, 0.0f);
+		this.txtWidget.SetPivot(0.5f, 0.0f);
+		this.txtWidget.SetSize(0.6f, 0.9f);
+		this.txtWidget.SetText("Dungeon Crawler");
+		var textStyle = this.txtWidget.GetTextStyle();
+		textStyle.SetColour(Colour(1.0f, 1.0f, 1.0f));
+		this.txtWidget.SetTextStyle(textStyle);
+		this.colWidget.AddChildWidget(this.txtWidget);
+	}
+	
+	def OnStart()
+	{
+	}
+	
+	def OnTick(deltatime)
+	{
+		
+	}
+};

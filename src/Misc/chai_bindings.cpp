@@ -131,6 +131,7 @@ namespace Retro3D
 		arg_chaiscript->add(chaiscript::fun([](Widget& widget, const float x, const float y) { widget.SetSize(x, y); }), "SetSize");
 		arg_chaiscript->add(chaiscript::fun([](Widget& widget, const float x, const float y) { widget.SetPosition(x, y); }), "SetPosition");
 		arg_chaiscript->add(chaiscript::fun([](Widget& widget, const float x, const float y) { widget.SetPivot(x, y); }), "SetPivot");
+		arg_chaiscript->add(chaiscript::fun(&Widget::SetWidgetScriptClass), "SetWidgetScriptClass");
 
 		arg_chaiscript->add(chaiscript::user_type<ImageWidget>(), "ImageWidget");
 		arg_chaiscript->add(chaiscript::fun(&ImageWidget::SetColour), "SetColour");
@@ -191,6 +192,13 @@ namespace Retro3D
 			TextWidget* widget = new TextWidget();
 			return widget;
 		}), "CreateTextWidget");
+		// TEMP - TODO: Create a CreateWidget(typename) function
+		arg_chaiscript->add(chaiscript::fun([](const std::string& scriptclass)
+		{
+			Widget* widget = new Widget();
+			widget->SetWidgetScriptClass(scriptclass.c_str());
+			return widget;
+		}), "CreateScriptWidget");
 
 		arg_chaiscript->add(chaiscript::fun([](const std::string& name)
 		{
@@ -201,6 +209,18 @@ namespace Retro3D
 			}
 			return (Actor*)nullptr;
 		}), "GetActorByName");
+
+		// TODO: Find better way to do this
+		arg_chaiscript->add(chaiscript::fun([]()
+		{
+			return GGameEngine->GetScriptManager()->CurrentScriptComponent;
+		}), "ThisScriptComponent");
+
+		// TODO: Find better way to do this
+		arg_chaiscript->add(chaiscript::fun([]()
+		{
+			return GGameEngine->GetWidgetManager()->CurrentWidget;
+		}), "ThisWidget");
 
 	}
 

@@ -8,6 +8,7 @@
 #include "Object/objectptr.h"
 #include "UI/Visual/visual.h"
 #include "Engine/input_listener.h"
+#include "chaiscript/chaiscript.hpp"
 
 namespace Retro3D
 {
@@ -31,11 +32,18 @@ namespace Retro3D
 
 		bool mTransformIsDirty;
 
+		bool mHasCreatedContent = false;
+
 		std::vector<ObjectPtr<Widget>> mChildWidgets;
 		ObjectPtr<Widget> mParentWidget;
 
 		std::vector<Visual*> mVisuals;
 
+		// ChaiScript
+		std::string mWidgetScriptClass;
+		chaiscript::Boxed_Value mScriptObject;
+		std::function<void(chaiscript::Boxed_Value&)> funcCreateContent;
+		std::function<void(chaiscript::Boxed_Value&, float)> funcOnTick;
 
 	public:
 		Widget();
@@ -89,6 +97,8 @@ namespace Retro3D
 		void SetVerticalScaling(WidgetScalingMode arg_mode);
 		void SetHorizontalScaling(WidgetScalingMode arg_mode);
 
+		void SetWidgetScriptClass(const char* arg_script);
+		bool SetupContentFromScript();
 
 		/***/
 		/***** Accessors ******/
@@ -107,6 +117,8 @@ namespace Retro3D
 
 		const size_t GetNumChildWidgets() const;
 		ObjectPtr<Widget> GetChildWidgetAt(const size_t& arg_index) const;
+
+		std::string GetWidgetScriptClass() { return mWidgetScriptClass; };
 
 	};
 }

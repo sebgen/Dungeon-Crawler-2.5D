@@ -23,6 +23,8 @@ namespace Retro3D
 		bool IsRegistered(const char* arg_class);
 
 		inline chaiscript::ChaiScript* GetChaiScriptCore() { return mChaiScript; }
+
+		ScriptComponent* CurrentScriptComponent; // UGLY!!
 	};
 }
 
