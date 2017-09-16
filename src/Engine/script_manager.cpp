@@ -20,7 +20,7 @@ namespace Retro3D
 		delete mChaiScript;
 	}
 
-	void ScriptManager::RegisterScript(const char* arg_file)
+	void ScriptManager::RegisterScript(std::string arg_file)
 	{
 		if (mChaiScript != nullptr && mRegisteredScripts.find(arg_file) == mRegisteredScripts.end())
 		{

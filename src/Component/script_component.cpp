@@ -41,7 +41,6 @@ namespace Retro3D
 		createScriptInstance(); // Create an instance of the class defined in script.
 		if (mCanExecute)
 		{
-			GGameEngine->GetScriptManager()->CurrentScriptComponent = this; // TODO
 			chaiscript::ChaiScript* chaiScriptCore = GGameEngine->GetScriptManager()->GetChaiScriptCore();
 			try
 			{
@@ -51,7 +50,6 @@ namespace Retro3D
 			{
 				LOG_ERROR() << "Exception caught in ScriptComponent::OnStart: " << ex.what();
 			}
-			GGameEngine->GetScriptManager()->CurrentScriptComponent = nullptr;
 		}
 	}
 
@@ -59,7 +57,6 @@ namespace Retro3D
 	{
 		if (mCanExecute)
 		{
-			GGameEngine->GetScriptManager()->CurrentScriptComponent = this; // TODO
 			chaiscript::ChaiScript* chaiScriptCore = GGameEngine->GetScriptManager()->GetChaiScriptCore();
 			try
 			{
@@ -69,7 +66,6 @@ namespace Retro3D
 			{
 				LOG_ERROR() << "Exception caught in ScriptComponent::OnTick: " << ex.what();
 			}
-			GGameEngine->GetScriptManager()->CurrentScriptComponent = nullptr;
 		}
 	}
 

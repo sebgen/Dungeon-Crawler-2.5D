@@ -119,6 +119,8 @@ namespace Retro3D
 		arg_chaiscript->add(chaiscript::fun(&InputManager::GetMousePosition), "GetMousePosition");
 
 		arg_chaiscript->add(chaiscript::user_type<ScriptManager>(), "ScriptManager");
+		arg_chaiscript->add(chaiscript::fun(&ScriptManager::RegisterScript), "RegisterScript");
+
 
 		arg_chaiscript->add(chaiscript::user_type<WidgetManager>(), "WidgetManager");
 		arg_chaiscript->add(chaiscript::fun(&WidgetManager::AddWidget), "AddWidget");
@@ -210,17 +212,11 @@ namespace Retro3D
 			return (Actor*)nullptr;
 		}), "GetActorByName");
 
-		// TODO: Find better way to do this
-		arg_chaiscript->add(chaiscript::fun([]()
-		{
-			return GGameEngine->GetScriptManager()->CurrentScriptComponent;
-		}), "ThisScriptComponent");
-
-		// TODO: Find better way to do this
-		arg_chaiscript->add(chaiscript::fun([]()
+		// ChaiScriptObject
+		arg_chaiscript->add(chaiscript::fun([](chaiscript::Boxed_Value boxedValue)
 		{
 			return GGameEngine->GetWidgetManager()->CurrentWidget;
-		}), "ThisWidget");
+		}), "GetWidget");
 
 	}
 

@@ -1,7 +1,7 @@
 class TestWidget
 {
 	var colWidget;
-	var txtWidget
+	var txtWidget;
 	
 	def TestWidget()
 	{
@@ -15,7 +15,7 @@ class TestWidget
 		this.colWidget.SetPosition(0.0f, 0.0f);
 		this.colWidget.SetSize(1.0f, 0.12f);
 		this.colWidget.SetColour(Colour(0.0f, 0.0f, 1.0f, 0.3f));
-		ThisWidget().AddChildWidget(this.colWidget); // ThisWidget() returns the Widget instance owned by this script
+		this.GetWidget().AddChildWidget(this.colWidget); // this.GetWidget() returns the Widget instance owned by this script
 		
 		this.txtWidget = CreateTextWidget();
 		this.txtWidget.SetPosition(0.5f, 0.0f);
@@ -26,10 +26,6 @@ class TestWidget
 		textStyle.SetColour(Colour(1.0f, 1.0f, 1.0f));
 		this.txtWidget.SetTextStyle(textStyle);
 		this.colWidget.AddChildWidget(this.txtWidget);
-	}
-	
-	def OnStart()
-	{
 	}
 	
 	def OnTick(deltatime)

@@ -19,12 +19,11 @@ namespace Retro3D
 		ScriptManager();
 		~ScriptManager();
 
-		void RegisterScript(const char* arg_file);
+		void RegisterScript(std::string arg_file);
 		bool IsRegistered(const char* arg_class);
 
 		inline chaiscript::ChaiScript* GetChaiScriptCore() { return mChaiScript; }
 
-		ScriptComponent* CurrentScriptComponent; // UGLY!!
 	};
 }
 
