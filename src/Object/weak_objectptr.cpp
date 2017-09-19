@@ -1,7 +1,7 @@
-#ifndef RETRO3D_OBJECTPTR_CPP
-#define RETRO3D_OBJECTPTR_CPP
+#ifndef RETRO3D_WEAKOBJECTPTR_CPP
+#define RETRO3D_WEAKOBJECTPTR_CPP
 
-#include "objectptr.h"
+#include "weak_objectptr.h"
 #include "Misc/st_assert.h"
 #include "object.h"
 #include <type_traits>
@@ -9,88 +9,88 @@
 namespace Retro3D
 {
 	template<typename T>
-	ObjectPtr<T>::ObjectPtr()
+	WeakObjectPtr<T>::WeakObjectPtr()
 	{
 		this->mRefHandle = nullptr;
 		//__AssertComment((std::is_base_of<Object, T>::value), "Type of T must be Object or subclass of Object.");
 	}
 
 	template<typename T>
-	ObjectPtr<T>::ObjectPtr(Object* arg_object)
+	WeakObjectPtr<T>::WeakObjectPtr(Object* arg_object)
 	{
 		__AssertComment((std::is_base_of<Object, T>::value), "Type of T must be Object or subclass of Object.");
 
 		this->mRefHandle = arg_object->GetRefHandle();
-		this->mRefHandle->AddStrongRef();
+		this->mRefHandle->AddWeakRef();
 	}
 
 	template<typename T>
-	ObjectPtr<T>::ObjectPtr(const ObjectPtr<T>& arg_other)
+	WeakObjectPtr<T>::WeakObjectPtr(const WeakObjectPtr<T>& arg_other)
 	{
 		__AssertComment((std::is_base_of<Object, T>::value), "Type of T must be Object or subclass of Object.");
 
 		this->mRefHandle = arg_other.mRefHandle;
-		this->mRefHandle->AddStrongRef();
+		this->mRefHandle->AddWeakRef();
 	}
 
 	template<typename T>
-	ObjectPtr<T>::~ObjectPtr()
+	WeakObjectPtr<T>::~WeakObjectPtr()
 	{
 		if (this->mRefHandle != nullptr)
 		{
-			this->mRefHandle->RemoveStrongRef();
+			this->mRefHandle->RemoveWeakRef();
 		}
 	}
 
 	template<typename T>
-	ObjectPtr<T>& ObjectPtr<T>::operator=(const ObjectPtr<T>& arg_other)
+	WeakObjectPtr<T>& WeakObjectPtr<T>::operator=(const WeakObjectPtr<T>& arg_other)
 	{
 		ObjectRefHandle* oldHandle = this->mRefHandle;
 		this->mRefHandle = arg_other.mRefHandle;
-		this->mRefHandle->AddStrongRef();
+		this->mRefHandle->AddWeakRef();
 		if (oldHandle != nullptr)
-			oldHandle->RemoveStrongRef();
+			oldHandle->RemoveWeakRef();
 		return (*this);
 	}
 
 	template<typename T>
-	T* ObjectPtr<T>::Get() const
+	T* WeakObjectPtr<T>::Get() const
 	{
 		return static_cast<T*>(this->mRefHandle->GetObject());
 	}
 
 	template<typename T>
-	T* ObjectPtr<T>::operator->() const
+	T* WeakObjectPtr<T>::operator->() const
 	{
 		return static_cast<T*>(this->GetObjectSafe());
 	}
 
 	template<typename T>
-	bool ObjectPtr<T>::operator==(const ObjectPtrBase<T>& arg_other) const
+	bool WeakObjectPtr<T>::operator==(const ObjectPtrBase<T>& arg_other) const
 	{
 		return this->GetObjectSafe() == arg_other.GetObjectSafe();
 	}
 
 	template<typename T>
-	bool ObjectPtr<T>::operator!=(const ObjectPtrBase<T>& arg_other) const
+	bool WeakObjectPtr<T>::operator!=(const ObjectPtrBase<T>& arg_other) const
 	{
 		return this->GetObjectSafe() != arg_other.GetObjectSafe();
 	}
 
 	template<typename T>
-	bool ObjectPtr<T>::operator==(const T* arg_other) const
+	bool WeakObjectPtr<T>::operator==(const T* arg_other) const
 	{
 		return this->GetObjectSafe() == arg_other;
 	}
 
 	template<typename T>
-	bool ObjectPtr<T>::operator!=(const T* arg_other) const
+	bool WeakObjectPtr<T>::operator!=(const T* arg_other) const
 	{
 		return this->GetObjectSafe() != arg_other;
 	}
 
 	template<typename T>
-	bool ObjectPtr<T>::IsValid() const
+	bool WeakObjectPtr<T>::IsValid() const
 	{
 		return this->GetObjectSafe() != nullptr;
 	}

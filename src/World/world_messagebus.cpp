@@ -1,5 +1,8 @@
 #include "world_messagebus.h"
 
+#include "Actor/actor.h"
+#include "Component/component.h"
+
 namespace Retro3D
 {
 	void WorldMessageBus::ActorAdded(Actor* arg_actor)

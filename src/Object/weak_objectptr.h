@@ -1,8 +1,8 @@
-#ifndef RETRO3D_OBJECTPTR_H
-#define RETRO3D_OBJECTPTR_H
+#ifndef RETRO3D_WEAKOBJECTPTR_H
+#define RETRO3D_WEAKOBJECTPTR_H
 
 /*=============================================================================================
-Reference-counted pointer to a Retro3D::Object.
+Weak pointer to a Retro3D::Object.
 When the object is destroyed (in any way), this will return nullptr.
 
 ==============================================================================================*/
@@ -12,15 +12,15 @@ When the object is destroyed (in any way), this will return nullptr.
 namespace Retro3D
 {
 	template <class T>
-	class ObjectPtr : public ObjectPtrBase<T>
+	class WeakObjectPtr : public ObjectPtrBase<T>
 	{
 	public:
-		ObjectPtr();
-		ObjectPtr(Object* arg_object);
-		ObjectPtr(const ObjectPtr<T>& arg_other);
-		~ObjectPtr();
+		WeakObjectPtr();
+		WeakObjectPtr(Object* arg_object);
+		WeakObjectPtr(const WeakObjectPtr<T>& arg_other);
+		~WeakObjectPtr();
 
-		ObjectPtr<T>& operator=(const ObjectPtr<T>& arg_other);
+		WeakObjectPtr<T>& operator=(const WeakObjectPtr<T>& arg_other);
 
 		T* Get() const;
 		T* operator->() const;
@@ -34,6 +34,6 @@ namespace Retro3D
 	};
 }
 
-#include "objectptr.cpp"
+#include "weak_objectptr.cpp"
 
 #endif

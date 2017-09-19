@@ -24,14 +24,15 @@
 
 #include "Engine/script_manager.h"
 
+
 #undef main // TEMP - TODO
+
+using namespace Retro3D;
 
 
 int main(int argc, char** argv)
 {
 	LOG_INFO() << "starting from main";
-
-	using namespace Retro3D;
 
 	GameEngine* engine = GameEngine::CreateGameEngine();
 

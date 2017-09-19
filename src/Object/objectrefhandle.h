@@ -19,7 +19,8 @@ namespace Retro3D
 	{
 	private:
 		Object* mObject;
-		unsigned int mRefCount;
+		unsigned int mStrongRefCount;
+		unsigned int mWeakRefCount;
 
 		void maybeDelete();
 
@@ -28,9 +29,11 @@ namespace Retro3D
 
 		inline Object* GetObject() const { return mObject; };
 
-		inline void SetObject(Object* arg_object) { mObject = arg_object; }
-		void AddRef();
-		void RemoveRef();
+		void SetObject(Object* arg_object);
+		void AddStrongRef();
+		void RemoveStrongRef();
+		void AddWeakRef();
+		void RemoveWeakRef();
 	};
 }
 

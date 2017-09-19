@@ -29,14 +29,14 @@ namespace Retro3D
 
 	void World::TickWorld(float arg_deltatime)
 	{
-		for (Actor* actor : GGameEngine->GetWorldMessageBus()->GetActorsAdded())
+		for (ObjectPtrBase<Actor> actor : GGameEngine->GetWorldMessageBus()->GetActorsAdded())
 		{
-			addActor(actor);
+			addActor(actor.Get());
 			actor->OnStart();
 		}
-		for (Component* comp : GGameEngine->GetWorldMessageBus()->GetComponentsAdded())
+		for (ObjectPtrBase<Component> comp : GGameEngine->GetWorldMessageBus()->GetComponentsAdded())
 		{
-			addComponent(comp);
+			addComponent(comp.Get());
 			comp->OnStart();
 		}
 	}

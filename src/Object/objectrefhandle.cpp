@@ -3,26 +3,53 @@
 namespace Retro3D
 {
 	ObjectRefHandle::ObjectRefHandle(Object* arg_object)
-		: mObject(arg_object), mRefCount(0)
+		: mObject(arg_object), mStrongRefCount(0), mWeakRefCount(0)
 	{
 		maybeDelete();
 	}
 
-	void ObjectRefHandle::AddRef()
+	void ObjectRefHandle::SetObject(Object* arg_object)
 	{
-		mRefCount++;
+		mObject = arg_object; 
+		if (mObject == nullptr)
+		{
+			maybeDelete();
+		}
 	}
 
-	void ObjectRefHandle::RemoveRef()
+	void ObjectRefHandle::AddStrongRef()
 	{
-		mRefCount--;
+		mStrongRefCount++;
+	}
+
+	void ObjectRefHandle::RemoveStrongRef()
+	{
+		mStrongRefCount--;
+
+		if (mStrongRefCount == 0 && mObject != nullptr)
+		{
+			delete(mObject);
+			mObject = nullptr;
+		}
+
+		maybeDelete();
+	}
+
+	void ObjectRefHandle::AddWeakRef()
+	{
+		mWeakRefCount++;
+	}
+
+	void ObjectRefHandle::RemoveWeakRef()
+	{
+		mWeakRefCount--;
 
 		maybeDelete();
 	}
 
 	void ObjectRefHandle::maybeDelete()
 	{
-		if (mRefCount == 0 && mObject == nullptr)
+		if (mObject == nullptr && mStrongRefCount == 0 && mWeakRefCount == 0)
 		{
 			delete(this);
 		}

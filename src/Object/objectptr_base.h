@@ -1,27 +1,26 @@
-#ifndef RETRO3D_OBJECTPTR_H
-#define RETRO3D_OBJECTPTR_H
+#ifndef RETRO3D_OBJECTPTRBASE_H
+#define RETRO3D_OBJECTPTRBASE_H
 
 /*=============================================================================================
-Reference-counted pointer to a Retro3D::Object.
-When the object is destroyed (in any way), this will return nullptr.
+Base class for object pointers.
 
 ==============================================================================================*/
 #include "objectrefhandle.h"
-#include "objectptr_base.h"
 
 namespace Retro3D
 {
+	class Object;
+
 	template <class T>
-	class ObjectPtr : public ObjectPtrBase<T>
+	class ObjectPtrBase
 	{
+	protected:
+		ObjectRefHandle* mRefHandle;
+
 	public:
-		ObjectPtr();
-		ObjectPtr(Object* arg_object);
-		ObjectPtr(const ObjectPtr<T>& arg_other);
-		~ObjectPtr();
+		inline Object* GetObjectSafe() const { return (mRefHandle != nullptr ? mRefHandle->GetObject() : nullptr); }
 
-		ObjectPtr<T>& operator=(const ObjectPtr<T>& arg_other);
-
+	public:
 		T* Get() const;
 		T* operator->() const;
 		bool operator==(const ObjectPtrBase<T>& arg_other) const;
@@ -34,6 +33,6 @@ namespace Retro3D
 	};
 }
 
-#include "objectptr.cpp"
+#include "objectptr_base.cpp"
 
 #endif
