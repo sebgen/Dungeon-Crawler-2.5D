@@ -18,6 +18,7 @@ namespace Retro3D
 		WeakObjectPtr();
 		WeakObjectPtr(Object* arg_object);
 		WeakObjectPtr(const WeakObjectPtr<T>& arg_other);
+		WeakObjectPtr(const ObjectPtrBase<T>& arg_other);
 		~WeakObjectPtr();
 
 		WeakObjectPtr<T>& operator=(const WeakObjectPtr<T>& arg_other);

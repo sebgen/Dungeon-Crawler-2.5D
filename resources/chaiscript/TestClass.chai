@@ -21,6 +21,8 @@ class TestClass
 			
 			// Test: get ScriptTestActor (owner of this), and get its ScriptComponent, and the the ShriptComponent's ScriptObject (this)
 			var getActorTest = GetActorByName("ScriptTestActor");
+			var actorPtrTest = ActorPtr(getActorTest);
+			print(actorPtrTest.Get().GetActorName());
 			if(!getActorTest.is_var_null())
 			{
 				var scriptComp = getActorTest.GetScriptComponentByClass("TestClass");

@@ -34,6 +34,12 @@ namespace Retro3D
 	}
 
 	template<typename T>
+	WeakObjectPtr<T>::WeakObjectPtr(const ObjectPtrBase<T>& arg_other)
+		:WeakObjectPtr<T>::WeakObjectPtr(arg_other.GetObjectSafe())
+	{
+	}
+
+	template<typename T>
 	WeakObjectPtr<T>::~WeakObjectPtr()
 	{
 		if (this->mRefHandle != nullptr)

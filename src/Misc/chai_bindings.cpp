@@ -17,6 +17,7 @@
 #include "UI/Widgets/text_widget.h"
 #include "UI/Managers/WidgetManager.h"
 #include "Actor/player_controller.h"
+#include "Object/weak_objectptr.h"
 
 namespace Retro3D
 {
@@ -105,8 +106,10 @@ namespace Retro3D
 
 
 		// ObjectPtr
-		arg_chaiscript->add(chaiscript::user_type<ObjectPtr<Actor>>(), "ActorPtr");
-		arg_chaiscript->add(chaiscript::fun(&ObjectPtr<Actor>::Get), "Get");
+		arg_chaiscript->add(chaiscript::user_type<WeakObjectPtr<Actor>>(), "ActorPtr");
+		arg_chaiscript->add(chaiscript::base_class<ObjectPtrBase<Actor>, WeakObjectPtr<Actor>>());
+		arg_chaiscript->add(chaiscript::constructor<WeakObjectPtr<Actor>(Actor*)>(), "ActorPtr");
+		arg_chaiscript->add(chaiscript::fun(&WeakObjectPtr<Actor>::Get), "Get");
 
 
 		// Managers
