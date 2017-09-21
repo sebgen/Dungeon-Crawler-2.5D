@@ -71,6 +71,8 @@ namespace Retro3D
 			std::string currLine;
 			while (std::getline(inFile, currLine))
 			{
+				if(currLine[currLine.size() - 1] == '\r')
+					currLine.erase(currLine.size() - 1);
 				if (currLine != "")
 					fileList.push(currLine);
 			}
