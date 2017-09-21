@@ -9,6 +9,7 @@ namespace Retro3D
 	class Resource : public Object
 	{
 	public:
+		/** Loads the resource. Implemented in subclasses of Resource */
 		virtual bool LoadResource(const std::string& arg_path) = 0;
 	};
 }

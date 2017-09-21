@@ -33,8 +33,16 @@ namespace Retro3D
 
 		virtual void InitialiseObject(ObjectInitialiserParams arg_params);
 
+		/**
+		* Calls a function by the given name.
+		* Note, the function must have been registered using the REGISTER_CLASS_FUNCTION macro
+		*/
 		void CallFunction(Function* arg_function, FunctionArgContainer args);
 
+		/**
+		* Gets the ObjectRefHandle of the Object.
+		* Smart pointers reference this handle instead of referencing the object directly.
+		*/
 		inline ObjectRefHandle*  GetRefHandle() { return mObjectRefHandle; }
 
 		inline bool HasObjectFlag(ObjectFlag arg_flag) { return mObjectFlags & (ObjectFlagRegister)arg_flag; }

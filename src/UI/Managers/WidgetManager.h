@@ -1,6 +1,14 @@
 #ifndef RETRO3D_WIDGETMANAGER_H
 #define RETRO3D_WIDGETMANAGER_H
 
+/*=============================================================================================
+Widget Manager
+
+Owns and updates all Widgets.
+Deals with Widget ticking, input handling and rendering of Widgets.
+
+==============================================================================================*/
+
 #include "Misc/singleton.h"
 #include "Object/objectptr.h"
 #include "Window/window.h"
@@ -24,18 +32,23 @@ namespace Retro3D
 
 	public:
 		WidgetManager();
+
+		/** Adds a Widget to the widget tree. */
 		void AddWidget(Widget* arg_widget);
 
+		/** Updates all Widgets. */
 		void TickWidgets(float arg_deltatime);
 
+		/** Renders all Widgets. */
 		void RenderWidgets(Window* arg_window);
 
+		// IInputListener callbacks
 		virtual void OnKeyDown(const char* arg_key) override;
 		virtual void OnKeyUp(const char* arg_key) override;
 		virtual void OnMouseButtonDown(MouseButtonID arg_button) override;
 		virtual void OnMouseButtonUp(MouseButtonID arg_button) override;
 
-		Widget* CurrentWidget; // UGLY!!
+		Widget* CurrentWidget; // UGLY!! TODO
 	};
 }
 

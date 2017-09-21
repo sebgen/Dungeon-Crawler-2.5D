@@ -18,9 +18,14 @@ namespace Retro3D
 	public:
 		Component();
 		~Component();
+
+		/** Called when the game starts */
 		virtual void OnStart();
+
+		/** Called each frame */
 		virtual void OnTick(float arg_deltatime);
 
+		/** Gets the owning actor of the Component */
 		inline Actor* GetActor() { return mActor; }
 	};
 }

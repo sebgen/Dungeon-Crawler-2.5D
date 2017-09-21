@@ -27,11 +27,22 @@ namespace Retro3D
 		typedef Retro3D::Object*(*staticconstructor_t)();
 
 	private:
-		std::string mClassName;					// Name of this class
-		Retro3D::Class* mBaseClass;				// Pointer to base class
+		/** Name of the class */
+		std::string mClassName;
+
+		/** Pointer to base class */
+		Retro3D::Class* mBaseClass;
+
+		/** List of child classes of this class (specified in DEFINE_CLASS-macro) */
 		std::vector<Retro3D::Class*> mChildClasses;
-		staticconstructor_t mStaticConstructor; // Static functions that calls an empty constructor
-		unsigned int mCreatedInstanceCount;		// Number of created instances (destroyed isntances are also counted)
+
+		/** Static functions that calls an empty constructor */
+		staticconstructor_t mStaticConstructor;
+
+		/** Number of created instances (destroyed isntances are also counted) */
+		unsigned int mCreatedInstanceCount;
+
+		/** Pointers to member functions of the class (registered with REGISTER_CLASS_FUNCTION-macro) */
 		std::unordered_map<std::string, Function*> mMemberFunctions;
 
 	public:

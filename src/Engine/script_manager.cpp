@@ -6,6 +6,10 @@
 
 #include "Misc/chai_bindings.h"
 
+#include <queue>
+#include <fstream>
+#include <sstream>
+
 namespace Retro3D
 {
 	ScriptManager::ScriptManager()
@@ -13,6 +17,9 @@ namespace Retro3D
 		mChaiScript = new chaiscript::ChaiScript();
 
 		ChaiBindings::AddBindings(mChaiScript);
+
+		LoadScriptsFromIni();
+
 	}
 
 	ScriptManager::~ScriptManager()
@@ -46,8 +53,34 @@ namespace Retro3D
 		}
 	}
 
-	bool ScriptManager::IsRegistered(const char* arg_class)
+	bool ScriptManager::IsRegistered(const char* arg_script)
 	{
-		return mRegisteredScripts.find(arg_class) != mRegisteredScripts.end();
+		return mRegisteredScripts.find(arg_script) != mRegisteredScripts.end();
+	}
+
+	void ScriptManager::LoadScriptsFromIni()
+	{
+		const char* ScriptsRootDir = "resources//chaiscript//";
+		std::string scriptFilePath = ScriptsRootDir + std::string("ScriptFiles.txt");
+		std::queue<std::string> fileList;
+
+		std::ifstream inFile;
+		inFile.open(scriptFilePath);
+		if (inFile.is_open())
+		{
+			std::string currLine;
+			while (std::getline(inFile, currLine))
+			{
+				if (currLine != "")
+					fileList.push(currLine);
+			}
+		}
+
+		while (!fileList.empty())
+		{
+			std::string currFile = fileList.front();
+			RegisterScript(ScriptsRootDir + currFile);
+			fileList.pop();
+		}
 	}
 }

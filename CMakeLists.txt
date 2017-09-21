@@ -119,6 +119,10 @@ include_directories ("../include")
 
 add_executable(DungeonCrawler ${SOURCEFILES})
 
+if(MSVC)
+    set_property(TARGET DungeonCrawler APPEND PROPERTY LINK_FLAGS /DEBUG)
+endif()
+
 SET(LIB_DIR "${CMAKE_SOURCE_DIR}/libraries/Windows/x86")
 
 find_package(OpenMP)

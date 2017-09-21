@@ -25,8 +25,10 @@ namespace Retro3D
 		*/
 		virtual void RenderVisual(IWidgetRenderer *arg_renderer, const WidgetRenderParams& arg_renderparams);
 
+		/** Activates the Visual. The Visual will be rendered next frame. */
 		void Activate(bool arg_active);
 
+		/** Checks if the Visual is activated, and will be rendered. */
 		inline bool IsActivated() { return mActivated; }
 	};
 }

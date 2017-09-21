@@ -1,6 +1,15 @@
 #ifndef RETRO3D_SCENERENDERER_H
 #define RETRO3D_SCENERENDERER_H
 
+/*=============================================================================================
+Scene Renderer
+
+Renders walls, ceilings, floors and sprites.
+
+Everything is software rendered (obviously for educational purposes, as it is super-inefficient).
+
+==============================================================================================*/
+
 #include <stdint.h>
 #include <unordered_map>
 #include "Object/objectptr.h"
@@ -21,8 +30,12 @@ namespace Retro3D
 		SceneRenderer();
 		~SceneRenderer();
 
+		/** Renders the whole scene. */
 		void RenderScene();
+
+		/** Sets the Level to render. Called from the engine. */
 		void SetLevel(Level* arg_level);
+
 		void SetCameraComponent(CameraComponent* arg_comp); // TEMP
 
 	private:

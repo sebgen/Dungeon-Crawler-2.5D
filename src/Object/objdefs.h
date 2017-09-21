@@ -1,6 +1,26 @@
 #ifndef RETRO3D_OBJDEFS_H
 #define RETRO3D_OBJDEFS_H
 
+/*=============================================================================================
+Macros and more for Retro3D::Object and subclasses.
+
+Enabling reflection on a class:
+	class YourClass : public Object
+	{
+	DEFINE_CLASS(YourClass, Object)
+	...
+	}
+
+Registering a function (so you can call it by name or use RPCs):
+	DEFINE_FUNCTION(FunctionName, FunctionParameter1Type, FunctionParameter2Type, ......)
+
+	BEGIN_REGISTER_CLASSPROPERTIES(Retro3D::YourClass)
+	REGISTER_CLASS_FUNCTION(Retro3D::YourClass, FunctionName) // REPEAT FOR EACH FUNCTION
+	.....
+	END_REGISTER_CLASSPROPERTIES(Retro3D::YourClass)
+
+==============================================================================================*/
+
 #include "Misc/macros.h"
 #include "class.h"
 #include "function.h"

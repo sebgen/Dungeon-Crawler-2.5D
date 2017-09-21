@@ -19,11 +19,16 @@ namespace Retro3D
 		ScriptManager();
 		~ScriptManager();
 
+		/** Loads a script file and registers its code for later use */
 		void RegisterScript(std::string arg_file);
-		bool IsRegistered(const char* arg_class);
+
+		/** Checks if the script file already has been loaded */
+		bool IsRegistered(const char* arg_script);
 
 		inline chaiscript::ChaiScript* GetChaiScriptCore() { return mChaiScript; }
 
+		/** Loads all the scripts listed in ScriptFiles.txt */
+		void LoadScriptsFromIni();
 	};
 }
 

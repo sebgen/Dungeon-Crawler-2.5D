@@ -17,6 +17,7 @@ The game is ticked from here.
 
 namespace Retro3D
 {
+	// Forward declarations
 	class Level;
 	class Window;
 	class InputManager;
@@ -32,35 +33,49 @@ namespace Retro3D
 	class GameEngine
 	{
 	private:
+		World* mWorld;
+		WorldMessageBus* mWorldMessageBus;
 		Level* mCurrentLevel;
 		Window* mWindow;
+
+		// Managers
 		InputManager* mInputManager;
 		ScriptManager* mScriptManager;
 		WidgetManager* mWidgetManager;
 		SceneRenderer* mSceneRenderer;
 		ResourceManager* mResourceManager;
-		World* mWorld;
+		
 		PlayerController* mPlayerController;
-		float mDeltaTime = 0.1f;
-		bool mIsRunning;
 		ConfigReader mGameConfig;
-		WorldMessageBus* mWorldMessageBus;
 		IWidgetRenderer* mWidgetRenderer;
 
+		float mDeltaTime = 0.1f;
+		bool mIsRunning;
+
+		// Constructor
 		GameEngine();
 
 	public:
+		/**
+		* Creates the GameEngine.
+		* This will set the global GGameEngine instance.
+		* @return A pointer to the newly created GGameEngine
+		*/
 		static GameEngine* CreateGameEngine();
 
 	public:
+		/** Starts the game engine */
 		void StartEngine();
+
+		/** Called every frame */
 		void TickEngine();
 
+		/** Gets the time in seconds between current and last frame */
 		float GetDeltaTime();
 
 		void SetPlayerController(PlayerController* arg_controller) { mPlayerController = arg_controller; } // TODO
 
-	public:
+		// Accessors
 		inline Level* GetCurrentLevel() { return mCurrentLevel; }
 		inline Window* GetWindow() { return mWindow; }
 		inline InputManager* GetInputManager() { return mInputManager; }

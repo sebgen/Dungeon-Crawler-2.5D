@@ -1,6 +1,19 @@
 #ifndef RETRO3D_WIDGET_H
 #define RETRO3D_WIDGET_H
 
+/*=============================================================================================
+Base class for Widgets
+
+All GUI is rendered through Widgets.
+Widgets can contain other Widgets, as well as Visuals (that do the actual rendering).
+
+You can also specify a ChaiScript class to be used for constructing and updating the Widget.
+The ChaiScript can implement the following functions:
+  def CreateContent()
+  def OnTick(deltatime)
+
+==============================================================================================*/
+
 #include "UI/Core/widgettransform.h"
 #include <vector>
 #include "Math/rectangle.h"
@@ -30,24 +43,34 @@ namespace Retro3D
 		*/
 		WidgetTransform mAbsoluteTransform;
 
+		/** Does the absolute transform need to be recalculated? */
 		bool mTransformIsDirty;
 
 		bool mHasCreatedContent = false;
 
+		/** Child Widgets */
 		std::vector<ObjectPtr<Widget>> mChildWidgets;
+		
+		/** Parent of this Widget */
 		ObjectPtr<Widget> mParentWidget;
 
+		/** Visuals to render */
 		std::vector<Visual*> mVisuals;
 
-		// ChaiScript
+
+		/** ChaiScript class name. */
 		std::string mWidgetScriptClass;
+
+		/** Instance of the ChaiScript class, owned by this Widget. */
 		chaiscript::Boxed_Value mScriptObject;
+
 		std::function<void(chaiscript::Boxed_Value&)> funcCreateContent;
 		std::function<void(chaiscript::Boxed_Value&, float)> funcOnTick;
 
 	public:
 		Widget();
 
+		/** Sets up the Widget. Will also tell the ChaiScript object (if it has one) to create content. */
 		virtual void CreateContent();
 
 		/**
@@ -77,9 +100,17 @@ namespace Retro3D
 		*/
 		void SetTransformDirty();
 
+		/** Adds a child Widget.
+		* The child Widget will be owned by this Widget, and is rendered inside it.
+		*/
 		void AddChildWidget(Widget* arg_widget);
 
+		/**
+		* Removes the specified child Widget.
+		* This may cause in the child Widget being destroyed (when the strong reference count becomes 0).
+		*/
 		bool RemoveChildWidget(Widget* arg_widget);
+
 
 		/***/
 		/***** Modifiers ******/

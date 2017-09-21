@@ -1,6 +1,11 @@
 #ifndef RETRO3D_RESOURCEMANAGER_H
 #define RETRO3D_RESOURCEMANAGER_H
 
+/*=============================================================================================
+Resource manager class.
+
+==============================================================================================*/
+
 #include "res_ptr.h"
 #include "resource.h"
 #include <functional>
@@ -39,9 +44,19 @@ namespace Retro3D
 	public:
 		ResourceManager();
 
+		/** Called when the engine starts */
 		void OnStart();
+
+		/**
+		* Process all completed async load requests.
+		* This will validate their pointers, and call the lambda passed on to LoadResourceAsync(...)
+		*/
 		void ProcessCompletedAsyncLoads();
 		
+		/**
+		* Loads a resource on the main thread.
+		* @return A resource pointer, that will be valid when loading is done.
+		*/
 		template <typename T>
 		ResPtr<T> LoadResource(const std::string& arg_path)
 		{
@@ -59,6 +74,11 @@ namespace Retro3D
 			return resPtr;
 		}
 
+		/**
+		* Loads a resource, async.
+		* @param  arg_callback  Callback to call when finished loading.
+		* @return A resource pointer, that will be valid when loading is done.
+		*/
 		template <typename T>
 		ResPtr<T> LoadResourceAsync(const std::string& arg_path, std::function<void()> arg_callback = {})
 		{

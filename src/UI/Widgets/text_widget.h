@@ -4,6 +4,11 @@
 #include "visual_widget.h"
 #include "UI/Visual/text_visual.h"
 
+/*=============================================================================================
+A Text Widget, for rendering text.
+
+==============================================================================================*/
+
 namespace Retro3D
 {
 	class TextWidget : public VisualWidget

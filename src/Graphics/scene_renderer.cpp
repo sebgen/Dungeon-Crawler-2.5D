@@ -421,7 +421,7 @@ namespace Retro3D
 	Uint32 SceneRenderer::getpixel(const SDL_Surface *arg_surface, int arg_x, int arg_y)
 	{
 		const int& bpp = arg_surface->format->BytesPerPixel;
-		Uint8 *pixel = (Uint8 *)arg_surface->pixels + arg_y * arg_surface->pitch + arg_x * bpp;
+		const Uint8* pixel = (Uint8 *)arg_surface->pixels + arg_y * arg_surface->pitch + arg_x * bpp;
 
 		switch (bpp) {
 		case 1:

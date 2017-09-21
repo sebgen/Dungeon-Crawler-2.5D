@@ -27,7 +27,6 @@ namespace Retro3D
 		return mClassName;
 	}
 
-
 	std::string Class::GetName() const
 	{
 		size_t i = mClassName.find_last_of(':');
@@ -100,7 +99,6 @@ namespace Retro3D
 		}
 		return nullptr;
 	}
-
 
 	Class* Class::GetClassByName(const char* arg_name, bool arg_fullname)
 	{

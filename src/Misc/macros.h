@@ -1,5 +1,3 @@
-// FOR_EACH - modified version of http://stackoverflow.com/questions/14732803/preprocessor-variadic-for-each-macro-compatible-with-msvc10
-
 #define getFirst(first, ...) first 
 #define getSecond(first, second, ...) second 
 #define getAllButFirst(first, ...) EXPAND(__VA_ARGS__)

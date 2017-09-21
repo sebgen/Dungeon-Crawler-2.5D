@@ -36,10 +36,11 @@ int main(int argc, char** argv)
 
 	GameEngine* engine = GameEngine::CreateGameEngine();
 
-	// TODO: initialise from file
+#ifdef __EMSCRIPTEN__ // TEMP!
 	engine->GetScriptManager()->RegisterScript("resources//chaiscript//TestClass.chai");
 	engine->GetScriptManager()->RegisterScript("resources//chaiscript//TestLevel.chai");
 	engine->GetScriptManager()->RegisterScript("resources//chaiscript//TestWidget.chai");
+#endif
 
 	GGameEngine->GetCurrentLevel()->LoadLevel("level1");
 	engine->GetSceneRenderer()->SetLevel(GGameEngine->GetCurrentLevel()); // todo: do in engine

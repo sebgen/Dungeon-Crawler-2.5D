@@ -15,6 +15,7 @@ namespace Retro3D
 	class ChaiBindings
 	{
 	public:
+		/** Set up bindings for ChaiScript. */
 		static void AddBindings(chaiscript::ChaiScript* arg_chaiscript);
 	};
 }

@@ -48,8 +48,12 @@ namespace Retro3D
 		mWorld = new World();
 		mCurrentLevel = new Level();
 		mPlayerController = new PlayerController();
+
+		// Read game config
 		if (!mGameConfig.ReadFile("resources//config//GameConfig.ini"))
 			LOG_ERROR() << "Failed to read config game file: ";
+
+		// Read resources.ini
 	}
 
 	GameEngine* GameEngine::CreateGameEngine()

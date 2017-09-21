@@ -1,6 +1,13 @@
 #ifndef TEXT_STYLE_H
 #define TEXT_STYLE_H
 
+/*=============================================================================================
+Text Style class.
+
+Contains settings for text rendering.
+
+==============================================================================================*/
+
 #include <string>
 #include "colour.h"
 
@@ -9,9 +16,16 @@ namespace Retro3D
 	class TextStyle
 	{
 	private:
+		/** Name of the font to use. */
 		std::string mFontName;
+
+		/** Font size */
 		unsigned int mFontSize;
+
+		/** Text colour */
 		Retro3D::Colour mColour;
+		
+		/** Wrap the text (split to multiple lines to make it fit into the Widget) */
 		bool mWrapText;
 
 	public:
