@@ -4,6 +4,8 @@ project(DungeonCrawler)
 
 set(CMAKE_BUILD_TYPE Debug)
 
+set(SHIPPING_BUILD OFF CACHE BOOL "Shipping build (with optimisations)")
+
 set(BUILD_ROOT "${CMAKE_SOURCE_DIR}/build")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build")
 
@@ -121,6 +123,25 @@ add_executable(DungeonCrawler ${SOURCEFILES})
 
 if(MSVC)
     set_property(TARGET DungeonCrawler APPEND PROPERTY LINK_FLAGS /DEBUG)
+endif()
+
+IF(WIN32)
+    add_definitions("/Zi")
+    #--------------------------------------------------------------------------
+    # Since /Zi implies /OPT:NOREF, explicitly enable /OPT:REF on all
+    # release builds (this ensures all unused symbols are stripped)
+    #--------------------------------------------------------------------------
+    set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /OPT:REF")
+    set(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "${CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL} /OPT:REF")
+    set(CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO} /OPT:REF")
+ENDIF()
+
+if(NOT SHIPPING_BUILD)
+	message("Disabling optimisations, since SHIPPING_BUILD is OFF")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0")
+	add_definitions(-DRETRO3D_OPTIMISATIONS_DISABLED)
+else()
+	add_definitions(-DRETRO3D_SHIPPING_BUILD)
 endif()
 
 SET(LIB_DIR "${CMAKE_SOURCE_DIR}/libraries/Windows/x86")

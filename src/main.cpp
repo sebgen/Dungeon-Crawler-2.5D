@@ -34,6 +34,10 @@ int main(int argc, char** argv)
 {
 	LOG_INFO() << "starting from main";
 
+#ifdef RETRO3D_OPTIMISATIONS_DISABLED
+	LOG_INFO() << "Optimisations are disabled!";
+#endif
+
 	GameEngine* engine = GameEngine::CreateGameEngine();
 
 	GGameEngine->GetCurrentLevel()->LoadLevel("level1");
