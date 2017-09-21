@@ -24,6 +24,35 @@ const int texHeight = 600;
 
 namespace Retro3D
 {
+	// modified version of http://sdl.beuc.net/sdl.wiki/Pixel_Access
+	static inline Uint32 getpixel(const SDL_Surface *arg_surface, const int& arg_x, const int& arg_y)
+	{
+		const int& bpp = arg_surface->format->BytesPerPixel;
+		const Uint8* pixel = (Uint8*)arg_surface->pixels + arg_y * arg_surface->pitch + arg_x * bpp;
+
+		switch (bpp)
+		{
+		case 1:
+			return *pixel;
+			break;
+		case 2:
+			return *(Uint16 *)pixel;
+			break;
+		case 3:
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+			return pixel[0] << 16 | pixel[1] << 8 | pixel[2];
+#else
+			return pixel[0] | pixel[1] << 8 | pixel[2] << 16;
+#endif
+			break;
+		case 4:
+			return *(Uint32*)pixel;
+			break;
+		default:
+			return 0;
+		}
+	}
+
 	SceneRenderer::SceneRenderer()
 	{
 		Window* window = GGameEngine->GetWindow();
@@ -248,7 +277,7 @@ namespace Retro3D
 
 				if (mLevel->IsInGrid(gridX, gridY))
 				{
-					const char& ceilingTextureKey = mLevel->GetCeilingMapCell(gridX, gridY);
+					const char ceilingTextureKey = mLevel->GetCeilingMapCell(gridX, gridY);
 
 					if (ceilingTextureKey != 0)
 					{
@@ -306,7 +335,7 @@ namespace Retro3D
 				const int gridY = floorf(floorHit.y);
 				if (!mLevel->IsInGrid(gridX, gridY))
 					continue;
-				const char& floorTextureKey = mLevel->GetFloorMapCell(gridX, gridY);
+				const char floorTextureKey = mLevel->GetFloorMapCell(gridX, gridY);
 				if (floorTextureKey == 0)
 					continue;
 
@@ -414,37 +443,5 @@ namespace Retro3D
 		mPixels = mClearPixels; // TODO
 		mDepthBuffer = mClearDepthBuffer; // TODO
 
-	}
-
-
-	// from http://sdl.beuc.net/sdl.wiki/Pixel_Access
-	Uint32 SceneRenderer::getpixel(const SDL_Surface *arg_surface, int arg_x, int arg_y)
-	{
-		const int& bpp = arg_surface->format->BytesPerPixel;
-		const Uint8* pixel = (Uint8 *)arg_surface->pixels + arg_y * arg_surface->pitch + arg_x * bpp;
-
-		switch (bpp) {
-		case 1:
-			return *pixel;
-			break;
-
-		case 2:
-			return *(Uint16 *)pixel;
-			break;
-
-		case 3:
-			if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-				return pixel[0] << 16 | pixel[1] << 8 | pixel[2];
-			else
-				return pixel[0] | pixel[1] << 8 | pixel[2] << 16;
-			break;
-
-		case 4:
-			return *(Uint32 *)pixel;
-			break;
-
-		default:
-			return 0;
-		}
 	}
 }

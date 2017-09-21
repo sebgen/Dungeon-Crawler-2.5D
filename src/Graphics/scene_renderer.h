@@ -39,9 +39,8 @@ namespace Retro3D
 		void SetCameraComponent(CameraComponent* arg_comp); // TEMP
 
 	private:
-		uint32_t getpixel(const SDL_Surface* arg_surface, int arg_x, int arg_y);
 		Level* mLevel;
-		std::unordered_map<char, SDL_Surface*> mTextureSurfaceMap;
+		std::unordered_map<char, SDL_Surface*> mTextureSurfaceMap; // TODO: use array instead?
 		SDL_Surface* mSkyboxTexture = nullptr;
 		ObjectPtr<CameraComponent> mCameraComponent; // TODO: pass on some other structure
 		float mFOV = 95;
