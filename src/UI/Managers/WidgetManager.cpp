@@ -62,7 +62,7 @@ namespace Retro3D
 		renderParams.mContentRect = Rectangle(widgetTrans.mPosition, widgetTrans.mSize);
 		renderParams.mVisibleRect = Rectangle(glm::vec2(visiblePosX, visiblePosY), glm::vec2(visibleSizeW, visibleSizeH));
 		
-		for (Visual* visual : arg_widget->mVisuals)
+		for (ObjectPtrBase<Visual> visual : arg_widget->mVisuals)
 		{
 			if(visual->IsActivated())
 				visual->RenderVisual(widgetRenderer, renderParams);
@@ -118,8 +118,13 @@ namespace Retro3D
 			mouseEventRecursive(mRootWidget.Get(), GGameEngine->GetInputManager()->GetMousePosition() / glm::vec2(win_w, win_h), 2, arg_button);
 	}
 
-	void WidgetManager::mouseEventRecursive(Widget* arg_widget, const glm::vec2& arg_mousepos, int arg_mouseevent, MouseButtonID arg_button)
+	void WidgetManager::OnMouseMotion(const glm::vec2& arg_motion)
 	{
+
+	}
+
+	void WidgetManager::mouseEventRecursive(Widget* arg_widget, const glm::vec2& arg_mousepos, int arg_mouseevent, MouseButtonID arg_button)
+	{ // TODO: USE LAMBDA
 		const glm::vec2 widgetPos = arg_widget->mAbsoluteTransform.mPosition;
 		const glm::vec2 widgetRBPos = arg_widget->mAbsoluteTransform.mSize + widgetPos;
 

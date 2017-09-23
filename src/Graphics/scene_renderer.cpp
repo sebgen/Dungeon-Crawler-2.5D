@@ -25,7 +25,7 @@ const int texHeight = 600;
 namespace Retro3D
 {
 	// modified version of http://sdl.beuc.net/sdl.wiki/Pixel_Access
-	static inline Uint32 getpixel(const SDL_Surface *arg_surface, const int& arg_x, const int& arg_y)
+	static inline Uint32 getpixel(const SDL_Surface* arg_surface, const int& arg_x, const int& arg_y)
 	{
 		const int& bpp = arg_surface->format->BytesPerPixel;
 		const Uint8* pixel = (Uint8*)arg_surface->pixels + arg_y * arg_surface->pitch + arg_x * bpp;

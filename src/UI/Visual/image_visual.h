@@ -24,7 +24,7 @@ namespace Retro3D
 		ResPtr<TextureRes> mImageRes;
 
 		/** SDL Texture, used for rendering. */
-		SDL_Texture* mSDLTexture = nullptr;
+		SDL_Texture* mSDLTexture = nullptr; // TODO: Reuse? Store in TextureRes, or make a new Resource for this?
 
 	public:
 		

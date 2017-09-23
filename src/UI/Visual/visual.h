@@ -8,12 +8,13 @@ Base class for UI Visuals, such as text and images.
 ==============================================================================================*/
 
 #include "UI/Core/widget_render_params.h"
+#include "Object/object.h"
 
 namespace Retro3D
 {
 	class IWidgetRenderer;
 
-	class Visual
+	class Visual : public Object
 	{
 	protected:
 		bool mActivated = true;

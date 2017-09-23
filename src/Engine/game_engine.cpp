@@ -138,6 +138,12 @@ namespace Retro3D
 		//std::cout << "Frame time: " << mDeltaTime * 1000.0 << "ms" << std::endl;
 	}
 
+	void GameEngine::Shutdown()
+	{
+		LOG_INFO() << "Shutting down game engine";
+		mIsRunning = false;
+	}
+
 	float GameEngine::GetDeltaTime()
 	{
 		return mDeltaTime;

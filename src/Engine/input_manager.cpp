@@ -69,6 +69,9 @@ namespace Retro3D
 			else if (mEvent.type == SDL_MOUSEMOTION)
 			{
 				mMousePosition = glm::vec2(mEvent.motion.x, mEvent.motion.y);
+
+				for (IInputListener* listener : mInputListeners)
+					listener->OnMouseMotion(glm::vec2(mEvent.motion.xrel, mEvent.motion.yrel));
 			}
 			else if (mEvent.type == SDL_MOUSEWHEEL)
 			{

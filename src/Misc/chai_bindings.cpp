@@ -15,6 +15,8 @@
 #include "World/world.h"
 #include "UI/Widgets/image_widget.h"
 #include "UI/Widgets/text_widget.h"
+#include "UI/Widgets/button_widget.h"
+#include "UI/Widgets/image_widget_style.h"
 #include "UI/Managers/WidgetManager.h"
 #include "Actor/player_controller.h"
 #include "Object/weak_objectptr.h"
@@ -33,6 +35,7 @@ namespace Retro3D
 	void ChaiBindings::AddBindings(chaiscript::ChaiScript* arg_chaiscript)
 	{
 		arg_chaiscript->add(chaiscript::user_type<GameEngine>(), "GameEngine");
+		arg_chaiscript->add(chaiscript::fun(&GameEngine::Shutdown), "Shutdown");
 		arg_chaiscript->add(chaiscript::fun(&GameEngine::GetDeltaTime), "GetDeltaTime");
 		arg_chaiscript->add(chaiscript::fun(&GameEngine::GetCurrentLevel), "GetCurrentLevel");
 		arg_chaiscript->add(chaiscript::fun(&GameEngine::GetInputManager), "GetInputManager");
@@ -137,6 +140,8 @@ namespace Retro3D
 		arg_chaiscript->add(chaiscript::fun([](Widget& widget, const float x, const float y) { widget.SetPosition(x, y); }), "SetPosition");
 		arg_chaiscript->add(chaiscript::fun([](Widget& widget, const float x, const float y) { widget.SetPivot(x, y); }), "SetPivot");
 		arg_chaiscript->add(chaiscript::fun(&Widget::SetWidgetScriptClass), "SetWidgetScriptClass");
+		arg_chaiscript->add(chaiscript::fun(&Widget::BindOnMousePressed), "BindOnMousePressed");
+		arg_chaiscript->add(chaiscript::fun(&Widget::BindOnMouseReleased), "BindOnMouseReleased");
 
 		arg_chaiscript->add(chaiscript::user_type<ImageWidget>(), "ImageWidget");
 		arg_chaiscript->add(chaiscript::fun(&ImageWidget::SetColour), "SetColour");
@@ -159,6 +164,21 @@ namespace Retro3D
 		arg_chaiscript->add(chaiscript::constructor<Colour(float, float, float)>(), "Colour");
 		arg_chaiscript->add(chaiscript::constructor<Colour(float, float, float, float)>(), "Colour");
 
+		arg_chaiscript->add(chaiscript::user_type<ButtonWidget>(), "ButtonWidget");
+		arg_chaiscript->add(chaiscript::base_class<Widget, ButtonWidget>());
+		arg_chaiscript->add(chaiscript::fun(&ButtonWidget::SetText), "SetText");
+		arg_chaiscript->add(chaiscript::fun(&ButtonWidget::GetTextWidget), "GetTextWidget");
+		arg_chaiscript->add(chaiscript::fun(&ButtonWidget::SetBackgroundStyle), "SetBackgroundStyle");
+		arg_chaiscript->add(chaiscript::fun(&ButtonWidget::SetBackgroundStyleOnHover), "SetBackgroundStyleOnHover");
+		arg_chaiscript->add(chaiscript::fun(&ButtonWidget::SetBackgroundStyleOnClick), "SetBackgroundStyleOnClick");
+		arg_chaiscript->add(chaiscript::fun(&ButtonWidget::GetBackgroundStyle), "GetBackgroundStyle");
+		arg_chaiscript->add(chaiscript::fun(&ButtonWidget::GetBackgroundStyleOnHover), "GetBackgroundStyleOnHover");
+		arg_chaiscript->add(chaiscript::fun(&ButtonWidget::GetBackgroundStyleOnClick), "GetBackgroundStyleOnClick");
+
+		arg_chaiscript->add(chaiscript::user_type<ImageWidgetStyle>(), "ImageWidgetStyle");
+		arg_chaiscript->add(chaiscript::constructor<ImageWidgetStyle()>(), "ImageWidgetStyle");
+		arg_chaiscript->add(chaiscript::fun(&ImageWidgetStyle::SetImagePath), "SetImagePath");
+		arg_chaiscript->add(chaiscript::fun(&ImageWidgetStyle::SetColour), "SetColour");
 
 		// Transform
 		arg_chaiscript->add(chaiscript::user_type<Transform>(), "Transform");
@@ -197,6 +217,12 @@ namespace Retro3D
 			TextWidget* widget = new TextWidget();
 			return widget;
 		}), "CreateTextWidget");
+		// TEMP - TODO: Create a CreateWidget(typename) function
+		arg_chaiscript->add(chaiscript::fun([]()
+		{
+			ButtonWidget* widget = new ButtonWidget();
+			return widget;
+		}), "CreateButtonWidget");
 		// TEMP - TODO: Create a CreateWidget(typename) function
 		arg_chaiscript->add(chaiscript::fun([](const std::string& scriptclass)
 		{

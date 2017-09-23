@@ -70,6 +70,8 @@ namespace Retro3D
 		/** Called every frame */
 		void TickEngine();
 
+		void Shutdown();
+
 		/** Gets the time in seconds between current and last frame */
 		float GetDeltaTime();
 

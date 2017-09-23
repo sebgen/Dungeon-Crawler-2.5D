@@ -176,6 +176,16 @@ namespace Retro3D
 	}
 
 
+	void Widget::BindOnMousePressed(std::function<void()> arg_func)
+	{
+		mOnMousePressed = arg_func;
+	}
+
+	void Widget::BindOnMouseReleased(std::function<void()> arg_func)
+	{
+		mOnMouseReleased = arg_func;
+	}
+
 
 	const WidgetTransform& Widget::GetAbsoluteTransform()
 	{
@@ -199,6 +209,22 @@ namespace Retro3D
 	ObjectPtr<Widget> Widget::GetChildWidgetAt(const size_t& arg_index) const
 	{
 		return mChildWidgets[arg_index];
+	}
+
+	void Widget::OnMouseButtonDown(MouseButtonID arg_button)
+	{
+		if (mOnMousePressed != nullptr)
+		{
+			mOnMousePressed();
+		}
+	}
+
+	void Widget::OnMouseButtonUp(MouseButtonID arg_button)
+	{
+		if (mOnMouseReleased != nullptr)
+		{
+			mOnMouseReleased();
+		}
 	}
 
 }

@@ -38,7 +38,7 @@ namespace Retro3D
 			return arg_x + arg_y*mDimX;
 		}
 
-		inline const int GetWallMapCell(const int arg_x, const int arg_y) const
+		inline const int GetWallMapCell(const int& arg_x, const int& arg_y) const
 		{
 			const int index = GetMapIndex(arg_x, arg_y);
 			return mWallMap[index];
@@ -53,7 +53,7 @@ namespace Retro3D
 			const int index = GetMapIndex(arg_x, arg_y);
 			return mCeilingMap[index];
 		}
-		inline bool IsInGrid(const int& arg_x, const int& arg_y) const
+		inline const bool IsInGrid(const int& arg_x, const int& arg_y) const
 		{
 			return arg_x >= 0 && arg_y >= 0 && arg_x < mDimX && arg_y < mDimY;
 		}

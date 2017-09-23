@@ -22,6 +22,7 @@ The ChaiScript can implement the following functions:
 #include "UI/Visual/visual.h"
 #include "Engine/input_listener.h"
 #include "chaiscript/chaiscript.hpp"
+#include <functional>
 
 namespace Retro3D
 {
@@ -55,7 +56,7 @@ namespace Retro3D
 		ObjectPtr<Widget> mParentWidget;
 
 		/** Visuals to render */
-		std::vector<Visual*> mVisuals;
+		std::vector<ObjectPtr<Visual>> mVisuals;
 
 
 		/** ChaiScript class name. */
@@ -66,6 +67,13 @@ namespace Retro3D
 
 		std::function<void(chaiscript::Boxed_Value&)> funcCreateContent;
 		std::function<void(chaiscript::Boxed_Value&, float)> funcOnTick;
+
+
+		// callback functions
+		// TODO: ALLOW BINDING MULTIPLE FUNCTIONS
+		std::function<void()> mOnMousePressed; // TODO: Rename to mOnMouseButtonDown (to match the interface functions)
+		std::function<void()> mOnMouseReleased;
+
 
 	public:
 		Widget();
@@ -131,6 +139,9 @@ namespace Retro3D
 		void SetWidgetScriptClass(const char* arg_script);
 		bool SetupContentFromScript();
 
+		void BindOnMousePressed(std::function<void()> arg_func);
+		void BindOnMouseReleased(std::function<void()> arg_func);
+
 		/***/
 		/***** Accessors ******/
 
@@ -150,6 +161,13 @@ namespace Retro3D
 		ObjectPtr<Widget> GetChildWidgetAt(const size_t& arg_index) const;
 
 		std::string GetWidgetScriptClass() { return mWidgetScriptClass; };
+
+
+		/***/
+		/***** Interface functions ******/
+
+		virtual void OnMouseButtonDown(MouseButtonID arg_button) override;
+		virtual void OnMouseButtonUp(MouseButtonID arg_button) override;
 
 	};
 }

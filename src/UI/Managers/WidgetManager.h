@@ -47,6 +47,7 @@ namespace Retro3D
 		virtual void OnKeyUp(const char* arg_key) override;
 		virtual void OnMouseButtonDown(MouseButtonID arg_button) override;
 		virtual void OnMouseButtonUp(MouseButtonID arg_button) override;
+		virtual void OnMouseMotion(const glm::vec2& arg_motion) override;
 
 		Widget* CurrentWidget; // UGLY!! TODO
 	};

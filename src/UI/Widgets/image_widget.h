@@ -9,8 +9,9 @@ The image will be rendered on top of the colour.
 ==============================================================================================*/
 
 #include "visual_widget.h"
-#include "UI/Visual/image_visual.h"
+#include "image_widget_style.h"
 #include "UI/Visual/colour_visual.h"
+#include "UI/Visual/image_visual.h"
 
 namespace Retro3D
 {
@@ -18,10 +19,16 @@ namespace Retro3D
 	{
 	protected:
 		/** Colour Visual, for rendering the background colour. */
-		ColourVisual mColourVisual;
+		ObjectPtr<ColourVisual> mColourVisual;
 
 		/** Image Visual, for rendering the image. */
-		ImageVisual mImageVisual;
+		ObjectPtr<ImageVisual> mImageVisual;
+
+		/** Image Widget Style, containing ImageVisual and ColourVisual */
+		ImageWidgetStyle mImageWidgetStyle;
+
+		/** Removes all Visuals and add them back again. */
+		void setupVisuals();
 
 	public:
 		ImageWidget();
@@ -33,6 +40,10 @@ namespace Retro3D
 		void SetColour(Colour arg_colour);
 
 		virtual void CreateContent() override;
+
+		void SetImageWidgetStyle(ImageWidgetStyle& arg_style);
+
+		inline ImageWidgetStyle GetImageWidgetStyle() { return mImageWidgetStyle; }
 
 	};
 }

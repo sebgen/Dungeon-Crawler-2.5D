@@ -12,6 +12,7 @@ namespace Retro3D
 		virtual void OnKeyUp(const char* arg_key) {};
 		virtual void OnMouseButtonDown(MouseButtonID arg_button) {};
 		virtual void OnMouseButtonUp(MouseButtonID arg_button) {};
+		virtual void OnMouseMotion(const glm::vec2& arg_motion) {};
 	};
 };
 
