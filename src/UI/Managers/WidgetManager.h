@@ -14,6 +14,7 @@ Deals with Widget ticking, input handling and rendering of Widgets.
 #include "Window/window.h"
 #include "UI/Widgets/widget.h"
 #include "Engine/input_listener.h"
+#include <functional>
 
 namespace Retro3D
 {
@@ -26,9 +27,16 @@ namespace Retro3D
 
 		void renderWidgetRecursive(Widget* arg_widget, Window* arg_window);
 
-		void tickWidgetRecursive(Widget* arg_widget, float arg_deltatime);
+		/**
+		* Iterates through widgets and child widgets, starting from arg_widget.
+		* Calls arg_function on each widgets, and continues with children if it returned true.
+		* @param  arg_widget    Widget to start recursive iteration from.
+		* @param  arg_function  Function to be called on each widget. If it returns true, arg_widget's children will also be evaluated.
+		*/
+		void iterateWidgetsRecursive(Widget* arg_widget, std::function<bool(Widget*)> arg_function);
 
-		void mouseEventRecursive(Widget* arg_widget, const glm::vec2& arg_mousepos, int arg_mouseevent, MouseButtonID arg_button);
+		std::unordered_map<int, std::vector<WeakObjectPtr<Widget>>> mMouseButtonDownWidgets;
+		std::vector<WeakObjectPtr<Widget>> mHoveredWidgets;
 
 	public:
 		WidgetManager();

@@ -174,6 +174,7 @@ namespace Retro3D
 		arg_chaiscript->add(chaiscript::fun(&ButtonWidget::GetBackgroundStyle), "GetBackgroundStyle");
 		arg_chaiscript->add(chaiscript::fun(&ButtonWidget::GetBackgroundStyleOnHover), "GetBackgroundStyleOnHover");
 		arg_chaiscript->add(chaiscript::fun(&ButtonWidget::GetBackgroundStyleOnClick), "GetBackgroundStyleOnClick");
+		arg_chaiscript->add(chaiscript::fun(&ButtonWidget::BindOnButtonClicked), "BindOnButtonClicked");
 
 		arg_chaiscript->add(chaiscript::user_type<ImageWidgetStyle>(), "ImageWidgetStyle");
 		arg_chaiscript->add(chaiscript::constructor<ImageWidgetStyle()>(), "ImageWidgetStyle");

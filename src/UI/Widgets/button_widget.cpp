@@ -40,7 +40,7 @@ namespace Retro3D
 		ImageWidgetStyle activeStyle = mBackgroundStyle;
 		if (mIsMouseDown /*&& mBackgroundStyleOnClick != nullptr*/)
 			activeStyle = mBackgroundStyleOnClick;
-		else if (mIsMouseHovering /*&& mBackgroundStyleOnHover != nullptr*/)
+		else if (mIsHovered /*&& mBackgroundStyleOnHover != nullptr*/)
 			activeStyle = mBackgroundStyleOnHover;
 
 		if (/*activeStyle != nullptr*/ true)
@@ -68,6 +68,33 @@ namespace Retro3D
 	}
 
 
+	void ButtonWidget::BindOnButtonClicked(std::function<void()> arg_func)
+	{
+		mOnButtonClicked.push_back(arg_func);
+	}
+
+
+	void ButtonWidget::OnMouseEnter()
+	{
+		Widget::OnMouseEnter();
+
+		RefreshBackgroundImage();
+	}
+
+	void ButtonWidget::OnMouseLeave()
+	{
+		Widget::OnMouseLeave();
+		RefreshBackgroundImage();
+	}
+
+	void ButtonWidget::OnButtonClicked()
+	{
+		for (auto& func : mOnButtonClicked)
+		{
+			func();
+		}
+	}
+
 	void ButtonWidget::OnMouseButtonDown(MouseButtonID arg_button)
 	{
 		Widget::OnMouseButtonDown(arg_button);
@@ -85,6 +112,12 @@ namespace Retro3D
 		{
 			mIsMouseDown = false;
 			RefreshBackgroundImage();
+		}
+
+		// standard button behaviour: don't do anything if mouse is not over button when releasing
+		if (mIsHovered)
+		{
+			OnButtonClicked();
 		}
 	}
 

@@ -19,6 +19,7 @@ The ChaiScript can implement the following functions:
 #include "Math/rectangle.h"
 #include "Object/object.h"
 #include "Object/objectptr.h"
+#include "Object/weak_objectptr.h"
 #include "UI/Visual/visual.h"
 #include "Engine/input_listener.h"
 #include "chaiscript/chaiscript.hpp"
@@ -49,6 +50,8 @@ namespace Retro3D
 
 		bool mHasCreatedContent = false;
 
+		bool mIsHovered = false;
+
 		/** Child Widgets */
 		std::vector<ObjectPtr<Widget>> mChildWidgets;
 		
@@ -67,13 +70,13 @@ namespace Retro3D
 
 		std::function<void(chaiscript::Boxed_Value&)> funcCreateContent;
 		std::function<void(chaiscript::Boxed_Value&, float)> funcOnTick;
+		std::function<void(chaiscript::Boxed_Value&, int)> funcOnMouseButtonDown;
+		std::function<void(chaiscript::Boxed_Value&, int)> funcOnMouseButtonUp;
 
 
 		// callback functions
-		// TODO: ALLOW BINDING MULTIPLE FUNCTIONS
-		std::function<void()> mOnMousePressed; // TODO: Rename to mOnMouseButtonDown (to match the interface functions)
-		std::function<void()> mOnMouseReleased;
-
+		std::vector<std::function<void()>> mOnMousePressed;
+		std::vector<std::function<void()>> mOnMouseReleased;
 
 	public:
 		Widget();
@@ -154,7 +157,16 @@ namespace Retro3D
 		const WidgetScalingMode& GetVerticalScaling() const { return mTransform.mVerticalScaling; };
 		const WidgetScalingMode& GetHorizontalScaling() const { return mTransform.mHorizontalScaling; };
 
+		/**
+		* Gets the cached absolute transform of the Widget.
+		* Note: Only valid if mTransformIsDirty == true
+		*/
 		const WidgetTransform& GetCachedAbsoluteTransform() const { return mAbsoluteTransform; };
+		
+		/**
+		* Gets the absolute transform of the Widget.
+		* This will re-calculate the absolute transform if it's dirty.
+		*/
 		const WidgetTransform& GetAbsoluteTransform();
 
 		const size_t GetNumChildWidgets() const;
@@ -162,6 +174,8 @@ namespace Retro3D
 
 		std::string GetWidgetScriptClass() { return mWidgetScriptClass; };
 
+		virtual void OnMouseEnter();
+		virtual void OnMouseLeave();
 
 		/***/
 		/***** Interface functions ******/

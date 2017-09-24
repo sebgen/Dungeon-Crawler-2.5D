@@ -57,7 +57,7 @@ class TestWidget
 		this.btnQuit.SetBackgroundStyle(styleDefault);
 		this.btnQuit.SetBackgroundStyleOnHover(styleOnHover);
 		this.btnQuit.SetBackgroundStyleOnClick(styleOnClick);
-		this.btnQuit.BindOnMouseReleased(this.funcQuit);
+		this.btnQuit.BindOnButtonClicked(this.funcQuit);
 		this.GetWidget().AddChildWidget(this.btnQuit);
 		
 		// FPS Display
@@ -88,5 +88,10 @@ class TestWidget
 			this.timeSinceLastFPSUpdate += deltatime;
 		}
 		
+	}
+	
+	def OnMouseButtonDown(arg_button)
+	{
+		print("MouseButtonDown called in TestWidget");
 	}
 };

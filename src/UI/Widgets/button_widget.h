@@ -22,7 +22,6 @@ namespace Retro3D
 	{
 	private:
 		bool mIsMouseDown = false;
-		bool mIsMouseHovering = false;
 
 	protected:
 		ObjectPtr<TextWidget> mTextWidget;
@@ -31,6 +30,8 @@ namespace Retro3D
 		ImageWidgetStyle mBackgroundStyle;
 		ImageWidgetStyle mBackgroundStyleOnHover;
 		ImageWidgetStyle mBackgroundStyleOnClick;
+
+		std::vector<std::function<void()>> mOnButtonClicked;
 
 	public:
 		ButtonWidget();
@@ -57,6 +58,14 @@ namespace Retro3D
 		inline ImageWidgetStyle GetBackgroundStyleOnHover() { return mBackgroundStyleOnHover; }
 		inline ImageWidgetStyle GetBackgroundStyleOnClick() { return mBackgroundStyleOnClick; }
 
+		/** Binds a function to be called when button is clicked. */
+		void BindOnButtonClicked(std::function<void()> arg_func);
+
+		virtual void OnMouseEnter() override;
+		virtual void OnMouseLeave() override;
+
+		/** Called when the button is clicked. */
+		void OnButtonClicked();
 
 		// Input listener callbacks
 		

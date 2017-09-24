@@ -150,15 +150,33 @@ namespace Retro3D
 		try
 		{
 			mScriptObject = chaiScriptCore->eval(createInstanceCall); // will exist as long as mScriptObject
-			funcCreateContent = chaiScriptCore->eval<std::function<void(chaiscript::Boxed_Value&)>>("CreateContent");
-			funcOnTick = chaiScriptCore->eval<std::function<void(chaiscript::Boxed_Value&, float)>>("OnTick");
-
 		}
 		catch (std::exception ex)
 		{
 			LOG_ERROR() << "Failed to create script object for " << mWidgetScriptClass << ". Exception: " << ex.what();
 			return false;
 		}
+		try
+		{
+			funcCreateContent = chaiScriptCore->eval<std::function<void(chaiscript::Boxed_Value&)>>("CreateContent");
+		}
+		catch (std::exception ex) {}
+		try
+		{
+			funcOnTick = chaiScriptCore->eval<std::function<void(chaiscript::Boxed_Value&, float)>>("OnTick");
+		}
+		catch (std::exception ex) {}
+		try
+		{
+			funcOnMouseButtonDown = chaiScriptCore->eval<std::function<void(chaiscript::Boxed_Value&, int)>>("OnMouseButtonDown");
+		}
+		catch (std::exception ex) {}
+		try
+		{
+			funcOnMouseButtonUp = chaiScriptCore->eval<std::function<void(chaiscript::Boxed_Value&, int)>>("OnMouseButtonUp");
+		}
+		catch (std::exception ex) {}
+
 
 		// Call SetupContent
 		GGameEngine->GetWidgetManager()->CurrentWidget = this; // TODO
@@ -178,25 +196,28 @@ namespace Retro3D
 
 	void Widget::BindOnMousePressed(std::function<void()> arg_func)
 	{
-		mOnMousePressed = arg_func;
+		mOnMousePressed.push_back(arg_func);
 	}
 
 	void Widget::BindOnMouseReleased(std::function<void()> arg_func)
 	{
-		mOnMouseReleased = arg_func;
+		mOnMouseReleased.push_back(arg_func);
 	}
 
 
 	const WidgetTransform& Widget::GetAbsoluteTransform()
 	{
-		const WidgetTransform* parentTrans = nullptr;
-		if (mParentWidget.IsValid())
+		if (mTransformIsDirty)
 		{
-			parentTrans = &mParentWidget->GetAbsoluteTransform();
-		}
-		mAbsoluteTransform = mTransform.CreateAbsoluteWidgetTransform(parentTrans);
+			const WidgetTransform* parentTrans = nullptr;
+			if (mParentWidget.IsValid())
+			{
+				parentTrans = &mParentWidget->GetAbsoluteTransform();
+			}
+			mAbsoluteTransform = mTransform.CreateAbsoluteWidgetTransform(parentTrans);
 
-		mTransformIsDirty = false;
+			mTransformIsDirty = false;
+		}
 
 		return mAbsoluteTransform; // return the re-calculated absolute transform of the widget
 	}
@@ -211,19 +232,57 @@ namespace Retro3D
 		return mChildWidgets[arg_index];
 	}
 
+	void Widget::OnMouseEnter()
+	{
+		mIsHovered = true;
+	}
+
+	void Widget::OnMouseLeave()
+	{
+		mIsHovered = false;
+	}
+
 	void Widget::OnMouseButtonDown(MouseButtonID arg_button)
 	{
-		if (mOnMousePressed != nullptr)
+		for (auto callbackFunc : mOnMousePressed)
 		{
-			mOnMousePressed();
+			callbackFunc();
+		}
+		if (funcOnMouseButtonDown != nullptr)
+		{
+			GGameEngine->GetWidgetManager()->CurrentWidget = this; // TODO
+			chaiscript::ChaiScript* chaiScriptCore = GGameEngine->GetScriptManager()->GetChaiScriptCore();
+			try
+			{
+				funcOnMouseButtonDown(mScriptObject, arg_button); // TODO: only call if function exists
+			}
+			catch (std::exception ex)
+			{
+				LOG_ERROR() << "Exception caught in Widget::OnMouseButtonDown: " << ex.what();
+			}
+			GGameEngine->GetWidgetManager()->CurrentWidget = nullptr;
 		}
 	}
 
 	void Widget::OnMouseButtonUp(MouseButtonID arg_button)
 	{
-		if (mOnMouseReleased != nullptr)
+		for (auto callbackFunc : mOnMouseReleased)
 		{
-			mOnMouseReleased();
+			callbackFunc();
+		}
+		if (funcOnMouseButtonUp != nullptr)
+		{
+			GGameEngine->GetWidgetManager()->CurrentWidget = this; // TODO
+			chaiscript::ChaiScript* chaiScriptCore = GGameEngine->GetScriptManager()->GetChaiScriptCore();
+			try
+			{
+				funcOnMouseButtonUp(mScriptObject, arg_button); // TODO: only call if function exists
+			}
+			catch (std::exception ex)
+			{
+				LOG_ERROR() << "Exception caught in Widget::OnMouseButtonUp: " << ex.what();
+			}
+			GGameEngine->GetWidgetManager()->CurrentWidget = nullptr;
 		}
 	}
 

@@ -23,10 +23,14 @@ namespace Retro3D
 
 	void WidgetManager::TickWidgets(float arg_deltatime)
 	{
-		if (mRootWidget != nullptr)
+		std::function<bool(Widget*)> func = [&](Widget* arg_widget) -> bool
 		{
-			tickWidgetRecursive(mRootWidget.Get(), arg_deltatime);
-		}
+			CurrentWidget = arg_widget;
+			arg_widget->OnTick(arg_deltatime);
+			return true;
+		};
+
+		iterateWidgetsRecursive(mRootWidget.Get(), func);
 	}
 
 	void WidgetManager::RenderWidgets(Window* arg_window)
@@ -75,21 +79,6 @@ namespace Retro3D
 		}
 	}
 
-	void WidgetManager::tickWidgetRecursive(Widget* arg_widget, float arg_deltatime)
-	{
-		CurrentWidget = arg_widget;
-		arg_widget->OnTick(arg_deltatime);
-
-		// TODO: forward mouse and input
-
-		CurrentWidget = nullptr;
-
-		for (ObjectPtr<Widget> child : arg_widget->mChildWidgets)
-		{
-			tickWidgetRecursive(child.Get(), arg_deltatime);
-		}
-	}
-
 	void WidgetManager::OnKeyDown(const char* arg_key)
 	{
 		// TODO: forward to selected/highlighted widget
@@ -105,47 +94,120 @@ namespace Retro3D
 		int win_w;
 		int win_h;
 		GGameEngine->GetWindow()->GetWindowSize(win_w, win_h);
-		if (mRootWidget != nullptr)
-			mouseEventRecursive(mRootWidget.Get(), GGameEngine->GetInputManager()->GetMousePosition() / glm::vec2(win_w, win_h), 1, arg_button);
+
+		glm::vec2 relMousePos = GGameEngine->GetInputManager()->GetMousePosition() / glm::vec2(win_w, win_h);
+
+		std::function<bool(Widget*)> func = [&](Widget* arg_widget) -> bool
+		{
+			CurrentWidget = arg_widget;
+
+			const glm::vec2 widgetPos = arg_widget->mAbsoluteTransform.mPosition;
+			const glm::vec2 widgetRBPos = arg_widget->mAbsoluteTransform.mSize + widgetPos;
+
+			if (relMousePos.x > widgetPos.x && relMousePos.x < widgetRBPos.x && relMousePos.y > widgetPos.y && relMousePos.y < widgetRBPos.y)
+			{
+				arg_widget->OnMouseButtonDown(arg_button);
+
+				auto widgetArrayIter = mMouseButtonDownWidgets.find((int)arg_button);
+				if (widgetArrayIter == mMouseButtonDownWidgets.end())
+				{
+					mMouseButtonDownWidgets.emplace((int)arg_button, std::vector<WeakObjectPtr<Widget>>());
+					widgetArrayIter = mMouseButtonDownWidgets.find((int)arg_button);
+				}
+				widgetArrayIter->second.push_back(arg_widget);
+
+				return true;
+			}
+			return false;
+		};
+
+		iterateWidgetsRecursive(mRootWidget.Get(), func);
 	}
 
 	void WidgetManager::OnMouseButtonUp(MouseButtonID arg_button)
 	{
-		int win_w;
-		int win_h;
-		GGameEngine->GetWindow()->GetWindowSize(win_w, win_h);
-		if (mRootWidget != nullptr)
-			mouseEventRecursive(mRootWidget.Get(), GGameEngine->GetInputManager()->GetMousePosition() / glm::vec2(win_w, win_h), 2, arg_button);
+		auto widgetArrayIter = mMouseButtonDownWidgets.find((int)arg_button);
+		if (widgetArrayIter != mMouseButtonDownWidgets.end())
+		{
+			for (ObjectPtrBase<Widget>& widget : widgetArrayIter->second)
+			{
+				widget->OnMouseButtonUp(arg_button);
+			}
+			widgetArrayIter->second.clear();
+		}
 	}
 
 	void WidgetManager::OnMouseMotion(const glm::vec2& arg_motion)
 	{
+		int win_w;
+		int win_h;
+		GGameEngine->GetWindow()->GetWindowSize(win_w, win_h);
+
+		glm::vec2 relMousePos = GGameEngine->GetInputManager()->GetMousePosition() / glm::vec2(win_w, win_h);
+
+		std::vector<WeakObjectPtr<Widget>> widgetsNoLongerHovered;
+
+		std::function<bool(Widget*)> funcMouseMotion = [&](Widget* arg_widget) -> bool
+		{
+			CurrentWidget = arg_widget;
+
+			const glm::vec2 widgetPos = arg_widget->mAbsoluteTransform.mPosition;
+			const glm::vec2 widgetRBPos = arg_widget->mAbsoluteTransform.mSize + widgetPos;
+
+			if (relMousePos.x > widgetPos.x && relMousePos.x < widgetRBPos.x && relMousePos.y > widgetPos.y && relMousePos.y < widgetRBPos.y)
+			{
+				if (!arg_widget->mIsHovered)
+				{
+					arg_widget->OnMouseEnter();
+					arg_widget->mIsHovered = true;
+				}
+
+				arg_widget->OnMouseMotion(arg_motion);
+
+				return true;
+			}
+			else
+			{
+				// Tell widget and children that we are no longer hovering
+				if (arg_widget->mIsHovered)
+				{
+					widgetsNoLongerHovered.push_back(arg_widget);
+				}
+			}
+			return false;
+		};
+
+		iterateWidgetsRecursive(mRootWidget.Get(), funcMouseMotion);
+
+		// Iterate through all widgets that no longer are hovered, and call OnMouseLeave()
+		std::function<bool(Widget*)> funcOnMouseLeave = [&](Widget* arg_widget) -> bool
+		{
+			if (arg_widget->mIsHovered)
+			{
+				CurrentWidget = arg_widget;
+				arg_widget->OnMouseLeave();
+				arg_widget->mIsHovered = false;
+
+				return true; // continue with children
+			}
+			
+			return false;
+		};
+
+		for (auto& widget : widgetsNoLongerHovered)
+		{
+			iterateWidgetsRecursive(widget.Get(), funcOnMouseLeave);
+		}
 
 	}
 
-	void WidgetManager::mouseEventRecursive(Widget* arg_widget, const glm::vec2& arg_mousepos, int arg_mouseevent, MouseButtonID arg_button)
-	{ // TODO: USE LAMBDA
-		const glm::vec2 widgetPos = arg_widget->mAbsoluteTransform.mPosition;
-		const glm::vec2 widgetRBPos = arg_widget->mAbsoluteTransform.mSize + widgetPos;
-
-		if (arg_mousepos.x > widgetPos.x && arg_mousepos.x < widgetRBPos.x && arg_mousepos.y > widgetPos.y && arg_mousepos.y < widgetRBPos.y)
+	void WidgetManager::iterateWidgetsRecursive(Widget* arg_widget, std::function<bool(Widget*)> arg_function)
+	{
+		bool continueWithChildren = arg_function(arg_widget);
+		if (continueWithChildren)
 		{
-			switch (arg_mouseevent)
-			{
-			case 1:
-				arg_widget->OnMouseButtonDown(arg_button);
-				break;
-			case 2:
-				arg_widget->OnMouseButtonUp(arg_button);
-				break;
-			default:
-				break;
-			}
-		}
-
-		for (ObjectPtr<Widget> childWidget : arg_widget->mChildWidgets)
-		{
-			mouseEventRecursive(childWidget.Get(), arg_mousepos, arg_mouseevent, arg_button);
+			for(ObjectPtrBase<Widget>& child : arg_widget->mChildWidgets)
+				iterateWidgetsRecursive(child.Get(), arg_function);
 		}
 	}
 }
