@@ -11,11 +11,14 @@ file(GLOB_RECURSE SRC_FILES
 add_executable(Editor ${SRC_FILES})
 
 ADD_DEPENDENCIES(Editor DungeonCrawler)
+ADD_DEPENDENCIES(Editor NativeUI)
 
 include_directories ("../DungeonCrawler/src")
+include_directories ("../NativeUI/src")
 include_directories ("../include")
 
 target_link_libraries(Editor DungeonCrawler)
+target_link_libraries(Editor NativeUI)
 
 if(MSVC)
     set_property(TARGET Editor APPEND PROPERTY LINK_FLAGS /DEBUG)

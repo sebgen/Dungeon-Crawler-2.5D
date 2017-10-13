@@ -16,6 +16,7 @@ set(ROOT_DIR "${CMAKE_SOURCE_DIR}")
 add_subdirectory(DungeonCrawler)
 add_subdirectory(Game)
 add_subdirectory(Editor)
+add_subdirectory(NativeUI)
 
 if(NOT SHIPPING_BUILD)
 	message("Disabling optimisations, since SHIPPING_BUILD is OFF")

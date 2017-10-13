@@ -5,108 +5,62 @@
 #include <iostream>
 #include <sdl2/SDL.h>
 #include <Windows.h>
+#include "window.h"
+#include "button.h"
+#include "panel.h"
+#include "table_layout_panel.h"
 
 SDL_Window* WindowSDLWindow;
 SDL_Renderer* WindowSDLRenderer;
 
 
-LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	switch (msg)
-	{
-	case WM_CLOSE:
-		DestroyWindow(hwnd);
-		break;
-	case WM_PAINT:
-	{
-		PAINTSTRUCT ps;
-		HDC hds = BeginPaint(hwnd, &ps);
-
-		SDL_SetRenderDrawColor(WindowSDLRenderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-		SDL_RenderClear(WindowSDLRenderer);
-		SDL_RenderPresent(WindowSDLRenderer);
-
-		EndPaint(hwnd, &ps);
-		break;
-	}
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		break;
-	default:
-		return DefWindowProc(hwnd, msg, wParam, lParam);
-	}
-	return 0;
-}
-
-
-//int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-//	LPSTR lpCmdLine, int nCmdShow)
 int main()
 {
-	HINSTANCE hInstance = GetModuleHandle(NULL);
+	NativeUI::Window* window = new NativeUI::Window();
+	window->SetTitle("Editor window");
+	window->Show();
 
-	WNDCLASSEX wc;
-	HWND hwnd;
-	MSG Msg;
+	// Main panel
+	NativeUI::TableLayoutPanel* mainPanel = new NativeUI::TableLayoutPanel(window, 1, 2);
+	mainPanel->SetRowHeight(0, 0.2f);
+	mainPanel->SetRowHeight(1, 0.8f);
+	NativeUI::TableLayoutCell* toolbarCell = mainPanel->GetCell(0, 0);
+	NativeUI::TableLayoutCell* editorMainCell = mainPanel->GetCell(0, 1);
 
-	//Step 1: Registering the Window Class
-	wc.cbSize = sizeof(WNDCLASSEX);
-	wc.style = 0;
-	wc.lpfnWndProc = WndProc;
-	wc.cbClsExtra = 0;
-	wc.cbWndExtra = 0;
-	wc.hInstance = hInstance;
-	wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-	wc.lpszMenuName = NULL;
-	wc.lpszClassName = "MyWIndowClass";
-	wc.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
+	// Below toolbar
+	NativeUI::TableLayoutPanel* editorMainPanel = new NativeUI::TableLayoutPanel(editorMainCell->mContainerPanel, 3, 1);
+	editorMainPanel->SetColumnWidth(0, 0.2f);
+	editorMainPanel->SetColumnWidth(1, 0.6f);
+	editorMainPanel->SetColumnWidth(2, 0.2f);
+	NativeUI::TableLayoutCell* contentBrowserCell = editorMainPanel->GetCell(0, 0);
+	NativeUI::TableLayoutCell* viewContainerCell = editorMainPanel->GetCell(1, 0);
+	NativeUI::TableLayoutCell* propertyInspectorCell = editorMainPanel->GetCell(2, 0);
 
-	if (!RegisterClassEx(&wc))
-	{
-		MessageBox(NULL, "Window Registration Failed!", "Error!",
-			MB_ICONEXCLAMATION | MB_OK);
-		return 0;
-	}
-
-	// Step 2: Creating the Window
-	hwnd = CreateWindowEx(
-		WS_EX_CLIENTEDGE,
-		"MyWIndowClass",
-		"The title of my window",
-		WS_OVERLAPPEDWINDOW,
-		CW_USEDEFAULT, CW_USEDEFAULT, 800, 600,
-		NULL, NULL, hInstance, NULL);
-
-	if (hwnd == NULL)
-	{
-		MessageBox(NULL, "Window Creation Failed!", "Error!",
-			MB_ICONEXCLAMATION | MB_OK);
-		return 0;
-	}
-
-	WindowSDLWindow = SDL_CreateWindowFrom(hwnd);
-	WindowSDLRenderer = SDL_CreateRenderer(WindowSDLWindow, -1, SDL_RENDERER_ACCELERATED);
-
-	HWND hwndButton = CreateWindow("BUTTON", "OK", WS_CHILD | WS_VISIBLE | BS_DEFPUSHBUTTON, 10, 10, 100, 100, hwnd, NULL, (HINSTANCE)GetWindowLong(hwnd, GWL_HINSTANCE), NULL);
-
-	ShowWindow(hwnd, TRUE);
-	UpdateWindow(hwnd);
-
-	SDL_Init(SDL_INIT_EVERYTHING);
-	SDL_Window* SDLWindow = SDL_CreateWindowFrom(hwndButton);
-	SDL_Renderer* SDLRenderer = SDL_CreateRenderer(SDLWindow, -1, SDL_RENDERER_ACCELERATED);
+	// Test buttons
+	NativeUI::Button* testBtnToolbar = new NativeUI::Button(toolbarCell->mContainerPanel);
+	testBtnToolbar->SetText("Toolbar");
+	testBtnToolbar->SetSize(1.0f, 1.0f);
+	testBtnToolbar->SetVerticalSizeMode(NativeUI::SizeMode::Relative);
+	testBtnToolbar->SetHorizontalSizeMode(NativeUI::SizeMode::Relative);
 	
-	SDL_SetRenderDrawColor(SDLRenderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-	SDL_RenderClear(SDLRenderer);
-	SDL_RenderPresent(SDLRenderer);
+	NativeUI::Button* testBtnViewContainer = new NativeUI::Button(viewContainerCell->mContainerPanel);
+	testBtnViewContainer->SetText("View");
+	testBtnViewContainer->SetSize(1.0f, 1.0f);
+	testBtnViewContainer->SetVerticalSizeMode(NativeUI::SizeMode::Relative);
+	testBtnViewContainer->SetHorizontalSizeMode(NativeUI::SizeMode::Relative);
 
-	// Step 3: The Message Loop
-	while (GetMessage(&Msg, NULL, 0, 0) > 0)
+
+
+
+	MSG msg;
+	msg.message = ~WM_QUIT;
+	while (msg.message != WM_QUIT)
 	{
-		TranslateMessage(&Msg);
-		DispatchMessage(&Msg);
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
 	}
-	return Msg.wParam;
+	return 0;
 }
