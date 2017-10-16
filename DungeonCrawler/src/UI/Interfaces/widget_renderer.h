@@ -16,6 +16,7 @@ namespace Retro3D
 	class TextVisual;
 	class ColourVisual;
 	class Window;
+	class IRenderTargetWindow;
 
 	class IWidgetRenderer
 	{
@@ -23,7 +24,7 @@ namespace Retro3D
 		virtual void RenderColour(ColourVisual* arg_rect, const WidgetRenderParams& arg_renderparams) = 0;
 		virtual void RenderImage(ImageVisual* arg_image, const WidgetRenderParams& arg_renderparams) = 0;
 		virtual void RenderText(TextVisual* arg_image, const WidgetRenderParams& arg_renderparams) = 0;
-		virtual void SetWindow(Window* arg_window) = 0;
+		virtual void SetWindow(IRenderTargetWindow* arg_window) = 0;
 	};
 }
 

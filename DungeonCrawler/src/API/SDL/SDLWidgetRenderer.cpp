@@ -19,7 +19,7 @@ namespace Retro3D
 		const glm::vec4& rgba = arg_visual->GetColour().GetRGBA();
 		int window_width;
 		int window_height;
-		SDL_GetWindowSize(mWindow->GetSDLWindow(), &window_width, &window_height);
+		mWindow->GetWindowSize(window_width, window_height);
 
 		SDL_Renderer* renderer = mWindow->GetSDLRenderer();
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_ADD);
@@ -38,7 +38,7 @@ namespace Retro3D
 
 		int window_width;
 		int window_height;
-		SDL_GetWindowSize(mWindow->GetSDLWindow(), &window_width, &window_height);
+		mWindow->GetWindowSize(window_width, window_height);
 
 		SDL_Texture* img = arg_image->GetSDLTexture();
 		if (img == nullptr)
@@ -78,7 +78,7 @@ namespace Retro3D
 
 		int window_width;
 		int window_height;
-		SDL_GetWindowSize(mWindow->GetSDLWindow(), &window_width, &window_height);
+		mWindow->GetWindowSize(window_width, window_height);
 
 		SDL_Renderer* renderer = mWindow->GetSDLRenderer();
 		
@@ -145,7 +145,7 @@ namespace Retro3D
 		SDL_DestroyTexture(txtTexture); // TODO: use resource manager
 	}
 	
-	void SDLWidgetRenderer::SetWindow(Window* arg_window)
+	void SDLWidgetRenderer::SetWindow(IRenderTargetWindow* arg_window)
 	{
 		mWindow = arg_window;
 	}
@@ -155,7 +155,7 @@ namespace Retro3D
 	{
 		int window_width;
 		int window_height;
-		SDL_GetWindowSize(mWindow->GetSDLWindow(), &window_width, &window_height);
+		mWindow->GetWindowSize(window_width, window_height);
 
 		SDL_Renderer* renderer = mWindow->GetSDLRenderer();
 		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);

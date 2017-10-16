@@ -33,7 +33,7 @@ namespace Retro3D
 		iterateWidgetsRecursive(mRootWidget.Get(), func);
 	}
 
-	void WidgetManager::RenderWidgets(Window* arg_window)
+	void WidgetManager::RenderWidgets(IRenderTargetWindow* arg_window)
 	{
 		IWidgetRenderer* widgetRenderer = GGameEngine->GetWidgetRenderer();
 		widgetRenderer->SetWindow(arg_window);
@@ -45,7 +45,7 @@ namespace Retro3D
 		
 	}
 
-	void WidgetManager::renderWidgetRecursive(Widget* arg_widget, Window* arg_window)
+	void WidgetManager::renderWidgetRecursive(Widget* arg_widget, IRenderTargetWindow* arg_window)
 	{
 		__Assert(arg_widget->mParentWidget != nullptr);
 		__Assert(arg_window != nullptr);

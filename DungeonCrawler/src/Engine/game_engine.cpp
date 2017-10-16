@@ -103,6 +103,9 @@ namespace Retro3D
 	{
 		const Uint64 start = SDL_GetPerformanceCounter();
 
+		if (mTickCallback != nullptr)
+			mTickCallback(mDeltaTime);
+
 		mWorld->TickWorld(mDeltaTime);
 		mWorldMessageBus->Clear();
 

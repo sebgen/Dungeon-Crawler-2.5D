@@ -21,6 +21,7 @@ namespace NativeUI
 
 		void Show();
 		void SetTitle(const char* arg_title);
+		void Maximize();
 	};
 }
 

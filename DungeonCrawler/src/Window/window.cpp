@@ -36,6 +36,11 @@ namespace Retro3D
 		SDL_RenderPresent(mSDLRenderer);
 	}
 
+	SDL_Renderer* Window::GetSDLRenderer() 
+	{
+		return mSDLRenderer; 
+	}
+
 	void Window::GetWindowSize(int& out_width, int& out_height)
 	{
 		SDL_GetWindowSize(GetSDLWindow(), &out_width, &out_height);

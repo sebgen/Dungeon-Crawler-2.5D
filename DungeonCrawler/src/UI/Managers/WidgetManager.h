@@ -25,7 +25,7 @@ namespace Retro3D
 	private:
 		ObjectPtr<Widget> mRootWidget;
 
-		void renderWidgetRecursive(Widget* arg_widget, Window* arg_window);
+		void renderWidgetRecursive(Widget* arg_widget, IRenderTargetWindow* arg_window);
 
 		/**
 		* Iterates through widgets and child widgets, starting from arg_widget.
@@ -48,7 +48,7 @@ namespace Retro3D
 		void TickWidgets(float arg_deltatime);
 
 		/** Renders all Widgets. */
-		void RenderWidgets(Window* arg_window);
+		void RenderWidgets(IRenderTargetWindow* arg_window);
 
 		// IInputListener callbacks
 		virtual void OnKeyDown(const char* arg_key) override;

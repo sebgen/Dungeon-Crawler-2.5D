@@ -14,6 +14,8 @@ The game is ticked from here.
 
 #include "Object/objectptr.h"
 #include "Text/config_reader.h"
+#include "Graphics/render_target.h"
+#include <functional>
 
 namespace Retro3D
 {
@@ -36,7 +38,7 @@ namespace Retro3D
 		World* mWorld;
 		WorldMessageBus* mWorldMessageBus;
 		Level* mCurrentLevel;
-		Window* mWindow;
+		IRenderTargetWindow* mWindow;
 
 		// Managers
 		InputManager* mInputManager;
@@ -51,6 +53,8 @@ namespace Retro3D
 
 		float mDeltaTime = 0.1f;
 		bool mIsRunning;
+
+		std::function<void(float)> mTickCallback = nullptr;
 
 		// Constructor
 		GameEngine();
@@ -72,14 +76,18 @@ namespace Retro3D
 
 		void Shutdown();
 
+		void SetTickCallback(std::function<void(float)> arg_callback) { mTickCallback = arg_callback; }
+
 		/** Gets the time in seconds between current and last frame */
 		float GetDeltaTime();
 
 		void SetPlayerController(PlayerController* arg_controller) { mPlayerController = arg_controller; } // TODO
 
+		void SetRenderTargetWindow(IRenderTargetWindow* arg_target) { mWindow = arg_target; } // TODO
+
 		// Accessors
 		inline Level* GetCurrentLevel() { return mCurrentLevel; }
-		inline Window* GetWindow() { return mWindow; }
+		inline IRenderTargetWindow* GetWindow() { return mWindow; }
 		inline InputManager* GetInputManager() { return mInputManager; }
 		inline ScriptManager* GetScriptManager() { return mScriptManager; }
 		inline WidgetManager* GetWidgetManager() { return mWidgetManager; }

@@ -55,10 +55,7 @@ namespace Retro3D
 
 	SceneRenderer::SceneRenderer()
 	{
-		Window* window = GGameEngine->GetWindow();
-
-		/*** Set up the render target texture ***/
-		mRenderTexture = SDL_CreateTexture(window->GetSDLRenderer(), SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, texWidth, texHeight);
+		mRenderTexture = nullptr;
 
 		/*** Set up pixel arrays ***/
 		mClearPixels = std::vector<unsigned char>(texWidth * texHeight * 4, 0); // clear pixel array. "pixels" array is set to this before rendering
@@ -124,6 +121,16 @@ namespace Retro3D
 	void SceneRenderer::RenderScene()
 	{
 		__Assert(mLevel != nullptr);
+
+		if (mRenderTexture != nullptr)
+		{
+			SDL_DestroyTexture(mRenderTexture);
+		}
+
+		IRenderTargetWindow* window = GGameEngine->GetWindow();
+
+		/*** Set up the render target texture ***/
+		mRenderTexture = SDL_CreateTexture(window->GetSDLRenderer(), SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, texWidth, texHeight);
 
 		glm::vec3 camPos;
 		glm::mat4 camRot;
@@ -438,7 +445,6 @@ namespace Retro3D
 		SDL_UpdateTexture(mRenderTexture, NULL, &mPixels[0], texWidth * 4);
 
 		SDL_RenderCopy(GGameEngine->GetWindow()->GetSDLRenderer(), mRenderTexture, NULL, NULL);
-		//SDL_RenderPresent(GGameEngine->GetWindow()->GetSDLRenderer());
 
 		mPixels = mClearPixels; // TODO
 		mDepthBuffer = mClearDepthBuffer; // TODO

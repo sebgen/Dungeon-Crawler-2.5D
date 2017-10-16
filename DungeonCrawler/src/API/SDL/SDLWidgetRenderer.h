@@ -12,7 +12,7 @@ namespace Retro3D
 	class SDLWidgetRenderer : public IWidgetRenderer
 	{
 	private:
-		Window* mWindow = 0;
+		IRenderTargetWindow* mWindow = 0;
 
 		void InitTransform(const Rectangle& arg_contentrect, const Rectangle& arg_visiblerect, SDL_Rect& out_rect);
 
@@ -21,7 +21,7 @@ namespace Retro3D
 		void RenderImage(ImageVisual* arg_image, const WidgetRenderParams& arg_renderparams) override;
 		void RenderText(TextVisual* arg_text, const WidgetRenderParams& arg_renderparams) override;
 		
-		void SetWindow(Window* arg_window) override;
+		void SetWindow(IRenderTargetWindow* arg_window) override;
 	};
 }
 

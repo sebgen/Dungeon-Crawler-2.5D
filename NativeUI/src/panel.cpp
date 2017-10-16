@@ -23,17 +23,14 @@ namespace NativeUI
 			DestroyWindow(hwnd);
 			break;
 		case WM_PAINT:
-			BeginPaint(hwnd, &ps);
+			//BeginPaint(hwnd, &ps);
 			// RENDERING HERE
-			EndPaint(hwnd, &ps);
-			break;
-		case WM_DESTROY:
-			PostQuitMessage(0);
+			//EndPaint(hwnd, &ps);
 			break;
 		default:
 			return DefWindowProc(hwnd, msg, wParam, lParam);
 		}
-		return 0;
+		return DefWindowProc(hwnd, msg, wParam, lParam);;
 	}
 
 	void Panel::CreatePanelClass()

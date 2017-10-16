@@ -24,9 +24,9 @@ namespace NativeUI
 			DestroyWindow(hwnd);
 			break;
 		case WM_PAINT:
-			BeginPaint(hwnd, &ps);
+			//BeginPaint(hwnd, &ps);
 			// RENDERING HERE
-			EndPaint(hwnd, &ps);
+			//EndPaint(hwnd, &ps);
 			break;
 		case WM_DESTROY:
 			PostQuitMessage(0);
@@ -34,6 +34,7 @@ namespace NativeUI
 		default:
 			return DefWindowProc(hwnd, msg, wParam, lParam);
 		}
+		return DefWindowProc(hwnd, msg, wParam, lParam);;
 	}
 
 	void Window::CreateWindowClass()
@@ -97,5 +98,10 @@ namespace NativeUI
 	void Window::SetTitle(const char* arg_title)
 	{
 		SetWindowText(mHwnd, arg_title);
+	}
+
+	void Window::Maximize()
+	{
+		SendMessage(mHwnd, WM_SYSCOMMAND, SC_MAXIMIZE, 0);
 	}
 }

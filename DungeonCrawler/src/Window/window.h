@@ -8,12 +8,13 @@ The Game, with its scene and GUI, is rendered here.
 
 ==============================================================================================*/
 
+#include "Graphics/render_target.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_video.h>
 
 namespace Retro3D
 {
-	class Window
+	class Window : public IRenderTargetWindow
 	{
 	private:
 		SDL_Window* mSDLWindow;
@@ -24,17 +25,17 @@ namespace Retro3D
 		~Window();
 
 		/** Prepare the Window for rendering. Called by the engine. */
-		void PrepareRender();
+		virtual void PrepareRender() override;
 
 		/** Updates the screen with rendered content. */
-		void Render();
+		virtual void Render() override;
 
 		inline SDL_Window* GetSDLWindow() { return mSDLWindow; }
 
-		inline SDL_Renderer* GetSDLRenderer() { return mSDLRenderer;  }
+		virtual SDL_Renderer* GetSDLRenderer() override;
 
 		/** Gets the size (in pixels) of the Window. */
-		void GetWindowSize(int& out_width, int& out_height);
+		virtual void GetWindowSize(int& out_width, int& out_height) override;
 	};
 }
 
