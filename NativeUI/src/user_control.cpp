@@ -1,5 +1,7 @@
 #include "user_control.h"
 
+#include <iostream>
+
 namespace NativeUI
 {
 	WNDCLASSEX* UserControl::UserControlClass = NULL;
@@ -30,6 +32,54 @@ namespace NativeUI
 		case WM_DESTROY:
 			PostQuitMessage(0);
 			break;
+		case WM_HSCROLL:
+		{
+			SCROLLINFO si = { 0 };
+			si.cbSize = sizeof(SCROLLINFO);
+			si.fMask = SIF_POS;
+			int newX = -1;
+			switch (LOWORD(wParam))
+			{
+				case SB_THUMBPOSITION:
+				{
+					newX = HIWORD(wParam);
+					break;
+				}
+			}
+			if (newX != -1)
+			{
+				int deltaX = newX - userControl->mScrollX;
+				si.nPos = newX;
+				SetScrollInfo(hwnd, SB_HORZ, &si, TRUE);
+				ScrollWindow(hwnd, -deltaX, 0, NULL, NULL);
+				userControl->mScrollX = newX;
+			}
+			break;
+		}
+		case WM_VSCROLL:
+		{
+			SCROLLINFO si = { 0 };
+			si.cbSize = sizeof(SCROLLINFO);
+			si.fMask = SIF_POS;
+			int newY = -1;
+			switch (LOWORD(wParam))
+			{
+			case SB_THUMBPOSITION:
+			{
+				newY = HIWORD(wParam);
+				break;
+			}
+			}
+			if (newY != -1)
+			{
+				int deltaY = newY - userControl->mScrollY;
+				si.nPos = newY;
+				SetScrollInfo(hwnd, SB_VERT, &si, TRUE);
+				ScrollWindow(hwnd, 0, -deltaY, NULL, NULL);
+				userControl->mScrollY = newY;
+			}
+			break;
+		}
 		default:
 			return DefWindowProc(hwnd, msg, wParam, lParam);
 		}
@@ -68,7 +118,7 @@ namespace NativeUI
 			CreateUserControlClass();
 		}
 
-		mHwnd = CreateWindow("NativeUIUserControl", "", WS_CHILD | WS_VISIBLE | BS_DEFPUSHBUTTON, 0, 0, 50, 50, arg_parent->GetHwnd(), NULL, GetModuleHandle(NULL), NULL);
+		mHwnd = CreateWindow("NativeUIUserControl", "", WS_CHILD | WS_VISIBLE | BS_DEFPUSHBUTTON | WS_HSCROLL | WS_VSCROLL, 0, 0, 50, 50, arg_parent->GetHwnd(), NULL, GetModuleHandle(NULL), NULL);
 		ShowWindow(mHwnd, TRUE);
 		UpdateWindow(mHwnd);
 
@@ -80,10 +130,60 @@ namespace NativeUI
 		{
 			RegisteredUserControls[mHwnd] = this;
 		}
+
+		ShowScrollbar(false);
+	}
+
+	void UserControl::OnChildTransformUpdated()
+	{
+		Control::OnChildTransformUpdated();
+
+		if (mScrollbarVisible)
+		{
+			UpdateScrollbar();
+		}
+	}
+
+	void UserControl::UpdateScrollbar()
+	{
+		NativeUI::Point maxRBCorner = GetSizeClientCoords();
+		for (Control* child : mChildren)
+		{
+			const NativeUI::Point childPos = child->GetPositionClientCoords();
+			const NativeUI::Point childSize = child->GetSizeClientCoords();
+			const NativeUI::Point childRBCorner = childPos + childSize;
+			if (childRBCorner.x > maxRBCorner.x)
+				maxRBCorner.x = childRBCorner.x;
+			if (childRBCorner.y > maxRBCorner.y)
+				maxRBCorner.y = childRBCorner.y;
+		}
+
+		SCROLLINFO siHor = { 0 };
+		siHor.cbSize = sizeof(SCROLLINFO);
+		siHor.fMask = SIF_RANGE;
+		siHor.nMin = 0;
+		siHor.nMax = (int)maxRBCorner.x;
+
+		SCROLLINFO siVer = siHor;
+		siVer.nMin = 0;
+		siVer.nMax = (int)maxRBCorner.y;
+
+		SetScrollInfo(mHwnd, SB_HORZ, &siHor, TRUE);
+		SetScrollInfo(mHwnd, SB_VERT, &siVer, TRUE);
 	}
 
 	void UserControl::OnPaint()
 	{
 
+	}
+
+	void UserControl::ShowScrollbar(bool arg_show)
+	{
+		ShowScrollBar(mHwnd, SB_BOTH, arg_show);
+		mScrollbarVisible = arg_show;
+		if (arg_show)
+		{
+			UpdateScrollbar();
+		}
 	}
 }

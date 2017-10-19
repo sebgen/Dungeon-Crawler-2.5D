@@ -10,6 +10,8 @@ namespace NativeUI
 			mParent->mChildren.push_back(this);
 		}
 		mSize = Point(25.0f, 25.0f);
+
+		EnableScrollBar(mHwnd, SB_BOTH, ESB_ENABLE_BOTH);
 	}
 
 	void Control::UpdateClientCoords()
@@ -58,6 +60,16 @@ namespace NativeUI
 		const int h = (int)mSizeClientCoords.y;
 		SetWindowPos(mHwnd, HWND_TOP, x, y, w, h, 0);
 		OnResize();
+
+		if (mParent != nullptr)
+		{
+			mParent->OnChildTransformUpdated();
+		}
+	}
+
+	void Control::OnChildTransformUpdated()
+	{
+
 	}
 
 	void Control::SetPosition(const Point& arg_pos)

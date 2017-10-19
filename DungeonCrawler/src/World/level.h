@@ -38,17 +38,17 @@ namespace Retro3D
 			return arg_x + arg_y*mDimX;
 		}
 
-		inline const int GetWallMapCell(const int& arg_x, const int& arg_y) const
+		inline const char GetWallMapCell(const int& arg_x, const int& arg_y) const
 		{
 			const int index = GetMapIndex(arg_x, arg_y);
 			return mWallMap[index];
 		}
-		inline const int GetFloorMapCell(const int& arg_x, const int& arg_y) const
+		inline const char GetFloorMapCell(const int& arg_x, const int& arg_y) const
 		{
 			const int index = GetMapIndex(arg_x, arg_y);
 			return mFloorMap[index];
 		}
-		inline const int GetCeilingMapCell(const int& arg_x, const int& arg_y) const
+		inline const char GetCeilingMapCell(const int& arg_x, const int& arg_y) const
 		{
 			const int index = GetMapIndex(arg_x, arg_y);
 			return mCeilingMap[index];

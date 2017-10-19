@@ -13,8 +13,6 @@ namespace Retro3D
 
 	void GameView::OnPaint()
 	{
-		//SDL_SetRenderDrawColor(mSDLRenderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-		//SDL_RenderClear(mSDLRenderer);
 		SDL_RenderPresent(mSDLRenderer);
 	}
 
@@ -26,7 +24,7 @@ namespace Retro3D
 
 	void GameView::Render()
 	{
-		SDL_RenderPresent(mSDLRenderer);
+		//SDL_RenderPresent(mSDLRenderer); // NO!!!
 	}
 
 	SDL_Renderer* GameView::GetSDLRenderer()

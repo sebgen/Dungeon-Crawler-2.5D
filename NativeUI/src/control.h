@@ -24,7 +24,8 @@ namespace NativeUI
 		Point mSizeClientCoords;
 
 		void UpdateClientCoords();
-		void OnTransformUpdated();
+		virtual void OnTransformUpdated();
+		virtual void OnChildTransformUpdated();
 
 		void OnUserResize();
 

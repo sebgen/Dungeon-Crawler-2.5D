@@ -18,6 +18,11 @@ namespace NativeUI
 			: x(arg_x), y(arg_y)
 		{
 		}
+
+		Point operator+(const Point& arg_other) const
+		{
+			return Point(x + arg_other.x, y + arg_other.y);
+		}
 	};
 
 	enum SizeMode
