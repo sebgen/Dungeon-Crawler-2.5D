@@ -56,37 +56,6 @@ int main(int argc, char** argv)
 
 	GGameEngine->GetSceneRenderer()->SetCameraComponent(camComp); // TODO: make this automatic
 
-	
-
-
-	/**/
-	/*
-	ImageWidget* imgWidget = new ImageWidget();
-	imgWidget->SetSize(1.0f, 0.5f);
-	imgWidget->SetColour(Colour(1.0f, 0.0f, 0.0f));
-	engine->GetWidgetManager()->AddWidget(imgWidget);
-
-	UniformGridPanelWidget* gridWidget = new UniformGridPanelWidget();
-	gridWidget->SetSize(1.0f, 1.0f);
-	gridWidget->SetGridCellSize(150.0f, 150.0f, WidgetScalingMode::Absolute, WidgetScalingMode::Absolute);
-	gridWidget->SetDimension(3, 2);
-	imgWidget->AddChildWidget(gridWidget);
-
-	
-	for (int c = 0; c < 3; c++)
-	{
-		for (int r = 0; r < 2; r++)
-		{
-			ImageWidget* cell = new ImageWidget();
-			cell->SetSize(0.8f, 0.8f);
-			if(c % 2 == r % 2)
-				cell->SetColour(Colour(0.0f, 1.0f, 0.0f));
-			else
-				cell->SetColour(Colour(0.0f, 0.0f, 1.0f));
-			gridWidget->AddWidgetToGridCell(cell, c, r);
-		}
-	}*/
-
 	engine->StartEngine();
 
 	SDL_Quit();
