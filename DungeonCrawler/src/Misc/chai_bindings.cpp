@@ -15,6 +15,7 @@
 #include "World/world.h"
 #include "UI/Widgets/image_widget.h"
 #include "UI/Widgets/text_widget.h"
+#include "UI/Widgets/uniform_grid_panel_widget.h"
 #include "UI/Widgets/button_widget.h"
 #include "UI/Widgets/image_widget_style.h"
 #include "UI/Managers/WidgetManager.h"
@@ -139,6 +140,14 @@ namespace Retro3D
 		arg_chaiscript->add(chaiscript::fun([](Widget& widget, const float x, const float y) { widget.SetSize(x, y); }), "SetSize");
 		arg_chaiscript->add(chaiscript::fun([](Widget& widget, const float x, const float y) { widget.SetPosition(x, y); }), "SetPosition");
 		arg_chaiscript->add(chaiscript::fun([](Widget& widget, const float x, const float y) { widget.SetPivot(x, y); }), "SetPivot");
+		arg_chaiscript->add(chaiscript::fun(&Widget::GetVerticalPositioning), "GetVerticalPositioning");
+		arg_chaiscript->add(chaiscript::fun(&Widget::SetVerticalPositioning), "SetVerticalPositioning");
+		arg_chaiscript->add(chaiscript::fun(&Widget::GetHorizontalPositioning), "GetHorizontalPositioning");
+		arg_chaiscript->add(chaiscript::fun(&Widget::SetHorizontalPositioning), "SetHorizontalPositioning");
+		arg_chaiscript->add(chaiscript::fun(&Widget::GetVerticalScaling), "GetVerticalScaling");
+		arg_chaiscript->add(chaiscript::fun(&Widget::SetVerticalScaling), "SetVerticalScaling");
+		arg_chaiscript->add(chaiscript::fun(&Widget::GetHorizontalScaling), "GetHorizontalScaling");
+		arg_chaiscript->add(chaiscript::fun(&Widget::SetHorizontalScaling), "SetHorizontalScaling");
 		arg_chaiscript->add(chaiscript::fun(&Widget::SetWidgetScriptClass), "SetWidgetScriptClass");
 		arg_chaiscript->add(chaiscript::fun(&Widget::BindOnMousePressed), "BindOnMousePressed");
 		arg_chaiscript->add(chaiscript::fun(&Widget::BindOnMouseReleased), "BindOnMouseReleased");
@@ -153,6 +162,22 @@ namespace Retro3D
 		arg_chaiscript->add(chaiscript::fun(&TextWidget::SetText), "SetText");
 		arg_chaiscript->add(chaiscript::fun(&TextWidget::GetTextStyle), "GetTextStyle");
 		arg_chaiscript->add(chaiscript::fun(&TextWidget::SetTextStyle), "SetTextStyle");
+
+
+		chaiscript::ModulePtr moduleWidgetPositioningMode = chaiscript::ModulePtr(new chaiscript::Module());
+		chaiscript::utility::add_class<WidgetPositioningMode>(*moduleWidgetPositioningMode,
+			"WidgetPositioningMode",
+			{ { WidgetPositioningMode::Absolute, "Absolute" },
+			{	WidgetPositioningMode::Relative, "Relative" }
+			}
+		);
+		chaiscript::ModulePtr mWidgetScalingMode = chaiscript::ModulePtr(new chaiscript::Module());
+		chaiscript::utility::add_class<WidgetScalingMode>(*mWidgetScalingMode,
+			"WidgetPositioningMode",
+			{ { WidgetScalingMode::Absolute, "Absolute" },
+			{	WidgetScalingMode::Relative, "Relative" }
+			}
+		);
 
 		arg_chaiscript->add(chaiscript::user_type<TextStyle>(), "TextStyle");
 		arg_chaiscript->add(chaiscript::fun(&TextStyle::SetColour), "SetColour");
@@ -175,6 +200,18 @@ namespace Retro3D
 		arg_chaiscript->add(chaiscript::fun(&ButtonWidget::GetBackgroundStyleOnHover), "GetBackgroundStyleOnHover");
 		arg_chaiscript->add(chaiscript::fun(&ButtonWidget::GetBackgroundStyleOnClick), "GetBackgroundStyleOnClick");
 		arg_chaiscript->add(chaiscript::fun(&ButtonWidget::BindOnButtonClicked), "BindOnButtonClicked");
+
+		arg_chaiscript->add(chaiscript::user_type<PanelWidget>(), "PanelWidget");
+		arg_chaiscript->add(chaiscript::base_class<Widget, PanelWidget>());
+
+		arg_chaiscript->add(chaiscript::user_type<GridPanelBase>(), "GridPanelBase");
+		arg_chaiscript->add(chaiscript::base_class<PanelWidget, GridPanelBase>());
+		arg_chaiscript->add(chaiscript::fun(&GridPanelBase::SetDimension), "SetDimension");
+
+		arg_chaiscript->add(chaiscript::user_type<UniformGridPanelWidget>(), "UniformGridPanelWidget");
+		arg_chaiscript->add(chaiscript::base_class<GridPanelBase, UniformGridPanelWidget>());
+		arg_chaiscript->add(chaiscript::fun(&UniformGridPanelWidget::SetGridCellSize), "SetGridCellSize");
+		arg_chaiscript->add(chaiscript::fun(&UniformGridPanelWidget::AddWidgetToGridCell), "AddWidgetToGridCell");
 
 		arg_chaiscript->add(chaiscript::user_type<ImageWidgetStyle>(), "ImageWidgetStyle");
 		arg_chaiscript->add(chaiscript::constructor<ImageWidgetStyle()>(), "ImageWidgetStyle");
