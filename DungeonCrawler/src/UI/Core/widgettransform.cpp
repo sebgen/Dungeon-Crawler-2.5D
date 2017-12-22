@@ -48,6 +48,11 @@ namespace Retro3D
 		const glm::vec2 absPivotPos = (absoluteTransform.mPosition + absoluteTransform.mSize) * mPivot + absoluteTransform.mPosition * (1.0f - mPivot);
 		absoluteTransform.mPosition -= (absPivotPos - absoluteTransform.mPosition);
 
+		absoluteTransform.mHorizontalPositioning = WidgetPositioningMode::Absolute;
+		absoluteTransform.mVerticalPositioning = WidgetPositioningMode::Absolute;
+		absoluteTransform.mHorizontalScaling = WidgetScalingMode::Absolute;
+		absoluteTransform.mVerticalScaling = WidgetScalingMode::Absolute;
+
 		return absoluteTransform;
 	}
 

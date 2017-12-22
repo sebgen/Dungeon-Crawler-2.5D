@@ -120,7 +120,10 @@ namespace Retro3D
 	**/
 	void SceneRenderer::RenderScene()
 	{
-		__Assert(mLevel != nullptr);
+		if (mLevel == nullptr)
+		{
+			return;
+		}
 
 		if (mRenderTexture != nullptr)
 		{

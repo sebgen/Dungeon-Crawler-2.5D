@@ -23,12 +23,12 @@ namespace Retro3D
 
 	void SpriteComponent::OnStart()
 	{
-
+		Component::OnStart();
 	}
 
 	void SpriteComponent::OnTick(float arg_deltatime)
 	{
-
+		Component::OnTick(arg_deltatime);
 	}
 
 }

@@ -35,6 +35,20 @@ namespace Retro3D
 
 	void WidgetManager::RenderWidgets(IRenderTargetWindow* arg_window)
 	{
+		// TODO: Make sure this happens before ticking widgets for the first time.
+		// We don't want the absolute transforms of widgets to be incorrect the first frame.
+		if (mRootWidget.IsValid())
+		{
+			int winWidth = 0;
+			int winHeight = 0;
+			arg_window->GetWindowSize(winWidth, winHeight);
+			mRootWidget->SetSize(winWidth, winHeight);
+			mRootWidget->SetHorizontalPositioning(WidgetPositioningMode::Absolute);
+			mRootWidget->SetVerticalPositioning(WidgetPositioningMode::Absolute);
+			mRootWidget->SetHorizontalScaling(WidgetScalingMode::Absolute);
+			mRootWidget->SetVerticalScaling(WidgetScalingMode::Absolute);
+		}
+
 		IWidgetRenderer* widgetRenderer = GGameEngine->GetWidgetRenderer();
 		widgetRenderer->SetWindow(arg_window);
 		for (size_t i = 0; i < mRootWidget->GetNumChildWidgets(); i++)
@@ -91,11 +105,7 @@ namespace Retro3D
 
 	void WidgetManager::OnMouseButtonDown(MouseButtonID arg_button)
 	{
-		int win_w;
-		int win_h;
-		GGameEngine->GetWindow()->GetWindowSize(win_w, win_h);
-
-		glm::vec2 relMousePos = GGameEngine->GetInputManager()->GetMousePosition() / glm::vec2(win_w, win_h);
+		glm::vec2 mousePos = GGameEngine->GetInputManager()->GetMousePosition();
 
 		std::function<bool(Widget*)> func = [&](Widget* arg_widget) -> bool
 		{
@@ -104,7 +114,7 @@ namespace Retro3D
 			const glm::vec2 widgetPos = arg_widget->mAbsoluteTransform.mPosition;
 			const glm::vec2 widgetRBPos = arg_widget->mAbsoluteTransform.mSize + widgetPos;
 
-			if (relMousePos.x > widgetPos.x && relMousePos.x < widgetRBPos.x && relMousePos.y > widgetPos.y && relMousePos.y < widgetRBPos.y)
+			if (mousePos.x > widgetPos.x && mousePos.x < widgetRBPos.x && mousePos.y > widgetPos.y && mousePos.y < widgetRBPos.y)
 			{
 				arg_widget->OnMouseButtonDown(arg_button);
 
@@ -139,11 +149,7 @@ namespace Retro3D
 
 	void WidgetManager::OnMouseMotion(const glm::vec2& arg_motion)
 	{
-		int win_w;
-		int win_h;
-		GGameEngine->GetWindow()->GetWindowSize(win_w, win_h);
-
-		glm::vec2 relMousePos = GGameEngine->GetInputManager()->GetMousePosition() / glm::vec2(win_w, win_h);
+		glm::vec2 mousePos = GGameEngine->GetInputManager()->GetMousePosition();
 
 		std::vector<WeakObjectPtr<Widget>> widgetsNoLongerHovered;
 
@@ -154,7 +160,7 @@ namespace Retro3D
 			const glm::vec2 widgetPos = arg_widget->mAbsoluteTransform.mPosition;
 			const glm::vec2 widgetRBPos = arg_widget->mAbsoluteTransform.mSize + widgetPos;
 
-			if (relMousePos.x > widgetPos.x && relMousePos.x < widgetRBPos.x && relMousePos.y > widgetPos.y && relMousePos.y < widgetRBPos.y)
+			if (mousePos.x > widgetPos.x && mousePos.x < widgetRBPos.x && mousePos.y > widgetPos.y && mousePos.y < widgetRBPos.y)
 			{
 				if (!arg_widget->mIsHovered)
 				{

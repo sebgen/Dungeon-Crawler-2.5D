@@ -18,13 +18,13 @@ namespace Retro3D
 
 	void GameView::PrepareRender()
 	{
-		SDL_SetRenderDrawColor(mSDLRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+		SDL_SetRenderDrawColor(mSDLRenderer, 255	, 0, 0, SDL_ALPHA_OPAQUE);
 		SDL_RenderClear(mSDLRenderer);
 	}
 
 	void GameView::Render()
 	{
-		//SDL_RenderPresent(mSDLRenderer); // NO!!!
+		SDL_RenderPresent(mSDLRenderer);
 	}
 
 	SDL_Renderer* GameView::GetSDLRenderer()

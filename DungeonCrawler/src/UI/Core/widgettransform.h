@@ -13,17 +13,16 @@ Each Widget has a local transform, which needs to be turned into an absolute tra
 
 namespace Retro3D
 {
-	enum class WidgetPositioningMode
+	enum class WidgetPositioningMode // TODO: Merge with WidgetScalingMode?
 	{
 		Absolute,
 		Relative
 	};
 
-	enum class WidgetScalingMode
+	enum class WidgetScalingMode // TODO: Merge with WidgetPositioningMode?
 	{
 		Absolute,
-		Relative,
-		Fill
+		Relative
 	};
 
 	class WidgetTransform

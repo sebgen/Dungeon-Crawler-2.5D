@@ -5,7 +5,7 @@ namespace Retro3D
 {
 	VisualWidget::VisualWidget()
 	{
-		mBackgroundColourVisual.SetColour(Colour(0.7f, 0.7f, 0.7f, 1.0f));
+		mBackgroundColourVisual.SetColour(Colour(0.7f, 0.7f, 0.7f, 0.0f));
 	}
 
 	void VisualWidget::CreateContent()

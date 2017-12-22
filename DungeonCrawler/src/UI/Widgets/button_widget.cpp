@@ -16,8 +16,8 @@ namespace Retro3D
 
 		mTextWidget->SetText("");
 
-		AddChildWidget(mTextWidget.Get());
 		AddChildWidget(mBackgroundImageWidget.Get());
+		AddChildWidget(mTextWidget.Get());
 	}
 
 	TextWidget* ButtonWidget::GetTextWidget()

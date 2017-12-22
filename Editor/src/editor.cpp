@@ -68,7 +68,7 @@ namespace Retro3D
 		engine->SetTickCallback(tickCallback);
 		engine->StartEngine();
 		
-		while (false)
+		while (true)
 		{
 			tickCallback(0.1f);
 		}

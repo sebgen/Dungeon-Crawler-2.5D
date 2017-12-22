@@ -22,13 +22,13 @@ namespace Retro3D
 		mWindow->GetWindowSize(window_width, window_height);
 
 		SDL_Renderer* renderer = mWindow->GetSDLRenderer();
-		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_ADD);
+		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 		SDL_SetRenderDrawColor(renderer, rgba.r * 255, rgba.g * 255, rgba.b * 255, rgba.a * 255);
 		SDL_Rect rect;
-		rect.x = arg_renderparams.mVisibleRect.mPosition.x * window_width;
-		rect.y = arg_renderparams.mVisibleRect.mPosition.y * window_height;
-		rect.w = arg_renderparams.mVisibleRect.mSize.x * window_width;
-		rect.h = arg_renderparams.mVisibleRect.mSize.y * window_height;
+		rect.x = arg_renderparams.mVisibleRect.mPosition.x;
+		rect.y = arg_renderparams.mVisibleRect.mPosition.y;
+		rect.w = arg_renderparams.mVisibleRect.mSize.x;
+		rect.h = arg_renderparams.mVisibleRect.mSize.y;
 		SDL_RenderFillRect(renderer, &rect);
 	}
 
@@ -61,10 +61,10 @@ namespace Retro3D
 		srcRect.h = relSize.y * h;
 
 		SDL_Rect dstRect;
-		dstRect.x = arg_renderparams.mVisibleRect.mPosition.x * window_width;
-		dstRect.y = arg_renderparams.mVisibleRect.mPosition.y * window_height;
-		dstRect.w = arg_renderparams.mVisibleRect.mSize.x * window_width;
-		dstRect.h = arg_renderparams.mVisibleRect.mSize.y * window_height;
+		dstRect.x = arg_renderparams.mVisibleRect.mPosition.x;
+		dstRect.y = arg_renderparams.mVisibleRect.mPosition.y;
+		dstRect.w = arg_renderparams.mVisibleRect.mSize.x;
+		dstRect.h = arg_renderparams.mVisibleRect.mSize.y;
 
 		SDL_RenderCopy(renderer, img, &srcRect, &dstRect);
 	}
@@ -83,10 +83,10 @@ namespace Retro3D
 		SDL_Renderer* renderer = mWindow->GetSDLRenderer();
 		
 		SDL_Rect rect;
-		rect.x = arg_renderparams.mVisibleRect.mPosition.x * window_width;
-		rect.y = arg_renderparams.mVisibleRect.mPosition.y * window_height;
-		rect.w = arg_renderparams.mVisibleRect.mSize.x * window_width;
-		rect.h = arg_renderparams.mVisibleRect.mSize.y * window_height;
+		rect.x = arg_renderparams.mVisibleRect.mPosition.x;
+		rect.y = arg_renderparams.mVisibleRect.mPosition.y;
+		rect.w = arg_renderparams.mVisibleRect.mSize.x;
+		rect.h = arg_renderparams.mVisibleRect.mSize.y;
 
 		TTF_Font* font = arg_text->GetFontRes()->GetFont();
 
@@ -159,10 +159,10 @@ namespace Retro3D
 
 		SDL_Renderer* renderer = mWindow->GetSDLRenderer();
 		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-		out_rect.x = arg_contentrect.mPosition.x * window_width;
-		out_rect.y = arg_contentrect.mPosition.y * window_height;
-		out_rect.w = arg_contentrect.mSize.x * window_width;
-		out_rect.h = arg_contentrect.mSize.y * window_height;
+		out_rect.x = arg_contentrect.mPosition.x;
+		out_rect.y = arg_contentrect.mPosition.y;
+		out_rect.w = arg_contentrect.mSize.x;
+		out_rect.h = arg_contentrect.mSize.y;
 	}
 
 }
