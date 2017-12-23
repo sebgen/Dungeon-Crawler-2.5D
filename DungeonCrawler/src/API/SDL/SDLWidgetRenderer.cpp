@@ -104,28 +104,9 @@ namespace Retro3D
 		else
 			surface = TTF_RenderText_Solid(font, text.c_str(), White);
 
-		SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
-		if (texture == nullptr)
-		{
-			LOG_ERROR() << "Failed to create texture";
-			return;
-		}
-
 		const int iW = surface->w;
 		const int iH = surface->h;
-		//SDL_QueryTexture(texture, NULL, NULL, &iW, &iH);
-		/*
-		if (iW < rect.w)
-		{
-			rect.x += (rect.w - iW) / 2;
-			rect.w = iW;
-		}
-		if (iH < rect.h)
-		{
-			rect.y += (rect.h - iH) / 2;
-			rect.h = iH;
-		}
-		*/
+
 		SDL_Texture* txtTexture = SDL_CreateTextureFromSurface(renderer, surface);
 
 		const glm::vec2 relPos = (arg_renderparams.mVisibleRect.mPosition - arg_renderparams.mContentRect.mPosition) / arg_renderparams.mContentRect.mSize;

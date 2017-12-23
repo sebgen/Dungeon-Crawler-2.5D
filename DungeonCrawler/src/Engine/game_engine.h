@@ -58,6 +58,9 @@ namespace Retro3D
 
 		// Constructor
 		GameEngine();
+		~GameEngine();
+
+		static void AtExit();
 
 	public:
 		/**

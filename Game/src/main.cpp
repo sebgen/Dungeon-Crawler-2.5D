@@ -10,23 +10,11 @@
 #include "Engine/game_engine.h"
 #include "Graphics/scene_renderer.h"
 #include "World/level.h"
-#include "Actor/actor.h"
 #include "Actor/player.h"
 #include "Component/component.h"
 #include "Component/camera_component.h"
 #include "Misc/st_assert.h"
 #include "Actor/player_controller.h"
-#include "World/world.h"
-#include "Component/sprite_component.h"
-#include "Component/script_component.h"
-
-#include <typeinfo>
-
-#include "Engine/script_manager.h"
-
-#include "UI/Managers/WidgetManager.h"
-#include "UI/Widgets/uniform_grid_panel_widget.h"
-#include "UI/Widgets/image_widget.h"
 
 #undef main // TEMP - TODO
 
@@ -42,7 +30,7 @@ int main(int argc, char** argv)
 #endif
 
 	GameEngine* engine = GameEngine::CreateGameEngine();
-	
+
 	GGameEngine->GetCurrentLevel()->LoadLevel("level1");
 	engine->GetSceneRenderer()->SetLevel(GGameEngine->GetCurrentLevel()); // todo: do in engine
 
@@ -57,8 +45,6 @@ int main(int argc, char** argv)
 	GGameEngine->GetSceneRenderer()->SetCameraComponent(camComp); // TODO: make this automatic
 
 	engine->StartEngine();
-
-	SDL_Quit();
 
 	return 0;
 }

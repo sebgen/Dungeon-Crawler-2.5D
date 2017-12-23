@@ -27,7 +27,7 @@ namespace Retro3D
 	GameEngine::GameEngine()
 	{
 		SDL_Init(SDL_INIT_EVERYTHING);
-		atexit(SDL_Quit);
+		atexit(AtExit);
 
 		if (TTF_Init() != 0) {
 			LOG_ERROR() << "failed to initialise TTF";
@@ -54,6 +54,34 @@ namespace Retro3D
 			LOG_ERROR() << "Failed to read config game file: ";
 
 		// Read resources.ini
+	}
+
+	GameEngine::~GameEngine()
+	{
+		delete mSceneRenderer;
+		mSceneRenderer = nullptr;
+		delete mWidgetRenderer;
+		mWidgetRenderer = nullptr;
+		delete mWindow;
+		mWindow = nullptr;
+		delete mWorldMessageBus;
+		mWorldMessageBus = nullptr;
+		delete mCurrentLevel;
+		mCurrentLevel = nullptr;
+		delete mScriptManager;
+		mScriptManager = nullptr;
+		delete mInputManager;
+		mInputManager = nullptr;
+		SDL_Quit();
+	}
+
+	void GameEngine::AtExit()
+	{
+		if (GGameEngine != nullptr)
+		{
+			delete GGameEngine;
+			GGameEngine = nullptr;
+		}
 	}
 
 	GameEngine* GameEngine::CreateGameEngine()
@@ -96,6 +124,8 @@ namespace Retro3D
 		{
 			TickEngine();
 		}
+		delete this;
+		GGameEngine = nullptr; // TODO
 #endif
 	}
 

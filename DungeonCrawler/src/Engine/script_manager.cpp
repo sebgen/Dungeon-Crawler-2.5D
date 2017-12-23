@@ -25,6 +25,7 @@ namespace Retro3D
 	ScriptManager::~ScriptManager()
 	{
 		delete mChaiScript;
+		mChaiScript = nullptr;
 	}
 
 	void ScriptManager::RegisterScript(std::string arg_file)
