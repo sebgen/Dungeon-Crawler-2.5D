@@ -11,6 +11,7 @@ Deals with Widget ticking, input handling and rendering of Widgets.
 
 #include "Misc/singleton.h"
 #include "Object/objectptr.h"
+#include "Object/weak_objectptr.h"
 #include "Window/window.h"
 #include "UI/Widgets/widget.h"
 #include "Engine/input_listener.h"
@@ -24,8 +25,13 @@ namespace Retro3D
 	{
 	private:
 		ObjectPtr<Widget> mRootWidget;
+		WeakObjectPtr<Widget> mSelectedWidget;
 
-		void renderWidgetRecursive(Widget* arg_widget, IRenderTargetWindow* arg_window);
+		std::unordered_map<int, std::vector<WeakObjectPtr<Widget>>> mMouseButtonDownWidgets;
+		std::vector<WeakObjectPtr<Widget>> mHoveredWidgets;
+
+
+		void RenderWidgetRecursive(Widget* arg_widget, IRenderTargetWindow* arg_window);
 
 		/**
 		* Iterates through widgets and child widgets, starting from arg_widget.
@@ -33,10 +39,9 @@ namespace Retro3D
 		* @param  arg_widget    Widget to start recursive iteration from.
 		* @param  arg_function  Function to be called on each widget. If it returns true, arg_widget's children will also be evaluated.
 		*/
-		void iterateWidgetsRecursive(Widget* arg_widget, std::function<bool(Widget*)> arg_function);
+		void IterateWidgetsRecursive(Widget* arg_widget, std::function<bool(Widget*)> arg_function);
 
-		std::unordered_map<int, std::vector<WeakObjectPtr<Widget>>> mMouseButtonDownWidgets;
-		std::vector<WeakObjectPtr<Widget>> mHoveredWidgets;
+		void SetSelectedWidget(Widget* arg_widget);
 
 	public:
 		WidgetManager();

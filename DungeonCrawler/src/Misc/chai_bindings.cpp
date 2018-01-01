@@ -15,6 +15,7 @@
 #include "World/world.h"
 #include "UI/Widgets/image_widget.h"
 #include "UI/Widgets/text_widget.h"
+#include "UI/Widgets/text_input_widget.h"
 #include "UI/Widgets/uniform_grid_panel_widget.h"
 #include "UI/Widgets/button_widget.h"
 #include "UI/Widgets/image_widget_style.h"
@@ -163,6 +164,9 @@ namespace Retro3D
 		arg_chaiscript->add(chaiscript::fun(&TextWidget::GetTextStyle), "GetTextStyle");
 		arg_chaiscript->add(chaiscript::fun(&TextWidget::SetTextStyle), "SetTextStyle");
 
+		arg_chaiscript->add(chaiscript::user_type<TextInputWidget>(), "TextInputWidget");
+		arg_chaiscript->add(chaiscript::base_class<Widget, TextInputWidget>());
+		arg_chaiscript->add(chaiscript::base_class<TextWidget, TextInputWidget>());
 
 		chaiscript::ModulePtr moduleWidgetPositioningMode = chaiscript::ModulePtr(new chaiscript::Module());
 		chaiscript::utility::add_class<WidgetPositioningMode>(*moduleWidgetPositioningMode,
@@ -205,10 +209,13 @@ namespace Retro3D
 		arg_chaiscript->add(chaiscript::base_class<Widget, PanelWidget>());
 
 		arg_chaiscript->add(chaiscript::user_type<GridPanelBase>(), "GridPanelBase");
+		arg_chaiscript->add(chaiscript::base_class<Widget, GridPanelBase>());
 		arg_chaiscript->add(chaiscript::base_class<PanelWidget, GridPanelBase>());
 		arg_chaiscript->add(chaiscript::fun(&GridPanelBase::SetDimension), "SetDimension");
 
 		arg_chaiscript->add(chaiscript::user_type<UniformGridPanelWidget>(), "UniformGridPanelWidget");
+		arg_chaiscript->add(chaiscript::base_class<Widget, UniformGridPanelWidget>());
+		arg_chaiscript->add(chaiscript::base_class<PanelWidget, UniformGridPanelWidget>());
 		arg_chaiscript->add(chaiscript::base_class<GridPanelBase, UniformGridPanelWidget>());
 		arg_chaiscript->add(chaiscript::fun(&UniformGridPanelWidget::SetGridCellSize), "SetGridCellSize");
 		arg_chaiscript->add(chaiscript::fun(&UniformGridPanelWidget::AddWidgetToGridCell), "AddWidgetToGridCell");
@@ -255,6 +262,12 @@ namespace Retro3D
 			TextWidget* widget = new TextWidget();
 			return widget;
 		}), "CreateTextWidget");
+		// TEMP - TODO: Create a CreateWidget(typename) function
+		arg_chaiscript->add(chaiscript::fun([]()
+		{
+			TextInputWidget* widget = new TextInputWidget();
+			return widget;
+		}), "CreateTextInputWidget");
 		// TEMP - TODO: Create a CreateWidget(typename) function
 		arg_chaiscript->add(chaiscript::fun([]()
 		{

@@ -10,7 +10,58 @@ namespace Retro3D
 	{
 		mRootWidget = new Widget();
 		mRootWidget->SetSize(1.0f, 1.0f);
+		mSelectedWidget = nullptr;
 	}
+
+	void WidgetManager::RenderWidgetRecursive(Widget* arg_widget, IRenderTargetWindow* arg_window)
+	{
+		__Assert(arg_widget->mParentWidget != nullptr);
+		__Assert(arg_window != nullptr);
+
+		IWidgetRenderer* widgetRenderer = GGameEngine->GetWidgetRenderer();
+		const WidgetTransform& widgetTrans = arg_widget->GetAbsoluteTransform();
+		const WidgetTransform& parentTrans = arg_widget->mParentWidget->GetAbsoluteTransform();
+
+		// TODO: USE INT CALCULATION
+		// Calculate content rect (rect to render widget in) and visible rect (usually the same, unless parent widget is smaller)
+		const glm::vec2 contentXYBounds = widgetTrans.mPosition + widgetTrans.mSize;
+		const glm::vec2 parentXYBounds = parentTrans.mPosition + parentTrans.mSize;
+		const float visiblePosX = std::fminf(std::fmaxf(widgetTrans.mPosition.x, parentTrans.mPosition.x), parentXYBounds.x);
+		const float visiblePosY = std::fminf(std::fmaxf(widgetTrans.mPosition.y, parentTrans.mPosition.y), parentXYBounds.y);
+		const float visibleSizeW = std::fminf(contentXYBounds.x, parentXYBounds.x) - visiblePosX;
+		const float visibleSizeH = std::fminf(contentXYBounds.y, parentXYBounds.y) - visiblePosY;
+		WidgetRenderParams renderParams;
+		renderParams.mContentRect = Rectangle(widgetTrans.mPosition, widgetTrans.mSize);
+		renderParams.mVisibleRect = Rectangle(glm::vec2(visiblePosX, visiblePosY), glm::vec2(visibleSizeW, visibleSizeH));
+
+		for (ObjectPtrBase<Visual> visual : arg_widget->mVisuals)
+		{
+			if (visual->IsActivated())
+				visual->RenderVisual(widgetRenderer, renderParams);
+		}
+
+		for (size_t i = 0; i < arg_widget->GetNumChildWidgets(); i++)
+		{
+			ObjectPtr<Widget> currentWidget = arg_widget->GetChildWidgetAt(i);
+			RenderWidgetRecursive(currentWidget.Get(), arg_window);
+		}
+	}
+
+	void WidgetManager::IterateWidgetsRecursive(Widget* arg_widget, std::function<bool(Widget*)> arg_function)
+	{
+		bool continueWithChildren = arg_function(arg_widget);
+		if (continueWithChildren)
+		{
+			for (ObjectPtrBase<Widget>& child : arg_widget->mChildWidgets)
+				IterateWidgetsRecursive(child.Get(), arg_function);
+		}
+	}
+
+	void WidgetManager::SetSelectedWidget(Widget* arg_widget)
+	{
+		mSelectedWidget = arg_widget;
+	}
+
 
 	void WidgetManager::AddWidget(Widget* arg_widget)
 	{
@@ -30,7 +81,7 @@ namespace Retro3D
 			return true;
 		};
 
-		iterateWidgetsRecursive(mRootWidget.Get(), func);
+		IterateWidgetsRecursive(mRootWidget.Get(), func);
 	}
 
 	void WidgetManager::RenderWidgets(IRenderTargetWindow* arg_window)
@@ -54,58 +105,34 @@ namespace Retro3D
 		for (size_t i = 0; i < mRootWidget->GetNumChildWidgets(); i++)
 		{
 			ObjectPtr<Widget> currentWidget = mRootWidget->GetChildWidgetAt(i);
-			renderWidgetRecursive(currentWidget.Get(), arg_window);
+			RenderWidgetRecursive(currentWidget.Get(), arg_window);
 		}
 		
-	}
-
-	void WidgetManager::renderWidgetRecursive(Widget* arg_widget, IRenderTargetWindow* arg_window)
-	{
-		__Assert(arg_widget->mParentWidget != nullptr);
-		__Assert(arg_window != nullptr);
-
-		IWidgetRenderer* widgetRenderer = GGameEngine->GetWidgetRenderer();
-		const WidgetTransform& widgetTrans = arg_widget->GetAbsoluteTransform();
-		const WidgetTransform& parentTrans = arg_widget->mParentWidget->GetAbsoluteTransform();
-
-		// TODO: USE INT CALCULATION
-		// Calculate content rect (rect to render widget in) and visible rect (usually the same, unless parent widget is smaller)
-		const glm::vec2 contentXYBounds = widgetTrans.mPosition + widgetTrans.mSize;
-		const glm::vec2 parentXYBounds = parentTrans.mPosition + parentTrans.mSize;
-		const float visiblePosX = std::fminf(std::fmaxf(widgetTrans.mPosition.x, parentTrans.mPosition.x), parentXYBounds.x);
-		const float visiblePosY = std::fminf(std::fmaxf(widgetTrans.mPosition.y, parentTrans.mPosition.y), parentXYBounds.y);
-		const float visibleSizeW = std::fminf(contentXYBounds.x, parentXYBounds.x) - visiblePosX;
-		const float visibleSizeH = std::fminf(contentXYBounds.y, parentXYBounds.y) - visiblePosY;
-		WidgetRenderParams renderParams;
-		renderParams.mContentRect = Rectangle(widgetTrans.mPosition, widgetTrans.mSize);
-		renderParams.mVisibleRect = Rectangle(glm::vec2(visiblePosX, visiblePosY), glm::vec2(visibleSizeW, visibleSizeH));
-		
-		for (ObjectPtrBase<Visual> visual : arg_widget->mVisuals)
-		{
-			if(visual->IsActivated())
-				visual->RenderVisual(widgetRenderer, renderParams);
-		}
-
-		for (size_t i = 0; i < arg_widget->GetNumChildWidgets(); i++)
-		{
-			ObjectPtr<Widget> currentWidget = arg_widget->GetChildWidgetAt(i);
-			renderWidgetRecursive(currentWidget.Get(), arg_window);
-		}
 	}
 
 	void WidgetManager::OnKeyDown(const char* arg_key)
 	{
 		// TODO: forward to selected/highlighted widget
+		if (mSelectedWidget != nullptr)
+		{
+			mSelectedWidget->OnKeyDown(arg_key);
+		}
 	}
 
 	void WidgetManager::OnKeyUp(const char* arg_key)
 	{
 		// TODO: forward to selected/highlighted widget
+		if (mSelectedWidget != nullptr)
+		{
+			mSelectedWidget->OnKeyUp(arg_key);
+		}
 	}
 
 	void WidgetManager::OnMouseButtonDown(MouseButtonID arg_button)
 	{
 		glm::vec2 mousePos = GGameEngine->GetInputManager()->GetMousePosition();
+
+		Widget* lastWidget = nullptr;
 
 		std::function<bool(Widget*)> func = [&](Widget* arg_widget) -> bool
 		{
@@ -125,13 +152,19 @@ namespace Retro3D
 					widgetArrayIter = mMouseButtonDownWidgets.find((int)arg_button);
 				}
 				widgetArrayIter->second.push_back(arg_widget);
+				lastWidget = arg_widget;
 
 				return true;
 			}
 			return false;
 		};
 
-		iterateWidgetsRecursive(mRootWidget.Get(), func);
+		IterateWidgetsRecursive(mRootWidget.Get(), func);
+
+		if (lastWidget != nullptr)
+		{
+			SetSelectedWidget(lastWidget);
+		}
 	}
 
 	void WidgetManager::OnMouseButtonUp(MouseButtonID arg_button)
@@ -183,7 +216,7 @@ namespace Retro3D
 			return false;
 		};
 
-		iterateWidgetsRecursive(mRootWidget.Get(), funcMouseMotion);
+		IterateWidgetsRecursive(mRootWidget.Get(), funcMouseMotion);
 
 		// Iterate through all widgets that no longer are hovered, and call OnMouseLeave()
 		std::function<bool(Widget*)> funcOnMouseLeave = [&](Widget* arg_widget) -> bool
@@ -202,18 +235,9 @@ namespace Retro3D
 
 		for (auto& widget : widgetsNoLongerHovered)
 		{
-			iterateWidgetsRecursive(widget.Get(), funcOnMouseLeave);
+			IterateWidgetsRecursive(widget.Get(), funcOnMouseLeave);
 		}
 
 	}
 
-	void WidgetManager::iterateWidgetsRecursive(Widget* arg_widget, std::function<bool(Widget*)> arg_function)
-	{
-		bool continueWithChildren = arg_function(arg_widget);
-		if (continueWithChildren)
-		{
-			for(ObjectPtrBase<Widget>& child : arg_widget->mChildWidgets)
-				iterateWidgetsRecursive(child.Get(), arg_function);
-		}
-	}
 }

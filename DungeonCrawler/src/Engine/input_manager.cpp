@@ -16,14 +16,47 @@ namespace Retro3D
 		mKeycodeMap["right"] = SDLK_RIGHT;
 		mKeycodeMap["space"] = SDLK_SPACE;
 		mKeycodeMap["return"] = SDLK_RETURN;
+		mKeycodeMap["shift"] = SDLK_LSHIFT;
+		mKeycodeMap["shift"] = SDLK_RSHIFT;
+		mKeycodeMap["q"] = SDLK_q;
 		mKeycodeMap["w"] = SDLK_w;
+		mKeycodeMap["e"] = SDLK_e;
+		mKeycodeMap["r"] = SDLK_r;
+		mKeycodeMap["t"] = SDLK_t;
+		mKeycodeMap["y"] = SDLK_y;
+		mKeycodeMap["u"] = SDLK_u;
+		mKeycodeMap["i"] = SDLK_i;
+		mKeycodeMap["o"] = SDLK_o;
+		mKeycodeMap["p"] = SDLK_p;
 		mKeycodeMap["a"] = SDLK_a;
 		mKeycodeMap["s"] = SDLK_s;
 		mKeycodeMap["d"] = SDLK_d;
-		mKeycodeMap["q"] = SDLK_q;
-		mKeycodeMap["e"] = SDLK_e;
+		mKeycodeMap["f"] = SDLK_f;
+		mKeycodeMap["g"] = SDLK_g;
+		mKeycodeMap["h"] = SDLK_h;
+		mKeycodeMap["j"] = SDLK_j;
+		mKeycodeMap["k"] = SDLK_k;
+		mKeycodeMap["l"] = SDLK_l;
+		mKeycodeMap["z"] = SDLK_z;
+		mKeycodeMap["x"] = SDLK_x;
+		mKeycodeMap["c"] = SDLK_c;
+		mKeycodeMap["v"] = SDLK_v;
+		mKeycodeMap["b"] = SDLK_b;
+		mKeycodeMap["n"] = SDLK_n;
+		mKeycodeMap["m"] = SDLK_m;
+
 		mKeycodeMap["1"] = SDLK_1;
 		mKeycodeMap["2"] = SDLK_2;
+		mKeycodeMap["3"] = SDLK_3;
+		mKeycodeMap["4"] = SDLK_4;
+		mKeycodeMap["5"] = SDLK_5;
+		mKeycodeMap["6"] = SDLK_6;
+		mKeycodeMap["7"] = SDLK_7;
+		mKeycodeMap["8"] = SDLK_8;
+		mKeycodeMap["9"] = SDLK_9;
+		mKeycodeMap["0"] = SDLK_0;
+
+		mKeycodeMap["backspace"] = SDLK_BACKSPACE;
 
 		for (auto keyCodePair : mKeycodeMap)
 		{

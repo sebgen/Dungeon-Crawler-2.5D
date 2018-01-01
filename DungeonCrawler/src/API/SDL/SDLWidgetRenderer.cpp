@@ -76,6 +76,9 @@ namespace Retro3D
 		const bool wrapText = style.GetWrapText();
 		const std::string& text = arg_text->GetText();
 
+		if (text.length() <= 0)
+			return; // nothing to render
+
 		int window_width;
 		int window_height;
 		mWindow->GetWindowSize(window_width, window_height);

@@ -20,8 +20,15 @@ namespace Retro3D
 	{
 		__AssertComment((std::is_base_of<Object, T>::value), "Type of T must be Object or subclass of Object.");
 
-		this->mRefHandle = arg_object->GetRefHandle();
-		this->mRefHandle->AddStrongRef();
+		if (arg_object != nullptr)
+		{
+			this->mRefHandle = arg_object->GetRefHandle();
+			this->mRefHandle->AddStrongRef();
+		}
+		else
+		{
+			this->mRefHandle = nullptr;
+		}
 	}
 
 	template<typename T>
@@ -29,8 +36,15 @@ namespace Retro3D
 	{
 		__AssertComment((std::is_base_of<Object, T>::value), "Type of T must be Object or subclass of Object.");
 
-		this->mRefHandle = arg_other.mRefHandle;
-		this->mRefHandle->AddStrongRef();
+		if (arg_other != nullptr)
+		{
+			this->mRefHandle = arg_other.mRefHandle;
+			this->mRefHandle->AddStrongRef();
+		}
+		else
+		{
+			this->mRefHandle = nullptr;
+		}
 	}
 
 	template<typename T>
@@ -47,7 +61,8 @@ namespace Retro3D
 	{
 		ObjectRefHandle* oldHandle = this->mRefHandle;
 		this->mRefHandle = arg_other.mRefHandle;
-		this->mRefHandle->AddStrongRef();
+		if(this->mRefHandle != nullptr)
+			this->mRefHandle->AddStrongRef();
 		if (oldHandle != nullptr)
 			oldHandle->RemoveStrongRef();
 		return (*this);

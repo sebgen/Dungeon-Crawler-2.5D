@@ -19,6 +19,7 @@ namespace Retro3D
 	public:
 		TextWidget();
 
+		std::string GetText();
 		void SetText(const std::string &arg_string);
 
 		TextStyle GetTextStyle();

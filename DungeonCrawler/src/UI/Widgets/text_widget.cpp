@@ -8,6 +8,11 @@ namespace Retro3D
 		AddVisual(&mTextVisual);
 	}
 
+	std::string TextWidget::GetText()
+	{
+		return mTextVisual.GetText();
+	}
+
 	void TextWidget::SetText(const std::string &arg_string)
 	{
 		mTextVisual.SetText(arg_string);
