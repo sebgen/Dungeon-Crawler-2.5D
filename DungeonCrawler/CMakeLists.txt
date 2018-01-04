@@ -17,6 +17,10 @@ file(GLOB_RECURSE SRC_API_SDL
     "${SourceDir}/API/SDL/*.cpp"
     "${SourceDir}/API/SDL/*.h"
 )
+file(GLOB_RECURSE SRC_AUDIO
+    "${SourceDir}/Audio/*.cpp"
+    "${SourceDir}/Audio/*.h"
+)
 file(GLOB_RECURSE SRC_COMPONENT
     "${SourceDir}/Component/*.cpp"
     "${SourceDir}/Component/*.h"
@@ -84,6 +88,7 @@ file(GLOB_RECURSE SRC_WORLD
 source_group("Actor" FILES ${SRC_ACTOR})
 source_group("API" FILES ${SRC_API})
 source_group("API\\SDL" FILES ${SRC_API_SDL})
+source_group("Audio" FILES ${SRC_AUDIO})
 source_group("Component" FILES ${SRC_COMPONENT})
 source_group("Engine" FILES ${SRC_ENGINE})
 source_group("Graphics" FILES ${SRC_GRAPHICS})
@@ -140,6 +145,7 @@ TARGET_LINK_LIBRARIES(DungeonCrawler ${LIB_DIR}/SDL2_image.lib)
 TARGET_LINK_LIBRARIES(DungeonCrawler ${LIB_DIR}/SDL2main.lib)
 TARGET_LINK_LIBRARIES(DungeonCrawler ${LIB_DIR}/SDL2.lib)
 TARGET_LINK_LIBRARIES(DungeonCrawler ${LIB_DIR}/SDL2_ttf.lib)
+TARGET_LINK_LIBRARIES(DungeonCrawler ${LIB_DIR}/SDL2_mixer.lib)
 
 # ----- Copy DLLs to build folder ------------------------------------------------------------------
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")

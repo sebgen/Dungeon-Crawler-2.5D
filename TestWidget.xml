@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Widget class="PanelWidget" position="0.0, 0.0" size = "1.0, 0.5" VerticalScaling=Relative HorisontalScaling=Relative>
+	<Widget class="ImageWidget" position="0.0, 0.0" size="1.0, 0.5" VerticalScaling=Relative HorisontalScaling=Relative>
+		<Property key="colour" value="255, 0, 0">
+	</Widget>
+	<Widget class="UniformGridPanelWidget" position="0.0, 0.0" size="1.0, 1.0" VerticalScaling=Relative HorisontalScaling=Relative">
+		<Property key="GridCellSize" value="150.0, 150.0">
+		<Property key="GridVerticalScaling" value=Absolute>
+		<Property key="GridHorisontalScaling" value=Absolute>
+		<Property key="Dimension" value="3, 2">
+	</Widget>
+</Widget>
+
+-- NOTES:
+-- All properties can be set as attribute, or with "Property".
+-- Not case sensitive.
+-- Implementation: For each widget class, register properties + function pointer to implementation (that takes a string param)
+--       Find first "Widget" element - read all attributes and child "Property" elements, then go to next child "Widget".
+--           Iterate recursively (like we do when rendering)
+-- WHAT ABOUT GRIDS?   Need to add children to correct column/row

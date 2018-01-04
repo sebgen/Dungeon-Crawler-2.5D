@@ -19,6 +19,8 @@ namespace Retro3D
 
 	void TextInputWidget::OnKeyUp(const char* arg_key)
 	{
+		TextWidget::OnKeyUp(arg_key);
+
 		std::string txt(arg_key);
 		if (txt == "backspace") // TEMP
 		{

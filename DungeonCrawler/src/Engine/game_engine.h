@@ -31,6 +31,7 @@ namespace Retro3D
 	class PlayerController;
 	class WorldMessageBus;
 	class IWidgetRenderer;
+	class AudioManager;
 
 	class GameEngine
 	{
@@ -46,6 +47,7 @@ namespace Retro3D
 		WidgetManager* mWidgetManager;
 		SceneRenderer* mSceneRenderer;
 		ResourceManager* mResourceManager;
+		AudioManager* mAudioManager;
 		
 		PlayerController* mPlayerController;
 		ConfigReader mGameConfig;
@@ -95,6 +97,7 @@ namespace Retro3D
 		inline ScriptManager* GetScriptManager() { return mScriptManager; }
 		inline WidgetManager* GetWidgetManager() { return mWidgetManager; }
 		inline SceneRenderer* GetSceneRenderer() { return mSceneRenderer; }
+		inline AudioManager* GetAudioManager() { return mAudioManager; }
 		inline ResourceManager* GetResourceManager() { return mResourceManager; }
 		inline World* GetWorld() { return mWorld; }
 		inline PlayerController* GetPlayerController() { return mPlayerController; }

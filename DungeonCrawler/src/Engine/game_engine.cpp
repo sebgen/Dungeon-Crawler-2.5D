@@ -15,6 +15,8 @@
 #include "API/SDL/SDLWidgetRenderer.h"
 #include "UI/Managers/WidgetManager.h"
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
+#include "Audio/audio_manager.h"
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
@@ -31,9 +33,12 @@ namespace Retro3D
 
 		if (TTF_Init() != 0) {
 			LOG_ERROR() << "failed to initialise TTF";
-			//logSDLError(std::cout, "TTF_Init");
-			SDL_Quit();
-			//return 1;
+		}
+
+		//Initialize SDL_mixer
+		if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+		{
+			LOG_ERROR() << "Failed to initialise SDL_Mixer";
 		}
 
 		GGameEngine = this;
@@ -43,6 +48,7 @@ namespace Retro3D
 		mWindow = new Window();
 		mWidgetRenderer = new SDLWidgetRenderer();
 		mWidgetManager = new WidgetManager();
+		mAudioManager = new AudioManager();
 		mSceneRenderer = new SceneRenderer();
 		mWorldMessageBus = new WorldMessageBus();
 		mWorld = new World();
@@ -72,6 +78,9 @@ namespace Retro3D
 		mScriptManager = nullptr;
 		delete mInputManager;
 		mInputManager = nullptr;
+		delete mAudioManager;
+		mAudioManager = nullptr;
+
 		SDL_Quit();
 	}
 
@@ -114,7 +123,7 @@ namespace Retro3D
 		}
 
 		LOG_INFO() << "Entering main loop";
-
+		
 		mIsRunning = true;
 
 #ifdef __EMSCRIPTEN__

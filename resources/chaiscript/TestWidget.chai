@@ -33,7 +33,7 @@ class TestWidget
 		this.GetWidget().AddChildWidget(this.imgHeaderBackground); // this.GetWidget() returns the Widget instance owned by this script
 		
 		// Header text
-		this.txtHeaderTitle = CreateTextWidget();
+		this.txtHeaderTitle = CreateTextInputWidget();
 		this.txtHeaderTitle.SetPosition(0.5f, 0.0f);
 		this.txtHeaderTitle.SetPivot(0.5f, 0.0f);
 		this.txtHeaderTitle.SetSize(0.6f, 0.9f);

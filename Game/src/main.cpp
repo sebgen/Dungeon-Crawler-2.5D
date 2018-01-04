@@ -15,6 +15,8 @@
 #include "Component/camera_component.h"
 #include "Misc/st_assert.h"
 #include "Actor/player_controller.h"
+#include "Audio/audio_manager.h"
+#include "Audio/audio_track.h"
 
 #undef main // TEMP - TODO
 

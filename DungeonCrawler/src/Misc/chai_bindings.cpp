@@ -7,10 +7,12 @@
 #include "Component/script_component.h"
 #include "Component/sprite_component.h"
 #include "Component/camera_component.h"
+#include "Component/audio_component.h"
 #include "World/level.h"
 #include "glm/glm.hpp"
 #include "Engine/input_manager.h"
 #include "Engine/script_manager.h"
+#include "Audio/audio_manager.h"
 #include "Text/config_reader.h"
 #include "World/world.h"
 #include "UI/Widgets/image_widget.h"
@@ -32,6 +34,7 @@ namespace Retro3D
 	ScriptComponent* scripthelper_CreateScriptComponent() { return new ScriptComponent(); }
 	CameraComponent* scripthelper_CreateCameraComponent() { return new CameraComponent(); }
 	SpriteComponent* scripthelper_CreateSpriteComponent() { return new SpriteComponent(); }
+	AudioComponent* scripthelper_CreateAudioComponent() { return new AudioComponent(); }
 
 
 	void ChaiBindings::AddBindings(chaiscript::ChaiScript* arg_chaiscript)
@@ -43,6 +46,7 @@ namespace Retro3D
 		arg_chaiscript->add(chaiscript::fun(&GameEngine::GetInputManager), "GetInputManager");
 		arg_chaiscript->add(chaiscript::fun(&GameEngine::GetScriptManager), "GetScriptManager");
 		arg_chaiscript->add(chaiscript::fun(&GameEngine::GetWidgetManager), "GetWidgetManager");
+		arg_chaiscript->add(chaiscript::fun(&GameEngine::GetAudioManager), "GetAudioManager");
 		arg_chaiscript->add(chaiscript::fun(&GameEngine::GetGameConfig), "GetGameConfig");
 
 		arg_chaiscript->add(chaiscript::user_type<Level>(), "Level");
@@ -109,6 +113,12 @@ namespace Retro3D
 		arg_chaiscript->add(chaiscript::user_type<CameraComponent>(), "CameraComponent");
 		arg_chaiscript->add(chaiscript::base_class<Component, CameraComponent>());
 
+		arg_chaiscript->add(chaiscript::user_type<AudioComponent>(), "AudioComponent");
+		arg_chaiscript->add(chaiscript::base_class<Component, AudioComponent>());
+		arg_chaiscript->add(chaiscript::fun(&AudioComponent::LoadAudio), "LoadAudio");
+		arg_chaiscript->add(chaiscript::fun(&AudioComponent::PlayAudioTrack), "PlayAudioTrack");
+		arg_chaiscript->add(chaiscript::fun(&AudioComponent::PlayAllAudioTracks), "PlayAllAudioTracks");
+
 
 		// ObjectPtr
 		arg_chaiscript->add(chaiscript::user_type<WeakObjectPtr<Actor>>(), "ActorPtr");
@@ -129,9 +139,14 @@ namespace Retro3D
 		arg_chaiscript->add(chaiscript::user_type<ScriptManager>(), "ScriptManager");
 		arg_chaiscript->add(chaiscript::fun(&ScriptManager::RegisterScript), "RegisterScript");
 
-
 		arg_chaiscript->add(chaiscript::user_type<WidgetManager>(), "WidgetManager");
 		arg_chaiscript->add(chaiscript::fun(&WidgetManager::AddWidget), "AddWidget");
+
+		arg_chaiscript->add(chaiscript::user_type<AudioManager>(), "AudioManager");
+		arg_chaiscript->add(chaiscript::fun(&AudioManager::PlayAudioFile), "PlayAudioFile");
+
+		arg_chaiscript->add(chaiscript::user_type<AudioTrack>(), "AudioTrack");
+		arg_chaiscript->add(chaiscript::fun(&AudioTrack::SetLooping), "SetLooping");
 
 
 		// Widgets
@@ -249,6 +264,7 @@ namespace Retro3D
 		arg_chaiscript->add(chaiscript::fun(&scripthelper_CreateScriptComponent), "CreateScriptComponent");
 		arg_chaiscript->add(chaiscript::fun(&scripthelper_CreateSpriteComponent), "CreateSpriteComponent");
 		arg_chaiscript->add(chaiscript::fun(&scripthelper_CreateCameraComponent), "CreateCameraComponent");
+		arg_chaiscript->add(chaiscript::fun(&scripthelper_CreateAudioComponent), "CreateAudioComponent");
 
 		// TEMP - TODO: Create a CreateWidget(typename) function
 		arg_chaiscript->add(chaiscript::fun([]()
