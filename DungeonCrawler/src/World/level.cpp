@@ -151,4 +151,14 @@ namespace Retro3D
 		return true;
 	}
 
+	const bool Level::IsWalkableFloor(const int arg_x, const int arg_y) const
+	{
+		if (IsInGrid(arg_x, arg_y))
+		{
+			const int index = GetMapIndex(arg_x, arg_y);
+			return mWallMap[index] == 0;
+		}
+		return false;
+	}
+
 }

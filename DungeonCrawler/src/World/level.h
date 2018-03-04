@@ -64,6 +64,8 @@ namespace Retro3D
 		inline const std::unordered_map<char, std::string> GetTextureMap() { return mTextureMap; }
 
 		inline const std::string& GetSkyboxTexture() { return mSkyboxTexture; }
+
+		const bool IsWalkableFloor(const int arg_x, const int arg_y) const;
 	};
 }
 
