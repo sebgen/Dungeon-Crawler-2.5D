@@ -130,7 +130,6 @@ namespace Retro3D
 
 	}
 
-
 	bool InputManager::GetKey(const char* arg_key)
 	{
 		auto itKeyCode = mKeycodeMap.find(arg_key);

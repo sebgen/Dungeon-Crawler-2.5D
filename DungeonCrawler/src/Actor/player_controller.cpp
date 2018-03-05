@@ -23,22 +23,29 @@ namespace Retro3D
 		{
 			const float deltaSeconds = arg_deltatime;
 
+			// Sets requested velocity and rotation
 			ConsumeInput();
 
-			glm::vec3 playerPos = mPlayer->GetTransform().GetPosition();
-			glm::mat4 playerRot = mPlayer->GetTransform().GetRotation();
+			const glm::vec3& playerPos = mPlayer->GetTransform().GetPosition();
+			const glm::mat4& playerRot = mPlayer->GetTransform().GetRotation();
 
-			const float movementSpeed = deltaSeconds * 2.5f; // TODO
-
+			// Is our current position an invalid location? If so, we need to allow getting out of it
 			const bool initialOverlap = !IsValidMoveLocation(playerPos);
 
-			glm::vec3 moveDist = mRequestedVelocity * movementSpeed;
+			const glm::vec3 moveDir = glm::normalize(mRequestedVelocity);
+			glm::vec3 desiredDeltaMove = mRequestedVelocity * deltaSeconds;
+			float desiredDeltaMoveLength = glm::length(desiredDeltaMove);
 
-			if (glm::length(moveDist) > 0.0f)
+			const float MOVE_STEP_LENGTH = 0.1f;
+
+			// Move player by MOVE_STEP_LENGTH, until target location reached or move rejected.
+			while (desiredDeltaMoveLength > 0.0f)
 			{
-				const glm::vec3 moveDir = glm::normalize(moveDist);
-				moveDist = moveDir * movementSpeed;
+				float currentMoveLength = glm::min(desiredDeltaMoveLength, MOVE_STEP_LENGTH);
+				desiredDeltaMoveLength -= currentMoveLength;
+				glm::vec3 moveDist = moveDir * currentMoveLength;
 
+				// If target position is not a valid location, try move only along the X-axis or Y-axis (if possible)
 				if (!initialOverlap && !IsValidMoveLocation(playerPos + moveDist))
 				{
 					const bool xMoveValid = IsValidMoveLocation(playerPos + glm::vec3(moveDist.x, 0.0f, 0.0f));
@@ -55,17 +62,19 @@ namespace Retro3D
 					else
 					{
 						moveDist = glm::vec3(0.0f, 0.0f, 0.0f);
+						break;
 					}
 				}
 
+				// Update player position
 				const glm::vec3 newPos = playerPos + moveDist;
-
 				mPlayer->GetTransform().SetPosition(newPos);
 			}
 
+			// Update player rotation
 			if (glm::length(mRequestedRotation) > 0.0f)
 			{
-				glm::mat4 rotMat = glm::rotate(movementSpeed, mRequestedRotation);;
+				glm::mat4 rotMat = glm::rotate(deltaSeconds * glm::length(mRequestedRotation), mRequestedRotation);;
 				mPlayer->GetTransform().SetRotation(playerRot * rotMat);
 			}
 		}
@@ -86,6 +95,7 @@ namespace Retro3D
 		const bool crossFwd = fractY + DESIRED_WALL_DISTANCE > 1.0f;
 		const bool crossBack = fractY - DESIRED_WALL_DISTANCE < 0.0f;
 
+		// Make sure location is on a walkable floor, and that it's not too close to a nearby unwalkable floor
 		if (!level->IsWalkableFloor(intX, intY)
 			|| crossRight && !level->IsWalkableFloor(intX + 1, intY)
 			|| crossLeft && !level->IsWalkableFloor(intX - 1, intY)
@@ -114,6 +124,8 @@ namespace Retro3D
 		const glm::vec3 camForward = playerRot * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
 		const glm::vec3 camRight = playerRot * glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
 
+		// TODO: implement keybindings / input events
+
 		if (inputManager->GetKey("w"))
 		{
 			mRequestedVelocity = camForward;
@@ -138,6 +150,9 @@ namespace Retro3D
 		{
 			mRequestedRotation = glm::vec3(0.0f, 0.0f, 1.0f);
 		}
+
+		mRequestedVelocity *= mMovementSpeed;
+		mRequestedRotation *= mRotationSpeed;
 	}
 
 }
