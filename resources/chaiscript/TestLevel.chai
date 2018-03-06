@@ -44,7 +44,7 @@ class TestLevel
 		}
 		
 		// Test widget, loaded from the script "TestWidget.chai"
-		var scriptWidget = CreateScriptWidget("TestWidget");
+		var scriptWidget = CreateScriptWidget("MainMenuWidget");
 		GetGameEngine().GetWidgetManager().AddWidget(scriptWidget);
 	}
 };

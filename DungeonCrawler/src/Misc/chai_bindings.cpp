@@ -141,6 +141,7 @@ namespace Retro3D
 
 		arg_chaiscript->add(chaiscript::user_type<WidgetManager>(), "WidgetManager");
 		arg_chaiscript->add(chaiscript::fun(&WidgetManager::AddWidget), "AddWidget");
+		arg_chaiscript->add(chaiscript::fun(&WidgetManager::RemoveWidget), "RemoveWidget");
 
 		arg_chaiscript->add(chaiscript::user_type<AudioManager>(), "AudioManager");
 		arg_chaiscript->add(chaiscript::fun(&AudioManager::PlayAudioFile), "PlayAudioFile");
@@ -234,6 +235,7 @@ namespace Retro3D
 		arg_chaiscript->add(chaiscript::base_class<GridPanelBase, UniformGridPanelWidget>());
 		arg_chaiscript->add(chaiscript::fun(&UniformGridPanelWidget::SetGridCellSize), "SetGridCellSize");
 		arg_chaiscript->add(chaiscript::fun(&UniformGridPanelWidget::AddWidgetToGridCell), "AddWidgetToGridCell");
+		arg_chaiscript->add(chaiscript::fun(&UniformGridPanelWidget::SetAutoSize), "SetAutoSize");
 
 		arg_chaiscript->add(chaiscript::user_type<ImageWidgetStyle>(), "ImageWidgetStyle");
 		arg_chaiscript->add(chaiscript::constructor<ImageWidgetStyle()>(), "ImageWidgetStyle");
@@ -291,6 +293,12 @@ namespace Retro3D
 			return widget;
 		}), "CreateButtonWidget");
 		// TEMP - TODO: Create a CreateWidget(typename) function
+		arg_chaiscript->add(chaiscript::fun([]()
+		{
+			UniformGridPanelWidget* widget = new UniformGridPanelWidget();
+			return widget;
+		}), "CreateUniformGridPanelWidget");
+		// TEMP - TODO: Create a CreateWidget(typename) function
 		arg_chaiscript->add(chaiscript::fun([](const std::string& scriptclass)
 		{
 			Widget* widget = new Widget();
@@ -311,7 +319,7 @@ namespace Retro3D
 		// ChaiScriptObject
 		arg_chaiscript->add(chaiscript::fun([](chaiscript::Boxed_Value boxedValue)
 		{
-			return GGameEngine->GetWidgetManager()->CurrentWidget;
+			return GGameEngine->GetWidgetManager()->GetWidgetFromScriptObject(boxedValue);
 		}), "GetWidget");
 
 	}

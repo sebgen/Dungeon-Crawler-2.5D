@@ -72,11 +72,15 @@ namespace Retro3D
 		}
 	}
 
+	void WidgetManager::RemoveWidget(Widget* arg_widget)
+	{
+		mRootWidget->RemoveChildWidget(arg_widget);
+	}
+
 	void WidgetManager::TickWidgets(float arg_deltatime)
 	{
 		std::function<bool(Widget*)> func = [&](Widget* arg_widget) -> bool
 		{
-			CurrentWidget = arg_widget;
 			arg_widget->OnTick(arg_deltatime);
 			return true;
 		};
@@ -110,6 +114,38 @@ namespace Retro3D
 		
 	}
 
+	void WidgetManager::RegisterScriptObject(Widget* arg_widget)
+	{
+		if (!arg_widget->mScriptObject.is_null())
+		{
+			mScriptWidgetMap[arg_widget->mScriptObject.get_ptr()] = arg_widget;
+		}
+	}
+
+	void WidgetManager::UnRegisterScriptObject(Widget* arg_widget)
+	{
+		if (!arg_widget->mScriptObject.is_null())
+		{
+			mScriptWidgetMap.erase(arg_widget->mScriptObject.get_ptr());
+		}
+	}
+
+	Widget* WidgetManager::GetWidgetFromScriptObject(chaiscript::Boxed_Value arg_obj)
+	{
+		if (!arg_obj.is_null())
+		{
+			auto entry = mScriptWidgetMap.find(arg_obj.get_ptr());
+			if (entry != mScriptWidgetMap.end())
+			{
+				return entry->second.Get();
+			}
+			else
+			{
+				return nullptr;
+			}
+		}
+	}
+
 	void WidgetManager::OnKeyDown(const char* arg_key)
 	{
 		// TODO: forward to selected/highlighted widget
@@ -136,8 +172,6 @@ namespace Retro3D
 
 		std::function<bool(Widget*)> func = [&](Widget* arg_widget) -> bool
 		{
-			CurrentWidget = arg_widget;
-
 			const glm::vec2 widgetPos = arg_widget->mAbsoluteTransform.mPosition;
 			const glm::vec2 widgetRBPos = arg_widget->mAbsoluteTransform.mSize + widgetPos;
 
@@ -188,8 +222,6 @@ namespace Retro3D
 
 		std::function<bool(Widget*)> funcMouseMotion = [&](Widget* arg_widget) -> bool
 		{
-			CurrentWidget = arg_widget;
-
 			const glm::vec2 widgetPos = arg_widget->mAbsoluteTransform.mPosition;
 			const glm::vec2 widgetRBPos = arg_widget->mAbsoluteTransform.mSize + widgetPos;
 
@@ -223,7 +255,6 @@ namespace Retro3D
 		{
 			if (arg_widget->mIsHovered)
 			{
-				CurrentWidget = arg_widget;
 				arg_widget->OnMouseLeave();
 				arg_widget->mIsHovered = false;
 

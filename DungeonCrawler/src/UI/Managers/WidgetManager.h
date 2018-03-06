@@ -30,6 +30,7 @@ namespace Retro3D
 		std::unordered_map<int, std::vector<WeakObjectPtr<Widget>>> mMouseButtonDownWidgets;
 		std::vector<WeakObjectPtr<Widget>> mHoveredWidgets;
 
+		std::unordered_map<void*, WeakObjectPtr<Widget>> mScriptWidgetMap;
 
 		void RenderWidgetRecursive(Widget* arg_widget, IRenderTargetWindow* arg_window);
 
@@ -49,11 +50,18 @@ namespace Retro3D
 		/** Adds a Widget to the widget tree. */
 		void AddWidget(Widget* arg_widget);
 
+		/** Removes a Widget to the widget tree. */
+		void RemoveWidget(Widget* arg_widget);
+
 		/** Updates all Widgets. */
 		void TickWidgets(float arg_deltatime);
 
 		/** Renders all Widgets. */
 		void RenderWidgets(IRenderTargetWindow* arg_window);
+
+		void RegisterScriptObject(Widget* arg_widget);
+		void UnRegisterScriptObject(Widget* arg_widget);
+		Widget* GetWidgetFromScriptObject(chaiscript::Boxed_Value arg_obj);
 
 		// IInputListener callbacks
 		virtual void OnKeyDown(const char* arg_key) override;
@@ -61,8 +69,6 @@ namespace Retro3D
 		virtual void OnMouseButtonDown(MouseButtonID arg_button) override;
 		virtual void OnMouseButtonUp(MouseButtonID arg_button) override;
 		virtual void OnMouseMotion(const glm::vec2& arg_motion) override;
-
-		Widget* CurrentWidget; // UGLY!! TODO
 	};
 }
 

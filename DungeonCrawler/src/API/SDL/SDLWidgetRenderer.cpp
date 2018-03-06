@@ -84,7 +84,7 @@ namespace Retro3D
 		mWindow->GetWindowSize(window_width, window_height);
 
 		SDL_Renderer* renderer = mWindow->GetSDLRenderer();
-		
+
 		SDL_Rect rect;
 		rect.x = arg_renderparams.mVisibleRect.mPosition.x;
 		rect.y = arg_renderparams.mVisibleRect.mPosition.y;
@@ -109,6 +109,17 @@ namespace Retro3D
 
 		const int iW = surface->w;
 		const int iH = surface->h;
+
+		if (iW < rect.w)
+		{
+			rect.x += (rect.w - iW) / 2.0f;
+			rect.w = iW;
+		}
+		if (iH < rect.h)
+		{
+			rect.y += (rect.h - iH) / 2.0f;
+			rect.h = iH;
+		}
 
 		SDL_Texture* txtTexture = SDL_CreateTextureFromSurface(renderer, surface);
 

@@ -1,3 +1,4 @@
+MainMenuWidget.chai
 TestClass.chai
 TestLevel.chai
 TestWidget.chai

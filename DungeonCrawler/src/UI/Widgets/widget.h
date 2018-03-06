@@ -80,6 +80,7 @@ namespace Retro3D
 
 	public:
 		Widget();
+		~Widget();
 
 		/** Sets up the Widget. Will also tell the ChaiScript object (if it has one) to create content. */
 		virtual void CreateContent();

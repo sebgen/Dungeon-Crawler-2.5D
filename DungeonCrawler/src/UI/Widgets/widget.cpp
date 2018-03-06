@@ -15,6 +15,14 @@ namespace Retro3D
 		mTransform.mSize = glm::vec2(1.0f, 1.0f);
 	}
 
+	Widget::~Widget()
+	{
+		if (!mScriptObject.is_null())
+		{
+			GGameEngine->GetWidgetManager()->UnRegisterScriptObject(this);
+		}
+	}
+
 	void Widget::SetTransformDirty()
 	{
 		mTransformIsDirty = true;
@@ -77,7 +85,6 @@ namespace Retro3D
 	{
 		if (funcOnTick != nullptr)
 		{
-			GGameEngine->GetWidgetManager()->CurrentWidget = this; // TODO
 			chaiscript::ChaiScript* chaiScriptCore = GGameEngine->GetScriptManager()->GetChaiScriptCore();
 			try
 			{
@@ -87,7 +94,6 @@ namespace Retro3D
 			{
 				LOG_ERROR() << "Exception caught in Widget::OnTick: " << ex.what();
 			}
-			GGameEngine->GetWidgetManager()->CurrentWidget = nullptr;
 		}
 	}
 
@@ -177,9 +183,9 @@ namespace Retro3D
 		}
 		catch (std::exception ex) {}
 
+		GGameEngine->GetWidgetManager()->RegisterScriptObject(this);
 
 		// Call SetupContent
-		GGameEngine->GetWidgetManager()->CurrentWidget = this; // TODO
 		try
 		{
 			funcCreateContent(mScriptObject); // TODO: only call if function exists
@@ -188,8 +194,7 @@ namespace Retro3D
 		{
 			LOG_ERROR() << "Exception caught in Widget::SetupContentFromScript: " << ex.what();
 		}
-		GGameEngine->GetWidgetManager()->CurrentWidget = nullptr;
-		
+
 		return true;
 	}
 
@@ -250,7 +255,6 @@ namespace Retro3D
 		}
 		if (funcOnMouseButtonDown != nullptr)
 		{
-			GGameEngine->GetWidgetManager()->CurrentWidget = this; // TODO
 			chaiscript::ChaiScript* chaiScriptCore = GGameEngine->GetScriptManager()->GetChaiScriptCore();
 			try
 			{
@@ -260,7 +264,6 @@ namespace Retro3D
 			{
 				LOG_ERROR() << "Exception caught in Widget::OnMouseButtonDown: " << ex.what();
 			}
-			GGameEngine->GetWidgetManager()->CurrentWidget = nullptr;
 		}
 	}
 
@@ -272,7 +275,6 @@ namespace Retro3D
 		}
 		if (funcOnMouseButtonUp != nullptr)
 		{
-			GGameEngine->GetWidgetManager()->CurrentWidget = this; // TODO
 			chaiscript::ChaiScript* chaiScriptCore = GGameEngine->GetScriptManager()->GetChaiScriptCore();
 			try
 			{
@@ -282,7 +284,6 @@ namespace Retro3D
 			{
 				LOG_ERROR() << "Exception caught in Widget::OnMouseButtonUp: " << ex.what();
 			}
-			GGameEngine->GetWidgetManager()->CurrentWidget = nullptr;
 		}
 	}
 
