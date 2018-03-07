@@ -1,19 +1,24 @@
 class DCGameManager
 {
+	var playerInfo;
+
 	def DCGameManager()
 	{
+		this.playerInfo = PlayerInfo();
 	}
 
 	def StartGame()
 	{
 		var mainMenuWidget = CreateScriptWidget("MainMenuWidget");
 		GetGameEngine().GetWidgetManager().AddWidget(mainMenuWidget);
-		
 	}
 	
-	def StartNewGame()
+	def StartNewGame(newPlayerName)
 	{
 		print("Starting new game");
+		print("Player name: ${newPlayerName}");
+		
+		this.playerInfo.playerName = newPlayerName;
 		
 		GetGameEngine().GetCurrentLevel().LoadLevel("level1");
 		
@@ -24,6 +29,11 @@ class DCGameManager
 		player.AddComponent(camComp);
 		
 		GetGameEngine().GetPlayerController().SetPlayer(player);
+	}
+	
+	def SaveGame()
+	{
+		// TODO
 	}
 	
 }

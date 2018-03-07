@@ -17,9 +17,11 @@ class MainMenuWidget
 	{
 		this.funcNewGame = fun[this]()
 		{
-			print("Starting new game");
+			print("New game");
 			
-			GetGameManager().StartNewGame();
+			var newGameWidget = CreateScriptWidget("NewGameWidget");
+			GetGameEngine().GetWidgetManager().AddWidget(newGameWidget);
+			
 			GetGameEngine().GetWidgetManager().RemoveWidget(this.GetWidget());
 		}
 	
@@ -38,7 +40,7 @@ class MainMenuWidget
 		this.imgBackground.SetImagePath("resources//gui//mainmenu//background.png");
 		this.GetWidget().AddChildWidget(this.imgBackground);
 	
-		this.txtHeaderTitle = CreateTextInputWidget();
+		this.txtHeaderTitle = CreateTextWidget();
 		this.txtHeaderTitle.SetPosition(0.5f, 0.0f);
 		this.txtHeaderTitle.SetPivot(0.5f, 0.0f);
 		this.txtHeaderTitle.SetSize(0.6f, 0.15f);
@@ -82,7 +84,6 @@ class MainMenuWidget
 		
 		for (currBtn : btnArray)
 		{
-			//var currBtn = btnArray[i];
 			var styleDefault = currBtn.GetBackgroundStyle();
 			var styleOnHover = currBtn.GetBackgroundStyleOnHover();
 			var styleOnClick = currBtn.GetBackgroundStyleOnClick();

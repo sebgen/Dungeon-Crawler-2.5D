@@ -1,5 +1,7 @@
 DCGameManager.chai
 MainMenuWidget.chai
+NewGameWidget.chai
+PlayerInfo.chai
 TestClass.chai
 TestLevel.chai
 TestWidget.chai

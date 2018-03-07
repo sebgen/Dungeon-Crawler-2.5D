@@ -179,6 +179,7 @@ namespace Retro3D
 
 		arg_chaiscript->add(chaiscript::user_type<TextWidget>(), "TextWidget");
 		arg_chaiscript->add(chaiscript::base_class<Widget, TextWidget>());
+		arg_chaiscript->add(chaiscript::fun(&TextWidget::GetText), "GetText");
 		arg_chaiscript->add(chaiscript::fun(&TextWidget::SetText), "SetText");
 		arg_chaiscript->add(chaiscript::fun(&TextWidget::GetTextStyle), "GetTextStyle");
 		arg_chaiscript->add(chaiscript::fun(&TextWidget::SetTextStyle), "SetTextStyle");
