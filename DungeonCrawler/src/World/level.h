@@ -15,6 +15,8 @@ namespace Retro3D
 	class Level
 	{
 	private:
+		bool mIsLoaded;
+
 		int mDimX;
 		int mDimY;
 
@@ -31,7 +33,9 @@ namespace Retro3D
 	public:
 		Level();
 
-		bool LoadLevel(const char* arg_name);
+		bool LoadLevel(const std::string arg_name);
+
+		bool IsLoaded() const { return mIsLoaded; }
 
 		inline const int GetMapIndex(const int& arg_x, const int& arg_y) const
 		{

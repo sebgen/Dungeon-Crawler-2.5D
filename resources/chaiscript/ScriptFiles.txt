@@ -1,3 +1,4 @@
+DCGameManager.chai
 MainMenuWidget.chai
 TestClass.chai
 TestLevel.chai

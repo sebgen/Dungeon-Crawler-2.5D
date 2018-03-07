@@ -15,6 +15,8 @@ namespace Retro3D
 		chaiscript::ChaiScript* mChaiScript;
 		std::set<std::string> mRegisteredScripts;
 
+		chaiscript::Boxed_Value mGameManagerObject;
+
 	public:
 		ScriptManager();
 		~ScriptManager();
@@ -26,6 +28,11 @@ namespace Retro3D
 		bool IsRegistered(const char* arg_script);
 
 		inline chaiscript::ChaiScript* GetChaiScriptCore() { return mChaiScript; }
+
+		chaiscript::Boxed_Value& GetGameManagerScriptObject() { return mGameManagerObject; }
+
+		void SetGameManagerScriptObject(chaiscript::Boxed_Value& arg_object) { mGameManagerObject = arg_object; }
+
 
 		/** Loads all the scripts listed in ScriptFiles.txt */
 		void LoadScriptsFromIni();

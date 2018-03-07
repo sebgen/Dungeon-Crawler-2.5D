@@ -1,0 +1,29 @@
+class DCGameManager
+{
+	def DCGameManager()
+	{
+	}
+
+	def StartGame()
+	{
+		var mainMenuWidget = CreateScriptWidget("MainMenuWidget");
+		GetGameEngine().GetWidgetManager().AddWidget(mainMenuWidget);
+		
+	}
+	
+	def StartNewGame()
+	{
+		print("Starting new game");
+		
+		GetGameEngine().GetCurrentLevel().LoadLevel("level1");
+		
+		var player = CreatePlayer();
+		player.GetTransform().SetPosition(vec3(2.0f, 1.0f, 0.5f));
+		
+		var camComp = CreateCameraComponent();
+		player.AddComponent(camComp);
+		
+		GetGameEngine().GetPlayerController().SetPlayer(player);
+	}
+	
+}

@@ -90,6 +90,8 @@ namespace Retro3D
 
 		void SetRenderTargetWindow(IRenderTargetWindow* arg_target) { mWindow = arg_target; } // TODO
 
+		void SetCurrentLevel(Level* arg_level);
+
 		// Accessors
 		inline Level* GetCurrentLevel() { return mCurrentLevel; }
 		inline IRenderTargetWindow* GetWindow() { return mWindow; }

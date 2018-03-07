@@ -42,6 +42,7 @@ namespace Retro3D
 		}
 
 		GGameEngine = this;
+		mCurrentLevel = nullptr;
 		mResourceManager = new ResourceManager();
 		mInputManager = new InputManager();
 		mScriptManager = new ScriptManager();
@@ -52,8 +53,9 @@ namespace Retro3D
 		mSceneRenderer = new SceneRenderer();
 		mWorldMessageBus = new WorldMessageBus();
 		mWorld = new World();
-		mCurrentLevel = new Level();
 		mPlayerController = new PlayerController();
+
+		SetCurrentLevel(new Level());
 
 		// Read game config
 		if (!mGameConfig.ReadFile("resources//config//GameConfig.ini"))
@@ -116,6 +118,37 @@ namespace Retro3D
 		mResourceManager->OnStart();
 
 		mPlayerController->OnStart();
+
+		std::string gameManagerScriptClass;
+		mGameConfig.GetString("game", "GameManager", gameManagerScriptClass);
+
+		if (!gameManagerScriptClass.empty())
+		{
+			chaiscript::ChaiScript* chaiScriptCore = GGameEngine->GetScriptManager()->GetChaiScriptCore();
+			std::string createInstanceCall = gameManagerScriptClass + std::string("();");
+			chaiscript::Boxed_Value gameManagerScriptObject;
+			try
+			{
+				gameManagerScriptObject = chaiScriptCore->eval(createInstanceCall); // will exist as long as mScriptObject
+				mScriptManager->SetGameManagerScriptObject(gameManagerScriptObject);
+			}
+			catch (std::exception ex)
+			{
+				LOG_ERROR() << "Failed to create script object for " << gameManagerScriptClass << ". Exception: " << ex.what();
+				return;
+			}
+			try
+			{
+				std::function<void(chaiscript::Boxed_Value&)> funcStartGame = chaiScriptCore->eval<std::function<void(chaiscript::Boxed_Value&)>>("StartGame");
+				funcStartGame(gameManagerScriptObject);
+			}
+			catch (std::exception ex) {}
+		}
+		else
+		{
+			LOG_ERROR() << "No game manager set in game config";
+		}
+
 
 		for (const ObjectPtr<Actor> actor : mWorld->GetActors())
 		{
@@ -189,6 +222,16 @@ namespace Retro3D
 	float GameEngine::GetDeltaTime()
 	{
 		return mDeltaTime;
+	}
+
+	void GameEngine::SetCurrentLevel(Level* arg_level)
+	{
+		if (mCurrentLevel != nullptr && mCurrentLevel != arg_level)
+		{
+			delete mCurrentLevel;
+		}
+		mCurrentLevel = arg_level;
+		mSceneRenderer->SetLevel(arg_level);
 	}
 
 }

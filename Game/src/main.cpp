@@ -32,7 +32,7 @@ int main(int argc, char** argv)
 #endif
 
 	GameEngine* engine = GameEngine::CreateGameEngine();
-
+	/*
 	GGameEngine->GetCurrentLevel()->LoadLevel("level1");
 	engine->GetSceneRenderer()->SetLevel(GGameEngine->GetCurrentLevel()); // todo: do in engine
 
@@ -45,7 +45,7 @@ int main(int argc, char** argv)
 	GGameEngine->GetPlayerController()->SetPlayer(player);
 
 	GGameEngine->GetSceneRenderer()->SetCameraComponent(camComp); // TODO: make this automatic
-
+	*/
 	engine->StartEngine();
 
 	return 0;

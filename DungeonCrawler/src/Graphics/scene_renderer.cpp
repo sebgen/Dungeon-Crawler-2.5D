@@ -13,6 +13,7 @@
 #include "World/world.h"
 #include <map>
 #include "Actor/actor.h"
+#include "Actor/player_controller.h" // TEMP
 
 /* BEGIN: TEMP FOR TESTING */
 float camWidth = 0.2f;
@@ -85,6 +86,17 @@ namespace Retro3D
 	void SceneRenderer::SetLevel(Level* arg_level)
 	{
 		mLevel = arg_level;
+		
+		mLevelDataLoaded = mLevel->IsLoaded();
+
+		if (mLevelDataLoaded)
+		{
+			LoadLevelData();
+		}
+	}
+
+	void SceneRenderer::LoadLevelData()
+	{
 		for (auto textureKeyPair : mLevel->GetTextureMap())
 		{
 			std::string fullPath = std::string("resources//textures//") + textureKeyPair.second;
@@ -103,7 +115,8 @@ namespace Retro3D
 		{
 			mFOV = newFov;
 		}
-		
+
+		mLevelDataLoaded = true;
 	}
 
 	/**
@@ -120,7 +133,28 @@ namespace Retro3D
 	**/
 	void SceneRenderer::RenderScene()
 	{
-		if (mLevel == nullptr)
+		if (mLevel == nullptr || !mLevel->IsLoaded())
+		{
+			return;
+		}
+		else if(!mLevelDataLoaded)
+		{
+			LoadLevelData();
+		}
+
+		if (!mCameraComponent.IsValid())
+		{
+			if (GGameEngine->GetPlayerController() && GGameEngine->GetPlayerController()->GetPlayer())
+			{
+				for (CameraComponent* comp : ((Actor*)GGameEngine->GetPlayerController()->GetPlayer())->GetComponents<CameraComponent>())
+				{
+					mCameraComponent = comp;
+					break;
+				}
+			}
+		}
+
+		if (!mCameraComponent.IsValid())
 		{
 			return;
 		}
@@ -135,13 +169,8 @@ namespace Retro3D
 		/*** Set up the render target texture ***/
 		mRenderTexture = SDL_CreateTexture(window->GetSDLRenderer(), SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, texWidth, texHeight);
 
-		glm::vec3 camPos;
-		glm::mat4 camRot;
-		if (mCameraComponent.IsValid()) // TEMP!
-		{
-			camPos = mCameraComponent->GetCameraTransform().GetPosition();
-			camRot = mCameraComponent->GetCameraTransform().GetRotation();
-		}
+		glm::vec3 camPos = mCameraComponent->GetCameraTransform().GetPosition();
+		glm::mat4 camRot = mCameraComponent->GetCameraTransform().GetRotation();
 
 		const std::string& skyboxTexture = mLevel->GetSkyboxTexture();
 		bool renderSkybox = skyboxTexture != "";

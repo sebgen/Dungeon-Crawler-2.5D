@@ -12,7 +12,7 @@ Everything is software rendered (obviously for educational purposes, as it is su
 
 #include <stdint.h>
 #include <unordered_map>
-#include "Object/objectptr.h"
+#include "Object/weak_objectptr.h"
 #include "texture.h"
 #include <glm/glm.hpp>
 
@@ -36,13 +36,17 @@ namespace Retro3D
 		/** Sets the Level to render. Called from the engine. */
 		void SetLevel(Level* arg_level);
 
+		/* Call this to fetch data (textures, etc.) from current level. */
+		void LoadLevelData();
+
 		void SetCameraComponent(CameraComponent* arg_comp); // TEMP
 
 	private:
 		Level* mLevel = nullptr;
+		bool mLevelDataLoaded = false;
 		std::unordered_map<char, SDL_Surface*> mTextureSurfaceMap; // TODO: use array instead?
 		SDL_Surface* mSkyboxTexture = nullptr;
-		ObjectPtr<CameraComponent> mCameraComponent; // TODO: pass on some other structure
+		WeakObjectPtr<CameraComponent> mCameraComponent; // TODO: pass on some other structure
 		float mFOV = 95;
 		SDL_Texture* mRenderTexture;
 		std::vector<unsigned char> mPixels;

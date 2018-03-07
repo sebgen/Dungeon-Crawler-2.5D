@@ -18,6 +18,8 @@ class MainMenuWidget
 		this.funcNewGame = fun[this]()
 		{
 			print("Starting new game");
+			
+			GetGameManager().StartNewGame();
 			GetGameEngine().GetWidgetManager().RemoveWidget(this.GetWidget());
 		}
 	

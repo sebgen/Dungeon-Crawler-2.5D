@@ -14,7 +14,7 @@ namespace Retro3D
 {
 	Level::Level()
 	{
-
+		mIsLoaded = false;
 	}
 
 	void Level::setDimension(int arg_x, int arg_y)
@@ -26,7 +26,7 @@ namespace Retro3D
 		mCeilingMap.resize(arg_x * arg_y);
 	}
 	 
-	bool Level::LoadLevel(const char* arg_name)
+	bool Level::LoadLevel(const std::string arg_name)
 	{
 		LOG_INFO() << "Loading level: " << arg_name;
 
@@ -89,6 +89,7 @@ namespace Retro3D
 			}
 		}
 
+		mIsLoaded = true;
 		return true;
 	}
 

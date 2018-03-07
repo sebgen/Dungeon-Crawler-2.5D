@@ -24,12 +24,14 @@
 #include "UI/Managers/WidgetManager.h"
 #include "Actor/player_controller.h"
 #include "Object/weak_objectptr.h"
+#include "Actor/player.h"
 
 namespace Retro3D
 {
 	GameEngine* scripthelper_getengine() { return GGameEngine; }
 
 	Actor* scripthelper_CreateActor() { return new Actor(); }
+	Player* scripthelper_CreatePlayer() { return new Player(); }
 
 	ScriptComponent* scripthelper_CreateScriptComponent() { return new ScriptComponent(); }
 	CameraComponent* scripthelper_CreateCameraComponent() { return new CameraComponent(); }
@@ -42,6 +44,7 @@ namespace Retro3D
 		arg_chaiscript->add(chaiscript::user_type<GameEngine>(), "GameEngine");
 		arg_chaiscript->add(chaiscript::fun(&GameEngine::Shutdown), "Shutdown");
 		arg_chaiscript->add(chaiscript::fun(&GameEngine::GetDeltaTime), "GetDeltaTime");
+		arg_chaiscript->add(chaiscript::fun(&GameEngine::GetPlayerController), "GetPlayerController");
 		arg_chaiscript->add(chaiscript::fun(&GameEngine::GetCurrentLevel), "GetCurrentLevel");
 		arg_chaiscript->add(chaiscript::fun(&GameEngine::GetInputManager), "GetInputManager");
 		arg_chaiscript->add(chaiscript::fun(&GameEngine::GetScriptManager), "GetScriptManager");
@@ -50,7 +53,7 @@ namespace Retro3D
 		arg_chaiscript->add(chaiscript::fun(&GameEngine::GetGameConfig), "GetGameConfig");
 
 		arg_chaiscript->add(chaiscript::user_type<Level>(), "Level");
-		//arg_chaiscript->add(chaiscript::fun(&Level::LoadLevel), "LoadLevel");
+		arg_chaiscript->add(chaiscript::fun(&Level::LoadLevel), "LoadLevel");
 
 		
 		arg_chaiscript->add(chaiscript::user_type<ConfigReader>(), "ConfigReader");
@@ -263,6 +266,7 @@ namespace Retro3D
 		// helper functions
 		arg_chaiscript->add(chaiscript::fun(&scripthelper_getengine), "GetGameEngine");
 		arg_chaiscript->add(chaiscript::fun(&scripthelper_CreateActor), "CreateActor");
+		arg_chaiscript->add(chaiscript::fun(&scripthelper_CreatePlayer), "CreatePlayer");
 		arg_chaiscript->add(chaiscript::fun(&scripthelper_CreateScriptComponent), "CreateScriptComponent");
 		arg_chaiscript->add(chaiscript::fun(&scripthelper_CreateSpriteComponent), "CreateSpriteComponent");
 		arg_chaiscript->add(chaiscript::fun(&scripthelper_CreateCameraComponent), "CreateCameraComponent");
@@ -321,6 +325,12 @@ namespace Retro3D
 		{
 			return GGameEngine->GetWidgetManager()->GetWidgetFromScriptObject(boxedValue);
 		}), "GetWidget");
+
+		// GameManager
+		arg_chaiscript->add(chaiscript::fun([]()
+		{
+			return GGameEngine->GetScriptManager()->GetGameManagerScriptObject();
+		}), "GetGameManager");
 
 	}
 
