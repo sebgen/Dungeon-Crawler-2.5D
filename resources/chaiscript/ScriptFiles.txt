@@ -1,4 +1,5 @@
 DCGameManager.chai
+HUDWidget.chai
 MainMenuWidget.chai
 NewGameWidget.chai
 PlayerInfo.chai

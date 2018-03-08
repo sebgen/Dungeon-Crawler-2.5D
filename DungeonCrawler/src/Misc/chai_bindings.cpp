@@ -57,9 +57,17 @@ namespace Retro3D
 
 		
 		arg_chaiscript->add(chaiscript::user_type<ConfigReader>(), "ConfigReader");
-		arg_chaiscript->add(chaiscript::fun(&ConfigReader::GetString_string), "GetString");
-		arg_chaiscript->add(chaiscript::fun(&ConfigReader::GetInt_string), "GetInt");
-		arg_chaiscript->add(chaiscript::fun(&ConfigReader::GetFloat_string), "GetFloat");
+		arg_chaiscript->add(chaiscript::constructor<ConfigReader()>(), "ConfigReader");
+		arg_chaiscript->add(chaiscript::fun(&ConfigReader::ReadFile), "ReadFile");
+		arg_chaiscript->add(chaiscript::fun([](ConfigReader& arg_reader, std::string arg_filepath) { return arg_reader.ReadFile(arg_filepath); }), "ReadFile");
+		arg_chaiscript->add(chaiscript::fun(&ConfigReader::GetString), "GetString");
+		arg_chaiscript->add(chaiscript::fun(&ConfigReader::GetInt), "GetInt");
+		arg_chaiscript->add(chaiscript::fun(&ConfigReader::GetFloat), "GetFloat");
+		arg_chaiscript->add(chaiscript::fun(&ConfigReader::SetString), "SetString");
+		arg_chaiscript->add(chaiscript::fun(&ConfigReader::SetInt), "SetInt");
+		arg_chaiscript->add(chaiscript::fun(&ConfigReader::SetFloat), "SetFloat");
+		arg_chaiscript->add(chaiscript::fun(&ConfigReader::Save), "Save");
+		arg_chaiscript->add(chaiscript::fun(&ConfigReader::SaveToFile), "SaveToFile");
 
 
 		// Actors

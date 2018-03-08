@@ -40,6 +40,12 @@ namespace Retro3D
 			}
 			std::string strScript((std::istreambuf_iterator<char>(fileStream)),std::istreambuf_iterator<char>());
 
+			// UTF? => remove first 3 bytes
+			if (strScript.compare(0, 3, "\xEF\xBB\xBF") == 0)
+			{
+				strScript.erase(0, 3);
+			}
+
 			try
 			{
 				mChaiScript->eval(strScript);

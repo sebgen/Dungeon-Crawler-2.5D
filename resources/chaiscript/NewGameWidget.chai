@@ -21,6 +21,8 @@ class NewGameWidget
 			print("Starting new game");
 			
 			GetGameManager().StartNewGame(this.txtInputCharName.GetText());
+			var hudWidget = CreateScriptWidget("HUDWidget");
+			GetGameEngine().GetWidgetManager().AddWidget(hudWidget);
 			GetGameEngine().GetWidgetManager().RemoveWidget(this.GetWidget());
 		}
 	
@@ -69,7 +71,7 @@ class NewGameWidget
 		this.charInfoPanel.AddWidgetToGridCell(lblInputCharName, 0, 0);
 	
 		this.txtInputCharName = CreateTextInputWidget();
-		this.txtInputCharName.SetText("Matias");
+		this.txtInputCharName.SetText("マティアス");
 		this.txtInputCharName.SetTextStyle(lblInputTextStyle);
 		this.charInfoPanel.AddWidgetToGridCell(this.txtInputCharName, 1, 0);
 		

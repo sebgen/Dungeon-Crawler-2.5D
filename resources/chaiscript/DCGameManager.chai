@@ -1,10 +1,13 @@
 class DCGameManager
 {
 	var playerInfo;
+	
+	var saveConfig;
 
 	def DCGameManager()
 	{
 		this.playerInfo = PlayerInfo();
+		this.saveConfig = ConfigReader();
 	}
 
 	def StartGame()
@@ -17,6 +20,8 @@ class DCGameManager
 	{
 		print("Starting new game");
 		print("Player name: ${newPlayerName}");
+		
+		this.SaveGame();
 		
 		this.playerInfo.playerName = newPlayerName;
 		
@@ -31,9 +36,17 @@ class DCGameManager
 		GetGameEngine().GetPlayerController().SetPlayer(player);
 	}
 	
+	def LoadGame();
+	{
+		this.saveConfig.ReadFile("save.config", true);
+		this.saveConfig.GetString("PlayerInfo", "PlayerName", this.playerInfo.playerName);
+	}
+	
 	def SaveGame()
 	{
-		// TODO
+		this.saveConfig.SetString("PlayerInfo", "PlayerName", this.playerInfo.playerName);
+		
+		this.saveConfig.SaveToFile("save.config");
 	}
 	
 }

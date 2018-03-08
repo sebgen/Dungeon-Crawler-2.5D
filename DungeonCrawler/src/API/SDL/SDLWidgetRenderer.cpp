@@ -103,9 +103,9 @@ namespace Retro3D
 
 		SDL_Surface* surface;
 		if(wrapText)
-			surface = TTF_RenderText_Blended_Wrapped(font, text.c_str(), White, (Uint32)rect.w);
+			surface = TTF_RenderUTF8_Blended_Wrapped(font, text.c_str(), White, (Uint32)rect.w);
 		else
-			surface = TTF_RenderText_Solid(font, text.c_str(), White);
+			surface = TTF_RenderUTF8_Blended(font, text.c_str(), White);
 
 		const int iW = surface->w;
 		const int iH = surface->h;
