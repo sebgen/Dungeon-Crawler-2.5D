@@ -14,6 +14,7 @@
 #include <map>
 #include "Actor/actor.h"
 #include "Actor/player_controller.h" // TEMP
+#include <API/SDL/sdl_render_target.h>
 
 /* BEGIN: TEMP FOR TESTING */
 float camWidth = 0.2f;
@@ -131,7 +132,7 @@ namespace Retro3D
 	* Render the whole scene.
 	* Will render walls, ceiling, floor, skybox and sprites
 	**/
-	void SceneRenderer::RenderScene()
+	void SceneRenderer::RenderScene(IRenderTarget* arg_rendertarget)
 	{
 		if (mLevel == nullptr || !mLevel->IsLoaded())
 		{
@@ -164,10 +165,16 @@ namespace Retro3D
 			SDL_DestroyTexture(mRenderTexture);
 		}
 
-		IRenderTargetWindow* window = GGameEngine->GetWindow();
+		ISDLRenderTarget* SDLRenderTarget = dynamic_cast<ISDLRenderTarget*>(arg_rendertarget);
+
+		if (!SDLRenderTarget)
+		{
+			LOG_ERROR() << "Unhandled render target";
+			return;
+		}
 
 		/*** Set up the render target texture ***/
-		mRenderTexture = SDL_CreateTexture(window->GetSDLRenderer(), SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, texWidth, texHeight);
+		mRenderTexture = SDL_CreateTexture(SDLRenderTarget->GetSDLRenderer(), SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, texWidth, texHeight);
 
 		glm::vec3 camPos = mCameraComponent->GetCameraTransform().GetPosition();
 		glm::mat4 camRot = mCameraComponent->GetCameraTransform().GetRotation();
@@ -476,7 +483,7 @@ namespace Retro3D
 
 		SDL_UpdateTexture(mRenderTexture, NULL, &mPixels[0], texWidth * 4);
 
-		SDL_RenderCopy(GGameEngine->GetWindow()->GetSDLRenderer(), mRenderTexture, NULL, NULL);
+		SDL_RenderCopy(SDLRenderTarget->GetSDLRenderer(), mRenderTexture, NULL, NULL);
 
 		mPixels = mClearPixels; // TODO
 		mDepthBuffer = mClearDepthBuffer; // TODO

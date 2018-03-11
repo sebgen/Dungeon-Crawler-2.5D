@@ -16,6 +16,7 @@ Deals with Widget ticking, input handling and rendering of Widgets.
 #include "UI/Widgets/widget.h"
 #include "Engine/input_listener.h"
 #include <functional>
+#include "Graphics/render_target.h"
 
 namespace Retro3D
 {
@@ -26,13 +27,14 @@ namespace Retro3D
 	private:
 		ObjectPtr<Widget> mRootWidget;
 		WeakObjectPtr<Widget> mSelectedWidget;
+		IRenderTarget* mCurrentRenderingRenderTarget; // only valid in rendering loop
 
 		std::unordered_map<int, std::vector<WeakObjectPtr<Widget>>> mMouseButtonDownWidgets;
 		std::vector<WeakObjectPtr<Widget>> mHoveredWidgets;
 
 		std::unordered_map<void*, WeakObjectPtr<Widget>> mScriptWidgetMap;
 
-		void RenderWidgetRecursive(Widget* arg_widget, IRenderTargetWindow* arg_window);
+		void RenderWidgetRecursive(Widget* arg_widget, IRenderTarget* arg_window);
 
 		/**
 		* Iterates through widgets and child widgets, starting from arg_widget.
@@ -57,11 +59,13 @@ namespace Retro3D
 		void TickWidgets(float arg_deltatime);
 
 		/** Renders all Widgets. */
-		void RenderWidgets(IRenderTargetWindow* arg_window);
+		void RenderWidgets(IRenderTarget* arg_target);
 
 		void RegisterScriptObject(Widget* arg_widget);
 		void UnRegisterScriptObject(Widget* arg_widget);
 		Widget* GetWidgetFromScriptObject(chaiscript::Boxed_Value arg_obj);
+
+		IRenderTarget* GetCurrentRenderingRenderTarget() { return mCurrentRenderingRenderTarget; }
 
 		// IInputListener callbacks
 		virtual void OnKeyDown(const char* arg_key) override;

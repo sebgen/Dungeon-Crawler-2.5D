@@ -23,6 +23,7 @@ namespace Retro3D
 {
 	class Level;
 	class CameraComponent; // TODO: This is bad!
+	class IRenderTarget;
 
 	class SceneRenderer
 	{
@@ -31,7 +32,7 @@ namespace Retro3D
 		~SceneRenderer();
 
 		/** Renders the whole scene. */
-		void RenderScene();
+		void RenderScene(IRenderTarget* arg_rendertarget);
 
 		/** Sets the Level to render. Called from the engine. */
 		void SetLevel(Level* arg_level);

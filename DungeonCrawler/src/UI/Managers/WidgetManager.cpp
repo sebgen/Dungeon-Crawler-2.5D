@@ -8,12 +8,13 @@ namespace Retro3D
 {
 	WidgetManager::WidgetManager()
 	{
+		mCurrentRenderingRenderTarget = nullptr;
 		mRootWidget = new Widget();
 		mRootWidget->SetSize(1.0f, 1.0f);
 		mSelectedWidget = nullptr;
 	}
 
-	void WidgetManager::RenderWidgetRecursive(Widget* arg_widget, IRenderTargetWindow* arg_window)
+	void WidgetManager::RenderWidgetRecursive(Widget* arg_widget, IRenderTarget* arg_window)
 	{
 		__Assert(arg_widget->mParentWidget != nullptr);
 		__Assert(arg_window != nullptr);
@@ -88,15 +89,17 @@ namespace Retro3D
 		IterateWidgetsRecursive(mRootWidget.Get(), func);
 	}
 
-	void WidgetManager::RenderWidgets(IRenderTargetWindow* arg_window)
+	void WidgetManager::RenderWidgets(IRenderTarget* arg_target)
 	{
+		mCurrentRenderingRenderTarget = arg_target;
+
 		// TODO: Make sure this happens before ticking widgets for the first time.
 		// We don't want the absolute transforms of widgets to be incorrect the first frame.
 		if (mRootWidget.IsValid())
 		{
 			int winWidth = 0;
 			int winHeight = 0;
-			arg_window->GetWindowSize(winWidth, winHeight);
+			arg_target->GetRenderContextSize(winWidth, winHeight);
 			mRootWidget->SetSize(winWidth, winHeight);
 			mRootWidget->SetHorizontalPositioning(WidgetPositioningMode::Absolute);
 			mRootWidget->SetVerticalPositioning(WidgetPositioningMode::Absolute);
@@ -105,11 +108,11 @@ namespace Retro3D
 		}
 
 		IWidgetRenderer* widgetRenderer = GGameEngine->GetWidgetRenderer();
-		widgetRenderer->SetWindow(arg_window);
+		widgetRenderer->SetRenderTarget(arg_target);
 		for (size_t i = 0; i < mRootWidget->GetNumChildWidgets(); i++)
 		{
 			ObjectPtr<Widget> currentWidget = mRootWidget->GetChildWidgetAt(i);
-			RenderWidgetRecursive(currentWidget.Get(), arg_window);
+			RenderWidgetRecursive(currentWidget.Get(), arg_target);
 		}
 		
 	}
@@ -139,11 +142,8 @@ namespace Retro3D
 			{
 				return entry->second.Get();
 			}
-			else
-			{
-				return nullptr;
-			}
 		}
+		return nullptr;
 	}
 
 	void WidgetManager::OnKeyDown(const char* arg_key)

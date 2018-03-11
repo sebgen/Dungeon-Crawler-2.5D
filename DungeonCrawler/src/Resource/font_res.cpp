@@ -27,6 +27,11 @@ namespace Retro3D
 
 		mFont = TTF_OpenFont(path.c_str(), fontSize);
 
+		if (mFont == nullptr)
+		{
+			LOG_ERROR() << "Error loading font: " << TTF_GetError();
+		}
+
 		return (mFont != nullptr);
 	}
 

@@ -29,7 +29,7 @@ namespace Retro3D
 
 	public:
 		Object();
-		~Object();
+		virtual ~Object();
 
 		virtual void InitialiseObject(ObjectInitialiserParams arg_params);
 

@@ -32,20 +32,7 @@ int main(int argc, char** argv)
 #endif
 
 	GameEngine* engine = GameEngine::CreateGameEngine();
-	/*
-	GGameEngine->GetCurrentLevel()->LoadLevel("level1");
-	engine->GetSceneRenderer()->SetLevel(GGameEngine->GetCurrentLevel()); // todo: do in engine
 
-	Player* player = new Player();
-	player->GetTransform().SetPosition(glm::vec3(2.0f, 1.0f, 0.5f));
-
-	CameraComponent* camComp = new CameraComponent();
-	player->AddComponent(camComp);
-
-	GGameEngine->GetPlayerController()->SetPlayer(player);
-
-	GGameEngine->GetSceneRenderer()->SetCameraComponent(camComp); // TODO: make this automatic
-	*/
 	engine->StartEngine();
 
 	return 0;

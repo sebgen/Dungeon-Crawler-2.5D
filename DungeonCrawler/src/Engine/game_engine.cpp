@@ -17,6 +17,19 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
 #include "Audio/audio_manager.h"
+#include "Object/objectrefhandle.h"
+
+#ifdef _WIN32
+#include "Platform/Windows/windows_ime_manager.h"
+#else
+#include "Text/null_input_method_manager.h"
+#endif
+
+#ifdef _WIN32
+#include "Platform/Windows/windows_window.h"
+#elif __EMSCRIPTEN__
+#include "Platform/Emscripten/emscripten_window.h"
+#endif
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
@@ -42,11 +55,22 @@ namespace Retro3D
 		}
 
 		GGameEngine = this;
+
+#ifdef _WIN32
+		WindowsWindow* windowsWindow = new WindowsWindow();
+		mMainWindow = windowsWindow;
+		mRenderTarget = windowsWindow;
+#elif __EMSCRIPTEN__
+		EmscriptenWindow* emscriptenWindow = new EmscriptenWindow();
+		mMainWindow = emscriptenWindow;
+		mRenderTarget = emscriptenWindow;
+#endif
+
+		mFocusedWindow = nullptr;
 		mCurrentLevel = nullptr;
 		mResourceManager = new ResourceManager();
 		mInputManager = new InputManager();
 		mScriptManager = new ScriptManager();
-		mWindow = new Window();
 		mWidgetRenderer = new SDLWidgetRenderer();
 		mWidgetManager = new WidgetManager();
 		mAudioManager = new AudioManager();
@@ -54,6 +78,11 @@ namespace Retro3D
 		mWorldMessageBus = new WorldMessageBus();
 		mWorld = new World();
 		mPlayerController = new PlayerController();
+#ifdef _WIN32
+		mInputMethodManager = new WindowsIMEManager();
+#else
+		mInputMethodManager = new NullInputMethodManager();
+#endif
 
 		SetCurrentLevel(new Level());
 
@@ -66,12 +95,13 @@ namespace Retro3D
 
 	GameEngine::~GameEngine()
 	{
+		mFocusedWindow = nullptr;
 		delete mSceneRenderer;
 		mSceneRenderer = nullptr;
 		delete mWidgetRenderer;
 		mWidgetRenderer = nullptr;
-		delete mWindow;
-		mWindow = nullptr;
+		delete mMainWindow;
+		mMainWindow = nullptr;
 		delete mWorldMessageBus;
 		mWorldMessageBus = nullptr;
 		delete mCurrentLevel;
@@ -175,6 +205,11 @@ namespace Retro3D
 	{
 		const Uint64 start = SDL_GetPerformanceCounter();
 
+		// HACK! TTODO: Find a nicer way of doing this
+		for (ObjectRefHandle* refHandle : ObjectRefHandle::PendingDeleteHandles)
+			delete refHandle;
+		ObjectRefHandle::PendingDeleteHandles.clear();
+
 		if (mTickCallback != nullptr)
 			mTickCallback(mDeltaTime);
 
@@ -193,17 +228,26 @@ namespace Retro3D
 		// Update all widgets
 		mWidgetManager->TickWidgets(mDeltaTime);
 
-		// Clear screen
-		mWindow->PrepareRender();
+		// Render
+		if (mRenderTarget)
+		{
+			mWidgetRenderer->PreRender();
 
-		// Render the world
-		mSceneRenderer->RenderScene();
+			// Set focus window - TEMP - will add support for multiple render targets
+			mFocusedWindow = mRenderTarget->GetWindow()->HasFocus() ? mRenderTarget->GetWindow() : nullptr;
 
-		// Render UI
-		mWidgetManager->RenderWidgets(mWindow);
+			// Clear screen
+			mRenderTarget->PrepareRender();
 
-		// Update the screen
-		mWindow->Render();
+			// Render the world
+			mSceneRenderer->RenderScene(mRenderTarget);
+
+			// Render UI
+			mWidgetManager->RenderWidgets(mRenderTarget);
+
+			// Update the screen
+			mRenderTarget->Render();
+		}
 
 		mResourceManager->ProcessCompletedAsyncLoads();
 

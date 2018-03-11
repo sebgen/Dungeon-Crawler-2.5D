@@ -15,6 +15,7 @@ The game is ticked from here.
 #include "Object/objectptr.h"
 #include "Text/config_reader.h"
 #include "Graphics/render_target.h"
+#include "Window/window.h"
 #include <functional>
 
 namespace Retro3D
@@ -32,6 +33,7 @@ namespace Retro3D
 	class WorldMessageBus;
 	class IWidgetRenderer;
 	class AudioManager;
+	class InputMethodManager;
 
 	class GameEngine
 	{
@@ -39,7 +41,9 @@ namespace Retro3D
 		World* mWorld;
 		WorldMessageBus* mWorldMessageBus;
 		Level* mCurrentLevel;
-		IRenderTargetWindow* mWindow;
+		IRenderTarget* mRenderTarget; // TODO: support multiple render targets
+		IWindow* mMainWindow;
+		IWindow* mFocusedWindow;
 
 		// Managers
 		InputManager* mInputManager;
@@ -52,6 +56,7 @@ namespace Retro3D
 		PlayerController* mPlayerController;
 		ConfigReader mGameConfig;
 		IWidgetRenderer* mWidgetRenderer;
+		InputMethodManager* mInputMethodManager;
 
 		float mDeltaTime = 0.1f;
 		bool mIsRunning;
@@ -88,13 +93,12 @@ namespace Retro3D
 
 		void SetPlayerController(PlayerController* arg_controller) { mPlayerController = arg_controller; } // TODO
 
-		void SetRenderTargetWindow(IRenderTargetWindow* arg_target) { mWindow = arg_target; } // TODO
+		void SetRenderTarget(IRenderTarget* arg_target) { mRenderTarget = arg_target; } // TODO
 
 		void SetCurrentLevel(Level* arg_level);
 
 		// Accessors
 		inline Level* GetCurrentLevel() { return mCurrentLevel; }
-		inline IRenderTargetWindow* GetWindow() { return mWindow; }
 		inline InputManager* GetInputManager() { return mInputManager; }
 		inline ScriptManager* GetScriptManager() { return mScriptManager; }
 		inline WidgetManager* GetWidgetManager() { return mWidgetManager; }
@@ -106,6 +110,8 @@ namespace Retro3D
 		inline ConfigReader& GetGameConfig() { return mGameConfig; }
 		inline WorldMessageBus* GetWorldMessageBus() { return mWorldMessageBus; }
 		inline IWidgetRenderer* GetWidgetRenderer() { return mWidgetRenderer; }
+		inline InputMethodManager* GetInputMethodManager() { return mInputMethodManager; }
+		inline IWindow* GetFocusedWindow() { return mFocusedWindow; }
 	};
 }
 

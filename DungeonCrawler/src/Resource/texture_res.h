@@ -12,7 +12,7 @@ namespace Retro3D
 		SDL_Surface* mSDLSurface = nullptr;
 
 	public:
-		//~TextureRes();
+		~TextureRes() override;
 
 		virtual bool LoadResource(const std::string& arg_path) override;
 

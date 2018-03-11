@@ -18,7 +18,7 @@ namespace Retro3D
 		ObjectPtr();
 		ObjectPtr(Object* arg_object);
 		ObjectPtr(const ObjectPtr<T>& arg_other);
-		~ObjectPtr();
+		virtual ~ObjectPtr() override;
 
 		ObjectPtr<T>& operator=(const ObjectPtr<T>& arg_other);
 

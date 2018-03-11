@@ -68,10 +68,9 @@ namespace Retro3D
 				resObj = new T();
 
 				resObj->LoadResource(arg_path);
+				// TODO: Cache resource
 			}
-			ResPtr<T> resPtr(resObj);
-
-			return resPtr;
+			return ResPtr<T>(resObj);
 		}
 
 		/**

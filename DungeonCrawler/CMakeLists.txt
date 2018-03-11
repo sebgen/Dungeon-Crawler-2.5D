@@ -81,6 +81,14 @@ file(GLOB_RECURSE SRC_WINDOW
     "${SourceDir}/Window/*.cpp"
     "${SourceDir}/Window/*.h"
 )
+file(GLOB_RECURSE SRC_PLATFORM_EMSCRIPTEN
+    "${SourceDir}/Platform/Emscripten/*.cpp"
+    "${SourceDir}/Platform/Emscripten/*.h"
+)
+file(GLOB_RECURSE SRC_PLATFORM_WINDOWS
+    "${SourceDir}/Platform/Windows/*.cpp"
+    "${SourceDir}/Platform/Windows/*.h"
+)
 file(GLOB_RECURSE SRC_WORLD
     "${SourceDir}/World/*.cpp"
     "${SourceDir}/World/*.h"
@@ -105,6 +113,8 @@ source_group("UI\\Managers" FILES ${SRC_UI_MANAGERS})
 source_group("UI\\Visual" FILES ${SRC_UI_VISUAL})
 source_group("UI\\Widgets" FILES ${SRC_UI_WIDGETS})
 source_group("Window" FILES ${SRC_WINDOW})
+source_group("Platform\\Emscripten" FILES ${SRC_PLATFORM_EMSCRIPTEN})
+source_group("Platform\\Windows" FILES ${SRC_PLATFORM_WINDOWS})
 source_group("World" FILES ${SRC_WORLD})
 
 

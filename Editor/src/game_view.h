@@ -1,14 +1,14 @@
 #ifndef RETRO3DGAME_VIEW_H
 #define RETRO3DGAME_VIEW_H
 
-#include "Graphics/render_target.h"
+#include "API/SDL/sdl_render_target.h"
 #include "user_control.h"
 
 struct SDL_Window; // fwd. decl
 
 namespace Retro3D
 {
-	class GameView : public NativeUI::UserControl, public IRenderTargetWindow
+	class GameView : public NativeUI::UserControl, public ISDLRenderTarget, public IWindow
 	{
 	private:
 		SDL_Renderer* mSDLRenderer;
@@ -23,7 +23,11 @@ namespace Retro3D
 		virtual void Render() override;
 		virtual SDL_Renderer* GetSDLRenderer() override;
 
+		virtual void GetRenderContextSize(int& out_width, int& out_height) override;
 		virtual void GetWindowSize(int& out_width, int& out_height) override;
+		virtual void* GetOSWindowHandle() override;
+		virtual bool HasFocus() = 0;
+		virtual IWindow* GetWindow() override;
 	};
 }
 

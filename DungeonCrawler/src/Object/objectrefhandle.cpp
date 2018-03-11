@@ -1,7 +1,11 @@
 #include "objectrefhandle.h"
 
+#include "Object/object.h"
+
 namespace Retro3D
 {
+	std::vector<ObjectRefHandle*> ObjectRefHandle::PendingDeleteHandles = std::vector<ObjectRefHandle*>();
+
 	ObjectRefHandle::ObjectRefHandle(Object* arg_object)
 		: mObject(arg_object), mStrongRefCount(0), mWeakRefCount(0)
 	{
@@ -28,11 +32,11 @@ namespace Retro3D
 
 		if (mStrongRefCount == 0 && mObject != nullptr)
 		{
-			delete(mObject);
+			delete mObject;
 			mObject = nullptr;
 		}
 
-		maybeDelete();
+		//maybeDelete(); // Will be called by Object's destructor
 	}
 
 	void ObjectRefHandle::AddWeakRef()
@@ -51,7 +55,8 @@ namespace Retro3D
 	{
 		if (mObject == nullptr && mStrongRefCount == 0 && mWeakRefCount == 0)
 		{
-			delete(this);
+			// HACK! TTODO: Find a nicer way of doing this
+			PendingDeleteHandles.push_back(this);
 		}
 	}
 }

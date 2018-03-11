@@ -13,9 +13,21 @@ namespace Retro3D
 
 	void TextVisual::SetTextStyle(TextStyle arg_style)
 	{
-		mTextStyle = arg_style;
-		std::string resourceParam = mTextStyle.GetFontName() + std::string(":") + std::to_string(mTextStyle.GetFontSize());
-		mFontRes = GGameEngine->GetResourceManager()->LoadResource<FontRes>(resourceParam);
+		if (!mFontRes.IsValid() || arg_style.GetFontName() != mTextStyle.GetFontName() || arg_style.GetFontSize() != mTextStyle.GetFontSize())
+		{
+			std::string resourceParam = arg_style.GetFontName() + std::string(":") + std::to_string(arg_style.GetFontSize());
+
+			ResPtr<FontRes> loadedRes = GGameEngine->GetResourceManager()->LoadResource<FontRes>(resourceParam);
+			if (loadedRes.IsValid())
+			{
+				mTextStyle = arg_style;
+				mFontRes = loadedRes;
+			}
+			else
+			{
+				LOG_ERROR() << "Failed to load font: " << arg_style.GetFontName();
+			}
+		}
 	}
 
 	void TextVisual::SetText(std::string arg_text)

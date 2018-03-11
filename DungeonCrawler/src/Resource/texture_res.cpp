@@ -11,12 +11,12 @@ namespace Retro3D
 		return (mSDLSurface != nullptr);
 	}
 
-	/*
+	
 	TextureRes::~TextureRes()
 	{
 		if (mSDLSurface != nullptr)
 		{
 			SDL_FreeSurface(mSDLSurface);
 		}
-	}*/
+	}
 }

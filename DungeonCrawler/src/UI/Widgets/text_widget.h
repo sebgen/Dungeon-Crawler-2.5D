@@ -3,6 +3,7 @@
 
 #include "visual_widget.h"
 #include "UI/Visual/text_visual.h"
+#include "Text/text_input_method_context.h"
 
 /*=============================================================================================
 A Text Widget, for rendering text.
@@ -11,7 +12,7 @@ A Text Widget, for rendering text.
 
 namespace Retro3D
 {
-	class TextWidget : public VisualWidget
+	class TextWidget : public VisualWidget, public ITextInputMethodContext
 	{
 	protected:
 		TextVisual mTextVisual;
@@ -26,6 +27,9 @@ namespace Retro3D
 		void SetTextStyle(TextStyle arg_style);
 
 		virtual void CreateContent() override;
+
+		virtual IWindow* GetIMContextWindow() override;
+		virtual void HandleTextInputMethodResult(std::string arg_input) override;
 
 	};
 }

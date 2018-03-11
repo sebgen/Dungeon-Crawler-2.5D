@@ -1,5 +1,7 @@
 #include "text_widget.h"
 
+#include "Engine/game_engine.h"
+
 namespace Retro3D
 {
 	TextWidget::TextWidget()
@@ -29,6 +31,17 @@ namespace Retro3D
 	}
 
 	void TextWidget::CreateContent()
+	{
+
+	}
+
+	IWindow* TextWidget::GetIMContextWindow()
+	{
+		// TODO
+		return GGameEngine->GetFocusedWindow();
+	}
+
+	void TextWidget::HandleTextInputMethodResult(std::string arg_input)
 	{
 
 	}

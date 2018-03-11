@@ -64,7 +64,7 @@ namespace Retro3D
 			}
 		};
 
-		engine->SetRenderTargetWindow(mEditorWinndow->GetGameView());
+		engine->SetRenderTarget(mEditorWinndow->GetGameView());
 		engine->SetTickCallback(tickCallback);
 		engine->StartEngine();
 		

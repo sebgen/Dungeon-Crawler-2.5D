@@ -1,5 +1,5 @@
-#ifndef I_WIDGET_RENDERER_H
-#define I_WIDGET_RENDERER_H
+#ifndef RETRO3D_WIDGET_RENDERER_H
+#define RETRO3D_WIDGET_RENDERER_H
 
 /*=============================================================================================
                               Widget Renderer Interface
@@ -16,15 +16,16 @@ namespace Retro3D
 	class TextVisual;
 	class ColourVisual;
 	class Window;
-	class IRenderTargetWindow;
+	class IRenderTarget;
 
 	class IWidgetRenderer
 	{
 	public:
+		virtual void PreRender() = 0;
 		virtual void RenderColour(ColourVisual* arg_rect, const WidgetRenderParams& arg_renderparams) = 0;
 		virtual void RenderImage(ImageVisual* arg_image, const WidgetRenderParams& arg_renderparams) = 0;
 		virtual void RenderText(TextVisual* arg_image, const WidgetRenderParams& arg_renderparams) = 0;
-		virtual void SetWindow(IRenderTargetWindow* arg_window) = 0;
+		virtual void SetRenderTarget(IRenderTarget* arg_window) = 0;
 	};
 }
 

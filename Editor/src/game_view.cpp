@@ -32,8 +32,28 @@ namespace Retro3D
 		return mSDLRenderer;
 	}
 
-	void GameView::GetWindowSize(int& out_width, int& out_height)
+	void GameView::GetRenderContextSize(int& out_width, int& out_height)
 	{
 		SDL_GetWindowSize(mSDLWindow, &out_width, &out_height);
+	}
+
+	void GameView::GetWindowSize(int& out_width, int& out_height)
+	{
+		return GetRenderContextSize(out_width, out_height);
+	}
+
+	void* GameView::GetOSWindowHandle()
+	{
+		return mHwnd;
+	}
+
+	bool GameView::HasFocus()
+	{
+		return GetActiveWindow() == mHwnd;
+	}
+
+	IWindow* GameView::GetWindow()
+	{
+		return this;
 	}
 }

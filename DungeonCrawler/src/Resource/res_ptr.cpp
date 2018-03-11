@@ -20,6 +20,12 @@ namespace Retro3D
 	}
 
 	template<typename T>
+	ResPtr<T>::~ResPtr()
+	{
+
+	}
+
+	template<typename T>
 	bool ResPtr<T>::IsValid() const
 	{
 		return ObjectPtr<T>::IsValid() && !ObjectPtr<T>::Get()->HasObjectFlag(ObjectFlag::AsyncLoading);

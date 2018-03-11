@@ -1,6 +1,8 @@
 #ifndef RETRO3D_OBJECTREFHANDLE_H
 #define RETRO3D_OBJECTREFHANDLE_H
 
+#include <vector>
+
 /*=============================================================================================
 A reference handle that contains:
 - raw pointer to a Retro3D::Object
@@ -49,6 +51,9 @@ namespace Retro3D
 
 		/** Removes a weak reference to the object. Used by WeakObjectPtr. */
 		void RemoveWeakRef();
+
+		// HACK! TTODO: Find a nicer way of doing this
+		static std::vector<ObjectRefHandle*> PendingDeleteHandles;
 	};
 }
 

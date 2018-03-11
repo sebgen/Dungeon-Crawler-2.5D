@@ -12,9 +12,9 @@ namespace Retro3D
 	public:
 		ResPtr();
 		ResPtr(Resource* arg_object);
+		virtual ~ResPtr() override;
 		virtual bool IsValid() const override;
 
-	public:
 	};
 }
 

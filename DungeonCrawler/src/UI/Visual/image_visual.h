@@ -23,11 +23,7 @@ namespace Retro3D
 		/** Image Resource, used for rendering. */
 		ResPtr<TextureRes> mImageRes;
 
-		/** SDL Texture, used for rendering. */
-		SDL_Texture* mSDLTexture = nullptr; // TODO: Reuse? Store in TextureRes, or make a new Resource for this?
-
 	public:
-		
 		ImageVisual();
 		~ImageVisual();
 
@@ -40,7 +36,7 @@ namespace Retro3D
 		/** Gets the path to the image file. */
 		std::string GetImagePath() { return mImagePath; }
 
-		inline SDL_Texture* GetSDLTexture() { return mSDLTexture; }
+		TextureRes* GetImageRes() { return mImageRes.IsValid() ? mImageRes.Get() : nullptr; }
 	};
 }
 

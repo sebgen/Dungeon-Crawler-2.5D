@@ -1,19 +1,17 @@
-#ifndef I_RETRO3D_RENDERTARGETWINDOW_H
-#define I_RETRO3D_RENDERTARGETWINDOW_H
+#ifndef RETRO3D_RENDERTARGETWINDOW_H
+#define RETRO3D_RENDERTARGETWINDOW_H
 
-struct SDL_Renderer; // fwd. decl.
+#include "Window/window.h"
 
 namespace Retro3D
 {
-	class IRenderTargetWindow
+	class IRenderTarget
 	{
 	public:
 		virtual void PrepareRender() = 0;
 		virtual void Render() = 0;
-
-		virtual SDL_Renderer* GetSDLRenderer() = 0;
-
-		virtual void GetWindowSize(int& out_width, int& out_height) = 0;
+		virtual void GetRenderContextSize(int& out_width, int& out_height) = 0;
+		virtual IWindow* GetWindow() = 0;
 	};
 }
 
