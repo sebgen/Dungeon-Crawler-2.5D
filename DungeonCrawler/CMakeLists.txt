@@ -2,6 +2,8 @@ project(DungeonCrawler)
 
 set(SourceDir ${PROJECT_SOURCE_DIR}/src)
 
+add_definitions(-DUNICODE)
+
 # Gather c++ files
 file(GLOB_RECURSE SRC_FILES 
 	src/*.cpp

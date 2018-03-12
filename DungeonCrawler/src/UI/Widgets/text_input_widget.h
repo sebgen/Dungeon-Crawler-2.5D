@@ -2,6 +2,7 @@
 #define RETRO3D_TEXTINPUTWIDGET_H
 
 #include "text_widget.h"
+#include "Text/text_input_method_context.h"
 
 /*=============================================================================================
 A Text Widget, for rendering text.
@@ -10,7 +11,7 @@ A Text Widget, for rendering text.
 
 namespace Retro3D
 {
-	class TextInputWidget : public TextWidget
+	class TextInputWidget : public TextWidget, public ITextInputMethodContext
 	{
 	public:
 		TextInputWidget();
@@ -18,6 +19,9 @@ namespace Retro3D
 		void AddText(std::string arg_text);
 
 		virtual void OnKeyUp(const char* arg_key) override;
+
+		virtual IWindow* GetIMContextWindow() override;
+		virtual void HandleTextInputMethodResult(std::string arg_input) override;
 
 	};
 }

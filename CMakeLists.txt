@@ -18,6 +18,10 @@ add_subdirectory(Game)
 add_subdirectory(Editor)
 add_subdirectory(NativeUI)
 
+IF(WIN32)
+	add_definitions(-DUNICODE)
+endif()
+
 if(NOT SHIPPING_BUILD)
 	message("Disabling optimisations, since SHIPPING_BUILD is OFF")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0")

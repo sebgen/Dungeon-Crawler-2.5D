@@ -12,7 +12,7 @@ A Text Widget, for rendering text.
 
 namespace Retro3D
 {
-	class TextWidget : public VisualWidget, public ITextInputMethodContext
+	class TextWidget : public VisualWidget
 	{
 	protected:
 		TextVisual mTextVisual;
@@ -27,10 +27,6 @@ namespace Retro3D
 		void SetTextStyle(TextStyle arg_style);
 
 		virtual void CreateContent() override;
-
-		virtual IWindow* GetIMContextWindow() override;
-		virtual void HandleTextInputMethodResult(std::string arg_input) override;
-
 	};
 }
 

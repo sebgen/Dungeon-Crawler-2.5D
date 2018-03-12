@@ -2,6 +2,7 @@
 
 #include "Engine/game_engine.h"
 #include "Engine/input_manager.h"
+#include "Text/input_method_manager.h"
 
 namespace Retro3D
 {
@@ -24,23 +25,44 @@ namespace Retro3D
 		std::string txt(arg_key);
 		if (txt == "backspace") // TEMP
 		{
+			// TODO: Support erasing UTF-encoded characters wider than one byte
 			std::string txt = GetText();
 			txt = txt.substr(0, txt.length() - 1);
 			SetText(txt);
 		}
-		else if (txt == "space")
-		{
-			AddText(" ");
-		}
-		else if(txt.length() == 1)
-		{
-			std::string newTxt = txt;
 
-			if (GGameEngine->GetInputManager()->GetKey("shift"))
+		else
+		{
+			if (GGameEngine->GetInputMethodManager()->IsActive())
 			{
-				newTxt[0] = std::toupper(newTxt[0]);
+				return; // IME input
 			}
-			AddText(newTxt);
+
+			if (txt == "space")
+			{
+				AddText(" ");
+			}
+			else if (txt.length() == 1)
+			{
+				std::string newTxt = txt;
+
+				if (GGameEngine->GetInputManager()->GetKey("shift"))
+				{
+					newTxt[0] = std::toupper(newTxt[0]);
+				}
+				AddText(newTxt);
+			}
 		}
 	}
+
+	IWindow* TextInputWidget::GetIMContextWindow()
+	{
+		return GGameEngine->GetFocusedWindow();
+	}
+
+	void TextInputWidget::HandleTextInputMethodResult(std::string arg_input)
+	{
+		AddText(arg_input);
+	}
+
 }

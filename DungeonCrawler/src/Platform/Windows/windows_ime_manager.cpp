@@ -1,6 +1,7 @@
 #ifdef _WIN32
 #include "windows_ime_manager.h"
 #include "Window/window.h"
+#include "Misc/debug.h"
 
 #pragma comment(lib, "imm32.lib")
 
@@ -20,8 +21,16 @@ namespace Retro3D
 					if (mImmContext)
 					{
 						ImmReleaseContext(mHwnd, mImmContext);
-						ImmAssociateContextEx(mHwnd, NULL, IACE_DEFAULT);
-						mInputEnabled = true;
+						BOOL succeeded = ImmAssociateContextEx(mHwnd, NULL, IACE_DEFAULT);
+						if (succeeded)
+						{
+							mInputEnabled = true;
+							LOG_INFO() << "IME enabled";
+						}
+						else
+						{
+							LOG_ERROR() << "Failed to associate IME context";
+						}
 					}
 				}
 			}
@@ -32,8 +41,12 @@ namespace Retro3D
 	{
 		if (mHwnd && mImmContext)
 		{
-			ImmAssociateContextEx(mHwnd, NULL, 0);
-			mInputEnabled = false;
+			BOOL succeeded = ImmAssociateContextEx(mHwnd, NULL, 0);
+			if (succeeded)
+			{
+				mInputEnabled = false;
+				LOG_INFO() << "IME disabled";
+			}
 		}
 	}
 
@@ -49,6 +62,18 @@ namespace Retro3D
 
 	bool WindowsIMEManager::GetString(std::string& out_string)
 	{
+
+		MSG msg = {};
+		BOOL hasMessage = PeekMessage(&msg, NULL, 0, 0, PM_REMOVE);
+
+		if (!hasMessage)
+			return false;
+
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+
+		::SetCaretPos(500, 200);
+
 		// Try get result string
 		int stringSize = ::ImmGetCompositionString(mImmContext, GCS_RESULTSTR, NULL, 0);
 
@@ -71,7 +96,19 @@ namespace Retro3D
 
 			// Get the result strings into lpstr
 			ImmGetCompositionString(mImmContext, GCS_RESULTSTR, lpstr, stringSize);
+			
+			ImmSetCompositionString(mImmContext, SCS_SETSTR, lpstr, stringSize, NULL, 0);
+			
 			ImmReleaseContext(mHwnd, mImmContext);
+
+			std::string tmpStr = std::string(lpstr);
+
+			// TODO: Fix this hack!
+			int size_needed = WideCharToMultiByte(CP_UTF8, 0, (LPCWCH)lpstr, (int)tmpStr.size(), NULL, 0, NULL, NULL);
+			std::string strTo(size_needed, 0);
+			WideCharToMultiByte(CP_UTF8, 0, (LPCWCH)lpstr, (int)tmpStr.size(), &strTo[0], size_needed, NULL, NULL);
+
+			out_string = strTo.substr(0, strTo.find((char)0));
 
 			GlobalUnlock(hstr);
 			GlobalFree(hstr);
@@ -80,6 +117,12 @@ namespace Retro3D
 
 		return false;
 	}
+
+	bool WindowsIMEManager::IsActive()
+	{
+		return mInputEnabled;
+	}
+
 }
 
 #endif

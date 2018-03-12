@@ -3,6 +3,8 @@
 #include "Engine/game_engine.h"
 #include "UI/Interfaces/widget_renderer.h"
 #include "Engine/input_manager.h"
+#include "Text/text_input_method_context.h"
+#include "Text/input_method_manager.h"
 
 namespace Retro3D
 {
@@ -60,7 +62,19 @@ namespace Retro3D
 
 	void WidgetManager::SetSelectedWidget(Widget* arg_widget)
 	{
+		InputMethodManager* imManager = GGameEngine->GetInputMethodManager();
 		mSelectedWidget = arg_widget;
+
+		ITextInputMethodContext* imContext = dynamic_cast<ITextInputMethodContext*>(arg_widget);
+		if (imContext)
+		{
+			imManager->SetContext(imContext);
+			imManager->EnableInput();
+		}
+		else
+		{
+			imManager->DisableInput();
+		}
 	}
 
 
@@ -87,6 +101,17 @@ namespace Retro3D
 		};
 
 		IterateWidgetsRecursive(mRootWidget.Get(), func);
+
+		InputMethodManager* imManager = GGameEngine->GetInputMethodManager();
+		ITextInputMethodContext* imContext = dynamic_cast<ITextInputMethodContext*>(mSelectedWidget.GetObjectSafe());
+		if (imContext)
+		{
+			std::string imResultString;
+			if (imManager->GetString(imResultString))
+			{
+				imContext->HandleTextInputMethodResult(imResultString);
+			}
+		}
 	}
 
 	void WidgetManager::RenderWidgets(IRenderTarget* arg_target)

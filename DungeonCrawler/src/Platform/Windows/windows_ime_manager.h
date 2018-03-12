@@ -23,6 +23,8 @@ namespace Retro3D
 		virtual void SetContext(ITextInputMethodContext* arg_context) override;
 
 		virtual bool GetString(std::string& out_string) override;
+
+		virtual bool IsActive();
 	};
 }
 

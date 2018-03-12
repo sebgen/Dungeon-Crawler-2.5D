@@ -34,15 +34,4 @@ namespace Retro3D
 	{
 
 	}
-
-	IWindow* TextWidget::GetIMContextWindow()
-	{
-		// TODO
-		return GGameEngine->GetFocusedWindow();
-	}
-
-	void TextWidget::HandleTextInputMethodResult(std::string arg_input)
-	{
-
-	}
 }
