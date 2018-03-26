@@ -10,14 +10,14 @@ namespace Retro3D
 
 	Resource* ResourceManager::getCahcedResource(const std::type_index& arg_type, const std::string& arg_path)
 	{
-		auto typeFindResult = mCachedResources.find(arg_type);
+		auto typeFindResult = mCachedResources.find(arg_type.hash_code());
 		if (typeFindResult != mCachedResources.end())
 		{
 			const auto caccedResourcesForType = (*typeFindResult).second;
 			auto resFindResult = caccedResourcesForType.find(arg_path);
 			if (resFindResult != caccedResourcesForType.end())
 			{
-				return (*resFindResult).second;
+				return resFindResult->second.Get();
 			}
 		}
 

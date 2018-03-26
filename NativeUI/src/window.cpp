@@ -52,7 +52,7 @@ namespace NativeUI
 		WindowClass->hCursor = LoadCursor(NULL, IDC_ARROW);
 		WindowClass->hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 		WindowClass->lpszMenuName = NULL;
-		WindowClass->lpszClassName = "NativeUIWindow";
+		WindowClass->lpszClassName = "NativeUWindowBase";
 		WindowClass->hIconSm = LoadIcon(NULL, IDI_APPLICATION);
 
 		if (!RegisterClassEx(WindowClass))
@@ -72,7 +72,7 @@ namespace NativeUI
 
 		mHwnd = CreateWindowEx(
 			WS_EX_CLIENTEDGE,
-			"NativeUIWindow",
+			"NativeUWindowBase",
 			"Window title",
 			WS_OVERLAPPEDWINDOW,
 			CW_USEDEFAULT, CW_USEDEFAULT, 800, 600,

@@ -52,7 +52,7 @@ namespace Retro3D
 		return GetActiveWindow() == mHwnd;
 	}
 
-	IWindow* GameView::GetWindow()
+	WindowBase* GameView::GetWindow()
 	{
 		return this;
 	}

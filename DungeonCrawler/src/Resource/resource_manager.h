@@ -37,7 +37,7 @@ namespace Retro3D
 		void asyncLoadThread_Tick();
 
 		Thread mAsyncLoadThread;
-		std::unordered_map<std::type_index, std::unordered_map<std::string, Resource*>> mCachedResources;
+		std::unordered_map<size_t, std::unordered_map<std::string, ResPtr<Resource>>> mCachedResources;
 
 		Resource* getCahcedResource(const std::type_index& arg_type, const std::string& arg_path);
 
@@ -68,7 +68,11 @@ namespace Retro3D
 				resObj = new T();
 
 				resObj->LoadResource(arg_path);
-				// TODO: Cache resource
+				if (mCachedResources.find(typeIndex.hash_code()) == mCachedResources.end())
+				{
+					mCachedResources[typeIndex.hash_code()] = std::unordered_map<std::string, ResPtr<Resource>>();
+				}
+				mCachedResources[typeIndex.hash_code()][arg_path] = ResPtr<Resource>(resObj);
 			}
 			return ResPtr<T>(resObj);
 		}
@@ -98,6 +102,7 @@ namespace Retro3D
 				queuedAsyncLoad.resource = resObj;
 				queuedAsyncLoad.callback = arg_callback;
 
+				// TODO: add to a separate queue, and copy over on tick.
 				mGuard_QueuedAsyncResourceLoadRequests.lock();
 				mQueuedAsyncResourceLoadRequests.push_back(queuedAsyncLoad);
 				mGuard_QueuedAsyncResourceLoadRequests.unlock();

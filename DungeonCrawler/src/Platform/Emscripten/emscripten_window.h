@@ -14,7 +14,7 @@ namespace Retro3D
 	{
 	public:
 		EmscriptenWindow();
-		~EmscriptenWindow();
+		virtual ~EmscriptenWindow() override;
 
 		virtual void* GetOSWindowHandle() override;
 

@@ -55,7 +55,7 @@ namespace Retro3D
 		}
 	}
 
-	IWindow* TextInputWidget::GetIMContextWindow()
+	WindowBase* TextInputWidget::GetIMContextWindow()
 	{
 		return GGameEngine->GetFocusedWindow();
 	}

@@ -16,7 +16,7 @@ The Game, with its scene and GUI, is rendered here.
 
 namespace Retro3D
 {
-	class SDLWindow : public ISDLRenderTarget, public IWindow
+	class SDLWindow : public ISDLRenderTarget, public WindowBase
 	{
 	private:
 		SDL_Window* mSDLWindow;
@@ -24,7 +24,7 @@ namespace Retro3D
 
 	public:
 		SDLWindow();
-		~SDLWindow();
+		virtual ~SDLWindow() override;
 
 		/** Prepare the Window for rendering. Called by the engine. */
 		virtual void PrepareRender() override;
@@ -44,7 +44,7 @@ namespace Retro3D
 
 		virtual void* GetOSWindowHandle() = 0;
 
-		virtual IWindow* GetWindow() override;
+		virtual WindowBase* GetWindow() override;
 	};
 }
 

@@ -14,7 +14,7 @@ namespace Retro3D
 		virtual void Render() = 0;
 		virtual void GetRenderContextSize(int& out_width, int& out_height) = 0;
 		virtual SDL_Renderer* GetSDLRenderer() = 0;
-		virtual IWindow* GetWindow() = 0;
+		virtual WindowBase* GetWindow() = 0;
 
 	};
 }

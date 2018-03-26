@@ -42,8 +42,8 @@ namespace Retro3D
 		WorldMessageBus* mWorldMessageBus;
 		Level* mCurrentLevel;
 		IRenderTarget* mRenderTarget; // TODO: support multiple render targets
-		IWindow* mMainWindow;
-		IWindow* mFocusedWindow;
+		WindowBase* mMainWindow;
+		WindowBase* mFocusedWindow;
 
 		// Managers
 		InputManager* mInputManager;
@@ -111,7 +111,7 @@ namespace Retro3D
 		inline WorldMessageBus* GetWorldMessageBus() { return mWorldMessageBus; }
 		inline IWidgetRenderer* GetWidgetRenderer() { return mWidgetRenderer; }
 		inline InputMethodManager* GetInputMethodManager() { return mInputMethodManager; }
-		inline IWindow* GetFocusedWindow() { return mFocusedWindow; }
+		inline WindowBase* GetFocusedWindow() { return mFocusedWindow; }
 	};
 }
 

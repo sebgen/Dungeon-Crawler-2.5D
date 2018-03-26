@@ -51,7 +51,7 @@ namespace Retro3D
 		GetRenderContextSize(out_width, out_height);
 	}
 
-	IWindow* SDLWindow::GetWindow()
+	WindowBase* SDLWindow::GetWindow()
 	{
 		return this;
 	}

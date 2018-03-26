@@ -15,7 +15,7 @@ namespace Retro3D
 	{
 	public:
 		WindowsWindow();
-		~WindowsWindow();
+		virtual ~WindowsWindow() override;
 
 		virtual void* GetOSWindowHandle() override;
 

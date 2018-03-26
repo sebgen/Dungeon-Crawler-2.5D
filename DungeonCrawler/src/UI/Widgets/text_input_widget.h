@@ -20,7 +20,7 @@ namespace Retro3D
 
 		virtual void OnKeyUp(const char* arg_key) override;
 
-		virtual IWindow* GetIMContextWindow() override;
+		virtual WindowBase* GetIMContextWindow() override;
 		virtual void HandleTextInputMethodResult(std::string arg_input) override;
 
 	};

@@ -8,7 +8,7 @@ struct SDL_Window; // fwd. decl
 
 namespace Retro3D
 {
-	class GameView : public NativeUI::UserControl, public ISDLRenderTarget, public IWindow
+	class GameView : public NativeUI::UserControl, public ISDLRenderTarget, public WindowBase
 	{
 	private:
 		SDL_Renderer* mSDLRenderer;
@@ -27,7 +27,7 @@ namespace Retro3D
 		virtual void GetWindowSize(int& out_width, int& out_height) override;
 		virtual void* GetOSWindowHandle() override;
 		virtual bool HasFocus() = 0;
-		virtual IWindow* GetWindow() override;
+		virtual WindowBase* GetWindow() override;
 	};
 }
 

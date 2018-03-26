@@ -5,12 +5,12 @@
 
 namespace Retro3D
 {
-	class IWindow;
+	class WindowBase;
 
 	class ITextInputMethodContext
 	{
 	public:
-		virtual IWindow* GetIMContextWindow() = 0;
+		virtual WindowBase* GetIMContextWindow() = 0;
 		virtual void HandleTextInputMethodResult(std::string arg_input) = 0;
 	};
 }
