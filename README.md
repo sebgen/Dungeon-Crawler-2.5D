@@ -4,6 +4,8 @@
 
 By Sebastian Genlund and Matias Lavik
 
+TRY IT HERE: http://dungeoncrawler.dx.am/ (Requires a browser with webassembly-support)
+
 ![screenshot](https://pbs.twimg.com/media/DAh1QhPXkAAH2Ea.jpg:large)
 
 
