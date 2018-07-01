@@ -27,9 +27,9 @@ const int texHeight = 600;
 namespace Retro3D
 {
 	// modified version of http://sdl.beuc.net/sdl.wiki/Pixel_Access
-	static inline Uint32 getpixel(const SDL_Surface* arg_surface, const int& arg_x, const int& arg_y)
+	static inline Uint32 getpixel(const SDL_Surface* arg_surface, const int arg_x, const int arg_y)
 	{
-		const int& bpp = arg_surface->format->BytesPerPixel;
+		const int bpp = arg_surface->format->BytesPerPixel;
 		const Uint8* pixel = (Uint8*)arg_surface->pixels + arg_y * arg_surface->pitch + arg_x * bpp;
 
 		switch (bpp)
@@ -98,6 +98,13 @@ namespace Retro3D
 
 	void SceneRenderer::LoadLevelData()
 	{
+        // null-initialise texture array
+        for (size_t i = 0; i < 256; i++)
+        {
+            mTextureSurfaceMap[i] = nullptr;
+        }
+
+        // register all textures used in the level
 		for (auto textureKeyPair : mLevel->GetTextureMap())
 		{
 			std::string fullPath = std::string("resources//textures//") + textureKeyPair.second;
@@ -181,6 +188,8 @@ namespace Retro3D
 
 		const std::string& skyboxTexture = mLevel->GetSkyboxTexture();
 		bool renderSkybox = skyboxTexture != "";
+
+        unsigned char* pixelData = mPixels.data();
 
 		// Setup sprite render objects - TODO: don't do this here!
 		const std::vector<SpriteComponent*> spriteComps = GGameEngine->GetWorld()->GetComponentsOfType<SpriteComponent>();
@@ -295,9 +304,9 @@ namespace Retro3D
 						const Uint8 g = *(((Uint8*)&pixelColour) + 1);
 						const Uint8 b = *(((Uint8*)&pixelColour) + 2);;
 
-						mPixels[offset + 0] = b;
-						mPixels[offset + 1] = g;
-						mPixels[offset + 2] = r;
+                        *(pixelData + offset) = b;
+                        *(pixelData + offset + 1) = g;
+                        *(pixelData + offset + 2) = r;
 
 						mDepthBuffer[x] = t; // store depth
 					}
@@ -334,9 +343,9 @@ namespace Retro3D
 						const Uint8 g = *(((Uint8*)&pixelColour) + 1);
 						const Uint8 b = *(((Uint8*)&pixelColour) + 2);;
 
-						mPixels[offset + 0] = b;
-						mPixels[offset + 1] = g;
-						mPixels[offset + 2] = r;
+                        *(pixelData + offset) = b;
+                        *(pixelData + offset + 1) = g;
+                        *(pixelData + offset + 2) = r;
 					}
 					else if (renderSkybox)
 					{
@@ -357,9 +366,9 @@ namespace Retro3D
 						const Uint8 g = *(((Uint8*)&pixelColour) + 1);
 						const Uint8 b = *(((Uint8*)&pixelColour) + 2);;
 
-						mPixels[offset + 0] = b;
-						mPixels[offset + 1] = g;
-						mPixels[offset + 2] = r;
+                        *(pixelData + offset) = b;
+                        *(pixelData + offset + 1) = g;
+                        *(pixelData + offset + 2) = r;
 					}
 				}
 			}
@@ -392,9 +401,10 @@ namespace Retro3D
 				const Uint8 g = *(((Uint8*)&pixelColour) + 1);
 				const Uint8 b = *(((Uint8*)&pixelColour) + 2);;
 
-				mPixels[offset + 0] = b;
-				mPixels[offset + 1] = g;
-				mPixels[offset + 2] = r;
+                unsigned char* pixelData = mPixels.data();
+                *(pixelData + offset) = b;
+                *(pixelData + offset + 1) = g;
+                *(pixelData + offset + 2) = r;
 			}
 		}
 

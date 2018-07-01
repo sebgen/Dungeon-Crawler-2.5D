@@ -136,7 +136,7 @@ namespace Retro3D
 				{
 					__AssertComment(i_x < mDimX && i_y < mDimY, "Invalid map file");
 					char cellValue = currCell.c_str()[0];
-					const int& mapIndex = GetMapIndex(i_x, i_y);
+					const int mapIndex = GetMapIndex(i_x, i_y);
 					if (mTextureMap.find(cellValue) == mTextureMap.end())
 						cellValue = 0;
 					(*mapArray)[mapIndex] = cellValue;

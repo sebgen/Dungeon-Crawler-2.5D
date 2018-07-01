@@ -37,33 +37,33 @@ namespace Retro3D
 
 		bool IsLoaded() const { return mIsLoaded; }
 
-		inline const int GetMapIndex(const int& arg_x, const int& arg_y) const
+		inline const int GetMapIndex(const int arg_x, const int arg_y) const
 		{
 			return arg_x + arg_y*mDimX;
 		}
 
-		inline const char GetWallMapCell(const int& arg_x, const int& arg_y) const
+		inline const char GetWallMapCell(const int arg_x, const int arg_y) const
 		{
 			const int index = GetMapIndex(arg_x, arg_y);
 			return mWallMap[index];
 		}
-		inline const char GetFloorMapCell(const int& arg_x, const int& arg_y) const
+		inline const char GetFloorMapCell(const int arg_x, const int arg_y) const
 		{
 			const int index = GetMapIndex(arg_x, arg_y);
 			return mFloorMap[index];
 		}
-		inline const char GetCeilingMapCell(const int& arg_x, const int& arg_y) const
+		inline const char GetCeilingMapCell(const int arg_x, const int arg_y) const
 		{
 			const int index = GetMapIndex(arg_x, arg_y);
 			return mCeilingMap[index];
 		}
-		inline const bool IsInGrid(const int& arg_x, const int& arg_y) const
+		inline const bool IsInGrid(const int arg_x, const int arg_y) const
 		{
 			return arg_x >= 0 && arg_y >= 0 && arg_x < mDimX && arg_y < mDimY;
 		}
 
-		inline const int& GetDimensionX() { return mDimX; }
-		inline const int& GetDimensionY() { return mDimY; }
+		inline const int GetDimensionX() { return mDimX; }
+		inline const int GetDimensionY() { return mDimY; }
 
 		inline const std::unordered_map<char, std::string> GetTextureMap() { return mTextureMap; }
 

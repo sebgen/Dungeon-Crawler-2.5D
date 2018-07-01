@@ -45,7 +45,7 @@ namespace Retro3D
 	private:
 		Level* mLevel = nullptr;
 		bool mLevelDataLoaded = false;
-		std::unordered_map<char, SDL_Surface*> mTextureSurfaceMap; // TODO: use array instead?
+        SDL_Surface* mTextureSurfaceMap[256];
 		SDL_Surface* mSkyboxTexture = nullptr;
 		WeakObjectPtr<CameraComponent> mCameraComponent; // TODO: pass on some other structure
 		float mFOV = 95;
