@@ -125,7 +125,7 @@ namespace Retro3D
 			int winWidth = 0;
 			int winHeight = 0;
 			arg_target->GetRenderContextSize(winWidth, winHeight);
-			mRootWidget->SetSize(winWidth, winHeight);
+			mRootWidget->SetSize(static_cast<float>(winWidth), static_cast<float>(winHeight));
 			mRootWidget->SetHorizontalPositioning(WidgetPositioningMode::Absolute);
 			mRootWidget->SetVerticalPositioning(WidgetPositioningMode::Absolute);
 			mRootWidget->SetHorizontalScaling(WidgetScalingMode::Absolute);

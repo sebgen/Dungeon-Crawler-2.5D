@@ -32,11 +32,11 @@ namespace Retro3D
 			const char& currChar = arg_text[iPos];
 			if (!ToUint8(currChar, currValue))
 				return false; // not a number
-			out_value += currValue * GetFastPow10(iLast - iPos);
+			out_value += currValue * static_cast<int>(GetFastPow10(iLast - iPos));
 			iPos--;
 		}
 		if (isNegative)
-			out_value *= -1.0f;
+			out_value *= -1;
 		return true;
 	}
 

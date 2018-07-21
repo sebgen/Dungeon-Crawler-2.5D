@@ -60,12 +60,12 @@ namespace Retro3D
 
 		SDL_Renderer* renderer = mRenderTarget->GetSDLRenderer();
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-		SDL_SetRenderDrawColor(renderer, rgba.r * 255, rgba.g * 255, rgba.b * 255, rgba.a * 255);
+		SDL_SetRenderDrawColor(renderer, static_cast<int>(rgba.r * 255.0f), static_cast<int>(rgba.g * 255.0f), static_cast<int>(rgba.b * 255.0f), static_cast<int>(rgba.a * 255.0f));
 		SDL_Rect rect;
-		rect.x = arg_renderparams.mVisibleRect.mPosition.x;
-		rect.y = arg_renderparams.mVisibleRect.mPosition.y;
-		rect.w = arg_renderparams.mVisibleRect.mSize.x;
-		rect.h = arg_renderparams.mVisibleRect.mSize.y;
+		rect.x = static_cast<int>(arg_renderparams.mVisibleRect.mPosition.x);
+		rect.y = static_cast<int>(arg_renderparams.mVisibleRect.mPosition.y);
+		rect.w = static_cast<int>(arg_renderparams.mVisibleRect.mSize.x);
+		rect.h = static_cast<int>(arg_renderparams.mVisibleRect.mSize.y);
 		SDL_RenderFillRect(renderer, &rect);
 	}
 
@@ -115,16 +115,16 @@ namespace Retro3D
 		const glm::vec2 srcSize = glm::vec2(w * relSize.x, h * relSize.y);
 
 		SDL_Rect srcRect;
-		srcRect.x = relPos.x * w;
-		srcRect.y = relPos.y * h;
-		srcRect.w = relSize.x * w;
-		srcRect.h = relSize.y * h;
+		srcRect.x = static_cast<int>(relPos.x * w);
+		srcRect.y = static_cast<int>(relPos.y * h);
+		srcRect.w = static_cast<int>(relSize.x * w);
+		srcRect.h = static_cast<int>(relSize.y * h);
 
 		SDL_Rect dstRect;
-		dstRect.x = arg_renderparams.mVisibleRect.mPosition.x;
-		dstRect.y = arg_renderparams.mVisibleRect.mPosition.y;
-		dstRect.w = arg_renderparams.mVisibleRect.mSize.x;
-		dstRect.h = arg_renderparams.mVisibleRect.mSize.y;
+		dstRect.x = static_cast<int>(arg_renderparams.mVisibleRect.mPosition.x);
+		dstRect.y = static_cast<int>(arg_renderparams.mVisibleRect.mPosition.y);
+		dstRect.w = static_cast<int>(arg_renderparams.mVisibleRect.mSize.x);
+		dstRect.h = static_cast<int>(arg_renderparams.mVisibleRect.mSize.y);
 
 		SDL_RenderCopy(renderer, img, &srcRect, &dstRect);
 	}
@@ -146,10 +146,10 @@ namespace Retro3D
 		SDL_Renderer* renderer = mRenderTarget->GetSDLRenderer();
 
 		SDL_Rect rect;
-		rect.x = arg_renderparams.mVisibleRect.mPosition.x;
-		rect.y = arg_renderparams.mVisibleRect.mPosition.y;
-		rect.w = arg_renderparams.mVisibleRect.mSize.x;
-		rect.h = arg_renderparams.mVisibleRect.mSize.y;
+		rect.x = static_cast<int>(arg_renderparams.mVisibleRect.mPosition.x);
+		rect.y = static_cast<int>(arg_renderparams.mVisibleRect.mPosition.y);
+		rect.w = static_cast<int>(arg_renderparams.mVisibleRect.mSize.x);
+		rect.h = static_cast<int>(arg_renderparams.mVisibleRect.mSize.y);
 
 		TTF_Font* font = arg_text->GetFontRes() ? arg_text->GetFontRes()->GetFont() : nullptr;
 
@@ -172,12 +172,12 @@ namespace Retro3D
 
 		if (iW < rect.w)
 		{
-			rect.x += (rect.w - iW) / 2.0f;
+			rect.x += (rect.w - iW) / 2;
 			rect.w = iW;
 		}
 		if (iH < rect.h)
 		{
-			rect.y += (rect.h - iH) / 2.0f;
+			rect.y += (rect.h - iH) / 2;
 			rect.h = iH;
 		}
 
@@ -189,10 +189,10 @@ namespace Retro3D
 		const glm::vec2 srcSize = glm::vec2(iW * relSize.x, iH * relSize.y);
 
 		SDL_Rect srcRect;
-		srcRect.x = relPos.x * iW;
-		srcRect.y = relPos.y * iH;
-		srcRect.w = relSize.x * iW;
-		srcRect.h = relSize.y * iH;
+		srcRect.x = static_cast<int>(relPos.x * iW);
+		srcRect.y = static_cast<int>(relPos.y * iH);
+		srcRect.w = static_cast<int>(relSize.x * iW);
+		srcRect.h = static_cast<int>(relSize.y * iH);
 
 		SDL_RenderCopy(renderer, txtTexture, &srcRect, &rect);
 
@@ -215,10 +215,10 @@ namespace Retro3D
 
 		SDL_Renderer* renderer = mRenderTarget->GetSDLRenderer();
 		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-		out_rect.x = arg_contentrect.mPosition.x;
-		out_rect.y = arg_contentrect.mPosition.y;
-		out_rect.w = arg_contentrect.mSize.x;
-		out_rect.h = arg_contentrect.mSize.y;
+		out_rect.x = static_cast<int>(arg_contentrect.mPosition.x);
+		out_rect.y = static_cast<int>(arg_contentrect.mPosition.y);
+		out_rect.w = static_cast<int>(arg_contentrect.mSize.x);
+		out_rect.h = static_cast<int>(arg_contentrect.mSize.y);
 	}
 
 }

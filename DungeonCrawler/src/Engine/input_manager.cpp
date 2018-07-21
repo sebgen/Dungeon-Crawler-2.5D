@@ -171,12 +171,12 @@ namespace Retro3D
 
 	bool InputManager::GetMousePressed(MouseButtonID arg_button)
 	{
-		return mMousePressStates & ((MouseButtonID)1 << arg_button);
+		return (mMousePressStates & ((MouseButtonID)1 << arg_button)) != 0;
 	}
 
 	bool InputManager::GetMouseReleased(MouseButtonID arg_button)
 	{
-		return mMouseReleaseStates & ((MouseButtonID)1 << arg_button);
+		return (mMouseReleaseStates & ((MouseButtonID)1 << arg_button)) != 0;
 	}
 
 	const glm::vec2& InputManager::GetMouseMove() const

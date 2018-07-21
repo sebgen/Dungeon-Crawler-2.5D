@@ -45,7 +45,7 @@ namespace Retro3D
 		*/
 		inline ObjectRefHandle*  GetRefHandle() { return mObjectRefHandle; }
 
-		inline bool HasObjectFlag(ObjectFlag arg_flag) { return mObjectFlags & (ObjectFlagRegister)arg_flag; }
+		inline bool HasObjectFlag(ObjectFlag arg_flag) { return ((mObjectFlags & (ObjectFlagRegister)arg_flag)) != 0; }
 		inline void SetObjectFlag(ObjectFlag arg_flag) { mObjectFlags |= (ObjectFlagRegister)arg_flag; }
 		inline void ClearObjectFlag(ObjectFlag arg_flag) { mObjectFlags &= ~(ObjectFlagRegister)arg_flag; }
 

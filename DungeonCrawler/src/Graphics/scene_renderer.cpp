@@ -210,7 +210,7 @@ namespace Retro3D
 		const glm::mat4 invCamRot = glm::inverse(camRot);
 		const float camAspect = (float)texWidth / texHeight;
 		const float camHeight = camWidth / camAspect;
-		const float d = (camWidth / 2.0f) / tanf(mFOV * 0.5f * 3.141592654 / 180.0f); // distance from eye
+		const float d = (camWidth / 2.0f) / tanf(mFOV * 0.5f * 3.141592654f / 180.0f); // distance from eye
 		const glm::vec3 camForward = camRot * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
 		const glm::vec3 camRight = camRot * glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
 		const glm::vec3 camUp = camRot * glm::vec4(0.0f, 0.0f, 1.0f, 0.0f);
@@ -233,10 +233,10 @@ namespace Retro3D
 			const glm::vec2 rayStart = pixelWorld;
 			float t = 0.0f;
 			glm::vec2 currPos = rayStart;
-			const float xIntersOffset = 1.0f / fmaxf(fabsf(rayDir.x), 0.00001f);	// distance between each intersection at the X-axis
-			const float yIntersOffset = 1.0f / fmaxf(fabsf(rayDir.y), 0.00001f);	// distance between each intersection at the Y-axis
-			float tNextXIntersect = fabsf(rayDir.x) < 0.0001f ? 99999.0f : ((rayDir.x > 0 ? floorf(currPos.x + 1.0f) : floorf(currPos.x)) - currPos.x) / rayDir.x;	 // t at next intersection point with X-axis
-			float tNextYIntersect = fabsf(rayDir.y) < 0.0001f ? 99999.0f : ((rayDir.y > 0 ? floorf(currPos.y + 1.0f) : floorf(currPos.y)) - currPos.y) / rayDir.y;; // t at next intersection point with Y-axis
+			const float xIntersOffset = 1.0f / std::max(std::abs(rayDir.x), 0.00001f);	// distance between each intersection at the X-axis
+			const float yIntersOffset = 1.0f / std::max(std::abs(rayDir.y), 0.00001f);	// distance between each intersection at the Y-axis
+			float tNextXIntersect = std::abs(rayDir.x) < 0.0001f ? 99999.0f : ((rayDir.x > 0 ? std::floor(currPos.x + 1.0f) : std::floor(currPos.x)) - currPos.x) / rayDir.x;	 // t at next intersection point with X-axis
+			float tNextYIntersect = std::abs(rayDir.y) < 0.0001f ? 99999.0f : ((rayDir.y > 0 ? std::floor(currPos.y + 1.0f) : std::floor(currPos.y)) - currPos.y) / rayDir.y;; // t at next intersection point with Y-axis
 			bool xAxisInters;
 
 			char gridCellValue = 0; // hit result (0 == nothing)
@@ -280,26 +280,27 @@ namespace Retro3D
 			const glm::vec3 currPosTopProjCam = camPos + dirToCurrPosTop * dDivCosA;
 			const float wallHalfHeight = currPosTopProjCam.z - camPos.z;
 			const float wallHeight = wallHalfHeight * 2.0f;
-			const int wallHeightScreenSpace = (wallHeight / camHeight) * texHeight;
+			const int wallHeightScreenSpace = static_cast<int>((wallHeight / camHeight) * texHeight);
 			const int pixelsToSkip = texHeight - wallHeightScreenSpace;
 
 			if (gridCellValue != 0)
 			{
 				const SDL_Surface* wallTextureSurface = mTextureSurfaceMap[gridCellValue];
-				const int gridX = floorf(currPos.x);
-				const int gridY = floorf(currPos.y);
+				const int gridX = static_cast<int>(std::floor(currPos.x));
+				const int gridY = static_cast<int>(std::floor(currPos.y));
 				
 				if (mLevel->IsInGrid(gridX, gridY))
 				{
 					/*** Draw wall ***/
+                    const int zMin = std::max(pixelsToSkip / 2, 0);
 					const int zMax = std::min(texHeight - pixelsToSkip / 2, texHeight);
-					for (int z = fmaxf(pixelsToSkip / 2, 0); z < zMax; z++)
+					for (int z = zMin; z < zMax; z++)
 					{
 						const int offset = (texWidth * 4 * z) + x * 4;
 
 						const float realZ = 1.0f - ((float)(z - pixelsToSkip / 2) / wallHeightScreenSpace);
 						const glm::vec2 uv = xAxisInters ? glm::vec2(currPos.y - gridY, 1.0f - realZ) : glm::vec2(currPos.x - gridX, 1.0f - realZ);
-						const Uint32 pixelColour = getpixel(wallTextureSurface, uv.x * wallTextureSurface->w, uv.y * wallTextureSurface->h);
+						const Uint32 pixelColour = getpixel(wallTextureSurface, static_cast<int>(uv.x * wallTextureSurface->w), static_cast<int>(uv.y * wallTextureSurface->h));
 						const Uint8 r = pixelColour;
 						const Uint8 g = *(((Uint8*)&pixelColour) + 1);
 						const Uint8 b = *(((Uint8*)&pixelColour) + 2);;
@@ -327,8 +328,8 @@ namespace Retro3D
 
 				const int offset = (texWidth * 4 * z) + x * 4;
 
-				const int gridX = floorf(roofHit.x);
-				const int gridY = floorf(roofHit.y);
+				const int gridX = static_cast<int>(std::floor(roofHit.x));
+				const int gridY = static_cast<int>(std::floor(roofHit.y));
 
 				if (mLevel->IsInGrid(gridX, gridY))
 				{
@@ -338,7 +339,7 @@ namespace Retro3D
 					{
 						const SDL_Surface* ceilingTextureSurface = mTextureSurfaceMap[ceilingTextureKey];
 						const glm::vec2 uv(roofHit.x - gridX, roofHit.y - gridY);
-						const Uint32 pixelColour = getpixel(ceilingTextureSurface, uv.x * ceilingTextureSurface->w, uv.y * ceilingTextureSurface->h);
+						const Uint32 pixelColour = getpixel(ceilingTextureSurface, static_cast<int>(uv.x * ceilingTextureSurface->w), static_cast<int>(uv.y * ceilingTextureSurface->h));
 						const Uint8 r = pixelColour;
 						const Uint8 g = *(((Uint8*)&pixelColour) + 1);
 						const Uint8 b = *(((Uint8*)&pixelColour) + 2);;
@@ -350,7 +351,7 @@ namespace Retro3D
 					else if (renderSkybox)
 					{
 						float tSkybox;
-						const bool xAxisSkyboxInters = fabsf(ceilRayDir.x) > fabsf(ceilRayDir.y);
+						const bool xAxisSkyboxInters = std::abs(ceilRayDir.x) > std::abs(ceilRayDir.y);
 						if (xAxisSkyboxInters)
 							tSkybox = (200.0f * (ceilRayDir.x > 0 ? 1.0f : -1.0f)) / ceilRayDir.x;
 						else
@@ -360,8 +361,8 @@ namespace Retro3D
 						const float u = !xAxisSkyboxInters ? (200.0f + skyboxHit.x - camPos.x) / 400.0f : (200.0f + skyboxHit.y - camPos.y) / 400.0f;
 						const float v = 1.0f - (200.0f + skyboxHit.z - camPos.z) / 400.0f; // TODO: inverted??
 						//const glm::vec2 uv(u, v - 1.0f*std::floorf(v)); // TODO
-						const glm::vec2 uv(((!xAxisSkyboxInters && ceilRayDir.y < 0.0f) || xAxisSkyboxInters && ceilRayDir.x < 0.0f) ? (1.0f - u) : u, std::fabsf(v));
-						const Uint32 pixelColour = getpixel(mSkyboxTexture, uv.x * mSkyboxTexture->w, uv.y * mSkyboxTexture->h);
+						const glm::vec2 uv(((!xAxisSkyboxInters && ceilRayDir.y < 0.0f) || xAxisSkyboxInters && ceilRayDir.x < 0.0f) ? (1.0f - u) : u, std::abs(v));
+						const Uint32 pixelColour = getpixel(mSkyboxTexture, static_cast<int>(uv.x * mSkyboxTexture->w), static_cast<int>(uv.y * mSkyboxTexture->h));
 						const Uint8 r = pixelColour;
 						const Uint8 g = *(((Uint8*)&pixelColour) + 1);
 						const Uint8 b = *(((Uint8*)&pixelColour) + 2);;
@@ -386,8 +387,8 @@ namespace Retro3D
 
 				const int offset = (texWidth * 4 * z) + x * 4;
 
-				const int gridX = floorf(floorHit.x);
-				const int gridY = floorf(floorHit.y);
+				const int gridX = static_cast<int>(std::floor(floorHit.x));
+				const int gridY = static_cast<int>(std::floor(floorHit.y));
 				if (!mLevel->IsInGrid(gridX, gridY))
 					continue;
 				const char floorTextureKey = mLevel->GetFloorMapCell(gridX, gridY);
@@ -396,7 +397,7 @@ namespace Retro3D
 
 				const SDL_Surface* floorTextureSurface = mTextureSurfaceMap[floorTextureKey];
 				const glm::vec2 uv(floorHit.x - gridX, floorHit.y - gridY);
-				const Uint32 pixelColour = getpixel(floorTextureSurface, uv.x * floorTextureSurface->w, uv.y * floorTextureSurface->h);
+				const Uint32 pixelColour = getpixel(floorTextureSurface, static_cast<int>(uv.x * floorTextureSurface->w), static_cast<int>(uv.y * floorTextureSurface->h));
 				const Uint8 r = pixelColour;
 				const Uint8 g = *(((Uint8*)&pixelColour) + 1);
 				const Uint8 b = *(((Uint8*)&pixelColour) + 2);;
@@ -434,10 +435,10 @@ namespace Retro3D
 			const glm::vec3 spriteCentreProj = spriteCentreLocal + u1 * t1; // projection of sprite centre onto camera
 			const glm::vec3 spriteLeftProj = spriteLeftLocal + u2 * t2;		// projection of sprite leftmost pos onto camera
 
-			const float spriteWidthProj = fabsf(spriteCentreProj.x - spriteLeftProj.x);
-			const int spriteWidthScreenSpace = (spriteWidthProj / camWidth) * texWidth;
-			const int spriteXOffset = (spriteCentreProj.x / camWidth) * texWidth;
-			const int spriteZOffset = (spriteLeftProj.z / camHeight) * texHeight;
+			const float spriteWidthProj = std::abs(spriteCentreProj.x - spriteLeftProj.x);
+			const int spriteWidthScreenSpace = static_cast<int>((spriteWidthProj / camWidth) * texWidth);
+			const int spriteXOffset = static_cast<int>((spriteCentreProj.x / camWidth) * texWidth);
+			const int spriteZOffset = static_cast<int>((spriteLeftProj.z / camHeight) * texHeight);
 			const int startX = (texWidth / 2) + spriteXOffset - (spriteWidthScreenSpace / 2);
 			const int endX = (texWidth / 2) + spriteXOffset + (spriteWidthScreenSpace / 2);
 
@@ -448,7 +449,7 @@ namespace Retro3D
 			{ 
 				const float sizeRatio = spriteWidthProj / spriteWidth;
 				const float spriteHeightProj = sizeRatio * spriteHeight;
-				const int screenHeight = (spriteHeightProj / camHeight) * texHeight;
+				const int screenHeight = static_cast<int>((spriteHeightProj / camHeight) * texHeight);
 				const int startZ = std::max(0, (texHeight / 2) + spriteZOffset - (screenHeight / 2));
 				const int endZ = std::min(texHeight - 1, (texHeight / 2) + spriteZOffset + (screenHeight / 2));
 
@@ -472,7 +473,7 @@ namespace Retro3D
 						const int offset = (texWidth * 4 * z) + x * 4;
 						const float vCoord = (z - startZ) / (float)spriteWidthScreenSpace;
 						const glm::vec2 uv(uCoord, vCoord);
-						const Uint32 pixelColour = getpixel(spriteTexture.GetSDLSurface(), uv.x, uv.y * spriteTexture.GetSDLSurface()->h);
+						const Uint32 pixelColour = getpixel(spriteTexture.GetSDLSurface(), static_cast<int>(uv.x), static_cast<int>(uv.y * spriteTexture.GetSDLSurface()->h));
 						const Uint8 r = pixelColour;
 						const Uint8 g = *(((Uint8*)&pixelColour) + 1);
 						const Uint8 b = *(((Uint8*)&pixelColour) + 2);
